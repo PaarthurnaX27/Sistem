@@ -1,0 +1,88 @@
+@model EntityLayer.Concrete.Oncelik
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Güncelleme İşlemi Başarısız Oldu'
+                })
+            };</script>
+    }
+    OncelikManager om=new OncelikManager(new EfOncelikDal());
+    int oncelikId=ViewBag.id;
+    var tblOncelik=om.TGetByID(oncelikId);
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>Öncelik Güncelle</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmOncelikGuncelle" class=" align-right btn btn-success btn-lg float-right" ><i class="bi bi-database-fill-add"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <h4>
+                            <button type="button"  class=" align-right btn btn-warning btn-lg float-right"data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtOncelik" asp-controller="DtOncelik" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <form id="frmOncelikGuncelle" asp-controller="DtOncelik" asp-action="OncelikGuncelle" asp-route-oncelikId="@oncelikId" asp-route-olusturan="@tblOncelik.Olusturan" asp-route-olusturulmaTarihi="@tblOncelik.OlusturulmaTarih" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Öncelik</label>
+                            <input type="Text" class="form-control form-control-sm text-capitalize" placeholder="Öncelik" value="@tblOncelik.OncelikAciklama" asp-for="@Model.OncelikAciklama" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSil">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Öncelik Silinecek</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Silmek istediğinizden emin misiniz?&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">İptal</button>
+                <a href="/DtOncelik/DeleteOncelik/@oncelikId" class="btn btn-outline-light">Sil</a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+

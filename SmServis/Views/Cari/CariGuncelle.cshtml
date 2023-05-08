@@ -1,0 +1,367 @@
+﻿@model EntityLayer.Concrete.Cari
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    CariManager cm = new CariManager(new EfCariDal());
+    @* IlgiliKisilerManager im = new IlgiliKisilerManager(new EfIlgiliKisilerDal()); *@
+    IlceManager ilcem = new IlceManager(new EfIlceDal());
+    SehirManager sm = new SehirManager(new EfSehirDal());
+    UlkeManager um = new UlkeManager(new EfUlkeDal());
+    CariDurumManager cdm = new CariDurumManager(new EfCariDurumDal());
+    ParaBirimiManager pbm = new ParaBirimiManager(new EfParaBirimiDal());
+    AnaSektorManager asm = new AnaSektorManager(new EfAnaSektorDal());
+    BagliSektorManager bsm = new BagliSektorManager(new EfBagliSektorDal());
+    CinsiyetManager cnsm = new CinsiyetManager(new EfCinsiyetDal());
+    CariTipiManager ctm = new CariTipiManager(new EfCariTipiDal());
+    DepartmanManager dptm = new DepartmanManager(new EfDepartmanDal());
+    PozisyonManager pzm = new PozisyonManager(new EfPozisyonDal());
+    TempCariManager tcm = new TempCariManager(new EfTempCariDal());
+    ModulManager mm = new ModulManager(new EfModulDal());
+    PersonelTipiManager ptm = new PersonelTipiManager(new EfPersonelTipiDal());
+    ProgramManager prgm = new ProgramManager(new EfProgramDal());
+    var cari = cm.TGetByID(ViewBag.id);
+    int count = tcm.TGetList().Where(x => x.Silindi == false).Count();
+    if (count != 0)
+    {
+        cari = tcm.TGetList().Where(x => x.Silindi == false).FirstOrDefault();
+    }
+    var ulke = um.TGetByID(cari.UlkeId);
+    var sehir = sm.TGetByID(cari.SehirId);
+    var ilce = ilcem.TGetByID(cari.IlceId);
+    var cariDurum = cdm.TGetByID(cari.CariDurumId);
+    var paraBirimi = pbm.TGetByID(cari.ParaBirimiId);
+    var anaSektor = asm.TGetByID(cari.AnaSektorId);
+    var bagliSektor = bsm.TGetByID(cari.BagliSektorId);
+    var cariTipi = ctm.TGetByID(cari.CariTipiId);
+}
+@*@@Model. Tuple<Cari, IlgiliKisiler, Ulke, Sehir>*@
+
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Güncelleme İşlemi Başarısız Oldu'
+                })
+            };</script>
+    }
+}
+<style>
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 31px !important;
+    }
+</style>
+<div class="card bg-light">
+    <div class="card">
+        <div class="card-header bg-gray">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <h3>Cari Güncelle</h3>
+                </div>
+                <div class="col-md-2">
+                    <div class="row justify-content-end">
+                        <div class="col-4">
+                            <button type="submit" form="formCariGuncelle" asp-action="TumunuKaydet" asp-controller="TempCariPersonelKarti" class="lign-right btn btn-primary btn-lg float-right"><i class="bi bi-database-fill-add"></i></button>
+                        </div>
+                        <div class="col-4">
+                            <a asp-action="Index" asp-controller="Cari" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="formCariGuncelle" class="m-2" asp-action="GTempCariPersonelKarti" asp-controller="TempCariPersonelKarti" asp-route-cariId="@ViewBag.id" method="get">
+        <div class="row mb-2">
+            <div class=" col-md-4">
+                <label class="col-form-label-sm">Cari Tipi</label>
+                <select class="form-control select2bs4" style="width: 100%;" asp-for="@Model.CariTipiId" required>
+                    <option selected value="@cariTipi.CariTipiId">@cariTipi.CariTipiAciklama</option>
+                    @foreach (var cariTipis in ViewBag.cariTipiList)
+                    {
+                        <option value="@cariTipis.CariTipiId">@cariTipis.CariTipiAciklama</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label-sm">Vergi No</label>
+                <input type="number" class="form-control form-control-sm" id="vergiNo" placeholder="Vergi Numarası" value="@cari.VergiNo" asp-for="@Model.VergiNo" required>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label-sm" for="addHesapKodu">Cari Kodu</label>
+                <input type="number" class="form-control form-control-sm" id="hesapKodu" asp-for="@Model.HesapKodu" value="@cari.HesapKodu" readonly>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label class="col-form-label-sm">Cari No</label>
+                <input type="number" class="form-control form-control-sm" placeholder="Firma No" value="@cari.FirmaNo" asp-for="@Model.FirmaNo" required>
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label-sm">Cari Adı</label>
+                <input type="text" class="form-control form-control-sm" value="@cari.CariAdi" asp-for="@Model.CariAdi" placeholder="FirmaAdi">
+            </div>
+            <div class="col-md-4">
+                <label class="col-form-label-sm">Şube</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Şube">
+            </div>
+
+        </div>
+        <hr class="divider" />
+        <div class="  mt-3" id="isOk">
+            <div class="card ">
+                <div class="form-group ">
+                    <div class="card-body p-3">
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Cari Dili</label>
+                                <input type="text" class="form-control form-control-sm"
+                                       placeholder="Cari dili" value="@cari.CariDil" asp-for="@Model.CariDil" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Vergi Dairesi</label>
+                                <input type="Text" class="form-control form-control-sm " id="vergiDairesi" value="@cari.VergiDairesi" asp-for="@Model.VergiDairesi" required
+                                       placeholder="Vergi Dairesi">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Ükle</label>
+                                <select id="ulke" class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.UlkeId" onchange="FillCity();TelCode()" required>
+                                    <option selected value="@ulke.UlkeId">@ulke.UlkeAdi</option>
+                                    @foreach (var ulkes in ViewBag.ulkeList)
+                                    {
+                                        <option value="@ulkes.UlkeId">@ulkes.UlkeAdi</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Şehir</label>
+                                <select id="sehir" class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.SehirId" onchange="FillCounty();TelCode2()" required>
+                                    <option selected value="@sehir.SehirId">@sehir.SehirAdi</option>
+                                    @foreach (var item in ViewBag.sehirList)
+                                    {
+                                        <option value="@item.SehirId">@item.SehirAdi</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Telefon</label>
+                                <div class="input-group">
+                                    <div class="inout-group-prepend">
+                                        <span id="telCode" class="input-group-text form-control-sm">+ @um.TGetByID(cari.UlkeId).TelefonKodu</span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm " id="telefon" placeholder="Telefon" value="@cari.Telefon1" asp-for="@Model.Telefon1">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Telefon</label>
+                                <div class="input-group">
+                                    <div class="inout-group-prepend">
+                                        <span id="telCode2" class="input-group-text form-control-sm">0 @sm.TGetByID(cari.SehirId).TelefonKodu</span>
+                                    </div>
+                                    <input type="text" class="form-control form-control-sm " id="telefon2" value="@cari.Telefon2" asp-for="@Model.Telefon2"
+                                           placeholder="Telefon2">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">İlçe</label>
+                                <select id="selectIlce" class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.IlceId" required>
+                                    <option selected value="@ilce.IlceId">@ilce.IlceAdi</option>
+                                    @foreach (var item in ViewBag.ilceList)
+                                    {
+                                        <option value="@item.IlceId">@item.IlceAdi</option>
+                                    }
+                                </select>
+
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Cari Durum</label>
+                                <select class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.CariDurumId" required>
+                                    <option selected value="@cariDurum.CariDurumId">@cariDurum.CariDurumAciklama</option>
+                                    @foreach (var cariDurums in ViewBag.cariDurumList)
+                                    {
+                                        <option value="@cariDurums.CariDurumId">@cariDurums.CariDurumAciklama</option>
+                                    }
+                                </select>
+
+
+                            </div>
+
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Mail</label>
+                                <input class="form-control form-control-sm" placeholder="Mail Adresi" type="text" value="@cari.MailAdresi1" asp-for="@Model.MailAdresi1" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Mail</label>
+                                <input class="form-control form-control-sm" placeholder="Mail Adresi 2" type="text" value="@cari.MailAdresi2" asp-for="@Model.MailAdresi2" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Sektör</label>
+                                <select id="selectAnaSektor" class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.AnaSektorId" onchange="BagliSektor()" required>
+                                    <option selected value="@anaSektor.AnaSektorId">@anaSektor.AnaSektorAdi</option>
+                                    @foreach (var anaSektors in ViewBag.anaSektorList)
+                                    {
+                                        <option value="@anaSektors.AnaSektorId">@anaSektors.AnaSektorAdi</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Bağlı Sektör</label>
+                                <select id="selectBagliSektor" class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.BagliSektorId" required>
+                                    <option selected value="@bagliSektor.BagliSektorId">@bagliSektor.BagliSektorAdi</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-6">
+                                <label class="col-form-label-sm">Adres</label>
+                                <input class="form-control form-control-sm" placeholder="Adres" type="text" value="@cari.Adres" asp-for="@Model.Adres" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Web Sitesi</label>
+                                <input type="text" class="form-control form-control-sm " id="webSitesi" asp-for="@Model.WebSitesi" value="@cari.WebSitesi" placeholder="Web Sitesi">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label-sm">Para Birimi</label>
+                                <select class="form-control form-control-sm select2bs4" style="width: 100%;" asp-for="@Model.ParaBirimiId" required>
+                                    <option selected value="@paraBirimi.ParaBirimiId">@paraBirimi.ParaBirimiAdi @paraBirimi.ParaBirimiSimge</option>
+                                    @foreach (var paraBirimis in ViewBag.paraBirimiList)
+                                    {
+                                        <option value="@paraBirimis.ParaBirimiId">@paraBirimis.ParaBirimiAdi @paraBirimis.ParaBirimiSimge </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class=" row mb-2">
+                            <div class="col-md-3 mr-4">
+                                <input class=" mr-3" type="checkbox" checked="@cari.eIrsaliyeMukellefi" asp-for="@Model.eIrsaliyeMukellefi">
+                                <label class="form-check-label mr-3">e-İrsaliye Mükellefi</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-check-input" type="checkbox" checked="@cari.eFaturaMukellefi" asp-for="@Model.eFaturaMukellefi">
+                                <label class="form-check-label">e-Fatura Mükellefi</label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <h4 class="mt-5 "></h4>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+            <a class="nav-link active btn btn-white" data-toggle="tab" data-target="#ilgiliKisilerTab" role="tab">
+                <i class="bi bi-card-list"></i>
+                İlgili Kişiler
+            </a>
+
+
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#muhasebeTab" role="tab">
+                <i class="bi bi-card-list"></i> Muhasebe
+            </a>
+
+
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#projeTab" role="tab">
+                <i class="bi bi-card-list"></i>
+                Proje
+            </a>
+
+
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#eklenenlerTab" role="tab">
+                <i class="bi bi-card-list"></i> Eklenenler
+            </a>
+
+
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#danismanBilgileriTab" role="tab">
+                <i class="bi bi-card-list"></i> Danışman Bilgileri
+            </a>
+
+
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#faturaTab" role="tab">
+                <i class="bi bi-card-list"></i> Fatura
+            </a>
+
+
+        </div>
+    </nav>
+
+    <div class=" container-fluid bg-white p-4 ">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane  fade show active" id="ilgiliKisilerTab" role="tabpanel">
+                <h4>İlgili Kişiler</h4>
+                <div class="col-12">
+                    <partial name="~/Views/TempCariPersonelKarti/GTempCariPersonelKarti.cshtml" />
+                </div>
+            </div>
+            <div class="tab-pane fade" id="muhasebeTab" role="tabpanel" data-toggle="tab">
+                Sonradan Analizi Yapılacak
+            </div>
+            <div class="tab-pane fade" id="projeTab" role="tabpanel" data-toggle="tab">
+                <h4>Proje</h4>
+                <table id="tblServis" class="table table-head-fixed text-nowrap table-hover table-striped"
+                       style='font-size:75%'>
+                    <thead>
+                        <tr class="text-center">
+                            <th class="text-left">Seç</th>
+                            <th>Proje No</th>
+                            <th>Program</th>
+                            <th class="text-center">Proje Tarih Aralığı</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Enumerable.Count(ViewBag.projeList) != 0)
+                        {
+                            foreach (var item in ViewBag.projeList)
+                            {
+                                <tr class="text-center" ondblclick="ProjeGuncelle()">
+                                    <td class="text-left"><input name="radio" type="radio" value="@item.ProjeId" /></td>
+                                    <td>@item.ProjeNo</td>
+                                    @*<td>@cm.TGetByID(item.CariId).CariAdi</td>*@
+                                    <td>@prgm.TGetByID(item.ProgramId).ProgramAdi</td>
+                                    <td>@item.ProjeBaslangicTarihi.ToShortDateString() - @item.ProjeBitisTarihi.ToShortDateString() </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="eklenenlerTab" role="tabpanel" data-toggle="tab">
+                Cariye özel eklenmesi gereken dosyalar, resimler, dökümanlar
+                vb eklenebilecek. Proje bazlı eklenmesi gereken bir durumda
+                proje modülünden ilgili projeye eklenecek.
+            </div>
+            <div class="tab-pane fade" id="danismanBilgileriTab" role="tabpanel" data-toggle="tab">
+                Müşterinin projesine tanımlanmış danışmanları proje bazlı
+                görebileceğimiz sekme.
+            </div>
+            <div class="tab-pane fade" id="faturaTab" role="tabpanel" data-toggle="tab">
+                Fatura Mailleri
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

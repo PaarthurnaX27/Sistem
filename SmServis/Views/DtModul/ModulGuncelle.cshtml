@@ -1,0 +1,104 @@
+@model EntityLayer.Concrete.Modul
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Güncelleme İşlemi Başarısız Oldu'
+                })
+            };</script>
+    }
+    ModulManager mm=new ModulManager(new EfModulDal());
+    ServisDepartmanManager sdm=new ServisDepartmanManager(new EfServisDepartmanDal());
+    int modulId=ViewBag.id;
+    var tblModul=mm.TGetByID(modulId);
+    //var tbServisDepartman=sdm.TGetByID(tblModul.ServisDepartmanId);
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>Modül Güncelle</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmModulGuncelle" class=" align-right btn btn-info btn-lg float-right" ><i class="bi bi-database-fill-add"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <h4>
+                            <button type="button"  class=" align-right btn btn-warning btn-lg float-right"data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtModul" asp-controller="DtModul" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <form id="frmModulGuncelle" asp-controller="DtModul" asp-action="ModulGuncelle" asp-route-modulId="@modulId" asp-route-olusturan="@tblModul.Olusturan" asp-route-olusturulmaTarihi="@tblModul.OlusturulmaTarih" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Modül</label>
+                            <input type="Text" class="form-control form-control-sm text-capitalize" placeholder="Modül" value="@tblModul.ModulAdi" asp-for="@Model.ModulAdi" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Modül Kısaltma</label>
+                            <input type="Text" class="form-control form-control-sm text-capitalize" placeholder="Modül Kısaltma" value="@tblModul.ModulKisaltma" asp-for="@Model.ModulKisaltma" required />
+                        </div>
+                        <div class="col-md-3">
+                        <label class="col-form-label-sm"> Servis Departmanı</label>
+                        <input type="Text" class="form-control form-control-sm text-capitalize" placeholder="Servis Departmanı" value="@sdm.TGetByID(ViewBag.servisDepartmanId).ServisDepartmanAdi"   readonly />
+                        <input  type="Text" class="form-control form-control-sm text-capitalize invisible" placeholder="Servis Departmanı" value="@sdm.TGetByID(ViewBag.servisDepartmanId).ServisDepartmanId"  name="servisDepartmanId" readonly />
+                        @* <select id="servisDepartmanId"  class="form-control select2bs4" style="width: 100%;" name="servisDepartmanId">
+                            <option selected value="@ViewBag.servisDepartmanId">@ViewBag.servisDepartmanAdi</option>
+                            @foreach (var servisDepartmanList in ViewBag.servisDepartmanList)
+                            {
+                                <option value="@servisDepartmanList.ServisDepartmanId">@servisDepartmanList.ServisDepartmanAdi</option>
+                            }
+                        </select> *@
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modalSil">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Modül Silinecek</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Silmek istediğinizden emin misiniz?&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">İptal</button>
+                <a href="/DtModul/DeleteModul/@modulId" class="btn btn-outline-light">Sil</a>
+            </div>
+        </div>
+    </div>
+</div>
+

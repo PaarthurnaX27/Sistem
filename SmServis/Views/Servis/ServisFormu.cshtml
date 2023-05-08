@@ -1,0 +1,2035 @@
+@model EntityLayer.Concrete.TempServisBilgi
+@using Microsoft.AspNetCore.Http;
+
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+        var Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+
+        Toast.fire({
+          icon: 'error',
+          title: '@TempData["Error"]'
+        })
+      };</script>
+    }
+
+
+    var firmaAdi = Context.Session.GetString("firma").ToString();
+    CariManager cm = new CariManager(new EfCariDal());
+    ServisDepartmanManager sdptm = new ServisDepartmanManager(new EfServisDepartmanDal());
+    ModulManager mm = new ModulManager(new EfModulDal());
+    ServisTipiManager stm = new ServisTipiManager(new EfServisTipiDal());
+    ServisSekliManager ssm = new ServisSekliManager(new EfServisSekliDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    SonDurumManager sdm = new SonDurumManager(new EfSonDurumDal());
+    OncelikManager om = new OncelikManager(new EfOncelikDal());
+    PersonelManager pm = new PersonelManager(new EfPersonelDal());
+    IslemYeriManager iym = new IslemYeriManager(new EfIslemYeriDal());
+    TempServisBilgiManager tsbm = new TempServisBilgiManager(new EfTempServisBilgiDal());
+    TempServisKalemManager tskm = new TempServisKalemManager(new EfTempServisKalemDal());
+    var kullaniciId = (int)Context.Session.GetInt32("kullanici");
+    var tblTempServis = tsbm.TGetList().Where(x => x.SonDegistiren == kullaniciId).OrderBy(x => x.TempServisId).LastOrDefault();
+    int cariId = 0;
+    string cariAdi = "";
+    string cariNo = "";
+    int servisDepartmanId = 0;
+    string servisDepartmanAdi = "";
+    int modulId = 0;
+    string modulAdi = "";
+    string departmanYetkilisi = "";
+    string konu = "";
+    int oncelikId = 0;
+    string oncelikAciklama = "";
+    int servisSekliId = 0;
+    string servisSekliAciklama = "";
+    int servisTipiId = 0;
+    string servisTipiAciklama = "";
+    int personelId = pm.TGetList().Where(x => x.PersonelKodu == km.TGetByID(kullaniciId).KullaniciKodu).FirstOrDefault().PersonelId;
+    string personelAdi = pm.TGetByID(personelId).PersonelAdi + " " + pm.TGetByID(personelId).PersonelAdi2 + " " + pm.TGetByID(personelId).PersonelSoyadi;
+    int sonDurumId = 0;
+    string sonDurumAciklama = "";
+    int tSuresi = 0;
+    int fTSuresi = 0;
+    string tSuresiSaat = "";
+    string tarihSaat = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    string planlananTarih = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    string sonDurumTarihi = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    string fTSuresiSaat = "";
+    string tahminiSure = "";
+    string gercekSure = "";
+    bool kapandi = false;
+    bool musteriOnayi = false;
+    if (tblTempServis != null)
+    {
+        cariId = tblTempServis.CariId;
+        cariAdi = cm.TGetByID(cariId).CariAdi;
+        cariNo = cm.TGetByID(cariId).HesapKodu;
+        servisDepartmanId = tblTempServis.ServisDepartmanId;
+        servisDepartmanAdi = sdptm.TGetByID(servisDepartmanId).ServisDepartmanAdi;
+        modulId = tblTempServis.ModulId;
+        modulAdi = mm.TGetByID(modulId).ModulAdi;
+        departmanYetkilisi = tblTempServis.DepartmanYetkilisi;
+        konu = tblTempServis.Konu;
+        oncelikId = tblTempServis.OncelikId;
+        oncelikAciklama = om.TGetByID(oncelikId).OncelikAciklama;
+        servisSekliId = tblTempServis.ServisSekliId;
+        servisSekliAciklama = ssm.TGetByID(servisSekliId).ServisSekliAciklama;
+        servisTipiId = tblTempServis.ServisTipiId;
+        servisTipiAciklama = stm.TGetByID(servisTipiId).ServisTipiAciklama;
+        personelId = tblTempServis.PersonelId;
+        personelAdi = pm.TGetByID(personelId).PersonelAdi + " " + pm.TGetByID(personelId).PersonelAdi2 + " " + pm.TGetByID(personelId).PersonelSoyadi;
+        sonDurumId = tblTempServis.SonDurumID;
+        sonDurumAciklama = sdm.TGetByID(sonDurumId).SonDurumAciklama;
+        tSuresi = Convert.ToInt32(tblTempServis.TSuresi);
+        tSuresiSaat = (tSuresi / 60).ToString();
+        fTSuresi = Convert.ToInt32(tblTempServis.FTSuresi);
+        tarihSaat = tblTempServis.TarihSaat.ToString("yyyy-MM-ddTHH:mm:ss");
+        planlananTarih = tblTempServis.PlanlananTarih.ToString("yyyy-MM-ddTHH:mm:ss");
+        sonDurumTarihi = tblTempServis.SonDurumTarihi.ToString("yyyy-MM-ddTHH:mm:ss");
+        TimeSpan kalan = tblTempServis.PlanlananTarih - tblTempServis.TarihSaat;
+        // tahminiSure=kalan.TotalMinutes.ToString();
+        tahminiSure = tblTempServis.TahminiSure;
+        fTSuresiSaat = (fTSuresi / 60).ToString();
+        kapandi = tblTempServis.Kapandi;
+        musteriOnayi = tblTempServis.MusteriOnayi;
+        // tahminiSure=tblTempServis.TahminiSure;
+        gercekSure = tblTempServis.GercekSure;
+    }
+    var modal = tsbm.TGetList().Where(x => x.SonDegistiren == kullaniciId);
+    if (modal.Count() == 0)
+    {
+        <script type="text/javascript">window.addEventListener("load", (event) => {
+                $('#modalWizard').modal('show');
+            });</script>
+    }
+}
+
+<style>
+  .select2-selection__rendered {
+    line-height: 31px !important;
+  }
+
+  .select2-container .select2-selection--single {
+    height: 31px !important;
+  }
+body {
+    background: #eee
+}
+
+#regForm {
+    background-color: #ffffff;
+    margin: 0px auto;
+    font-family: Raleway;
+    padding: 40px;
+    border-radius: 10px
+}
+
+#register{
+
+  color: #6A1B9A;
+}
+
+h1 {
+    text-align: center
+}
+
+@* input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+
+    border: 1px solid #aaaaaa;
+    border-radius: 10px;
+    -webkit-appearance: none;
+} *@
+
+
+
+.tab input:focus{
+
+  border:1px solid #6a1b9a !important;
+  outline: none;
+}
+
+input.invalid {
+
+    border:1px solid #e03a0666;
+}
+
+.tab {
+    display: none
+}
+
+button {
+    background-color: #6A1B9A;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer
+}
+
+button:hover {
+    opacity: 0.8
+}
+
+button:focus{
+
+  outline: none !important;
+}
+
+#prevBtn {
+    background-color: #bbbbbb
+}
+
+
+.all-steps{
+      text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.step {
+       height: 40px;
+    width: 40px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color: #6a1b9a;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1
+}
+
+
+.step.finish {
+   color: #fff;
+   background: #6a1b9a;
+   opacity: 1;
+
+}
+
+
+
+.all-steps {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px
+}
+
+.thanks-message {
+    display: none
+}
+  @*.row{margin-bottom:20px;}.button.button-small{height:30px;line-height:30px;padding:0px10px;}tdinput[type=text],tdselect{width:100%;height:30px;margin:0;padding:2px8px;}th:last-child{text-align:right;}td:last-child{text-align:right;}td:last-child.button{width:30px;height:30px;text-align:center;padding:0px;margin-bottom:0px;margin-right:5px;background-color:#FFF;}td:last-child.button.fa{line-height:30px;width:30px;}*@
+</style>
+<div id="updateDiv" class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3><i class="bi bi-globe"></i> Servis Formu</h3>
+                </div>
+            </div>
+            <div class="form-check">
+                <input id="inputKapandi" class="form-check-input" type="checkbox" asp-for="@Model.Kapandi" form="frmServis"
+                       checked="@kapandi">
+                <label class="form-check-label">Kapandı</label>
+            </div>
+            <div class="form-check">
+                <input id="inputMusteriOnayi" class="form-check-input" type="checkbox" asp-for="@Model.MusteriOnayi"
+                       form="frmServis" checked="@musteriOnayi">
+                <label class="form-check-label">Onaylandı</label>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmServis" class=" align-right btn btn-info btn-lg float-right" value="1"
+                                    name="bitir">
+                                <i class="bi bi-database-add"></i>
+                            </button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="KaydetmedenCik" asp-controller="Servis" class=" btn btn-lg btn-danger">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-light">
+        <form id="frmServis" asp-controller="Servis" asp-action="TempServisEkle" method="post" onsubmit="ShowModal()"
+              asp-area="" data-ajax-loading="#loading" data-ajax-mode="replace" data-ajax-update="#updateDiv"
+              data-ajax-success="Success" data-ajax-failure="Failure" data-ajax="true">
+            <div class="row">
+                <div class=" col-xl-5">
+                    <div class="card p-1">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="row mb-1 ">
+                                    <label for="inputFirma" class=" col-sm-4 col-form-label col-form-label-sm">Firma</label>
+                                    <div class="col-7 ">
+                                        <input id="inputFirma" type="text" class="form-control form-control-sm text-capitalize"
+                                               value="@firmaAdi" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="row ">
+                                    <label for="inputCariNo" class="col-sm-4 col-form-label col-form-label-sm">Cari No</label>
+                                    <div class="col-7">
+                                        <input id="inputCariNo" type="text" value="@cariNo"
+                                               class="form-control form-control-sm text-capitalize" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class=" row ">
+                                    <label for="inputServisNo" class="col-sm-5   col-form-label col-form-label-sm">Servis No</label>
+                                    <div class="col-7">
+                                        <input id="inputServisNo" type="text" class="form-control form-control-sm text-capitalize"
+                                               value="@ViewBag.cariNo-@ViewBag.servisSiraNo" asp-for="@Model.ServisNo" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row mb-1">
+                            <label for="inputCari" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+                            <div class="col-10">
+                                <select id="inputCari" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.CariId"
+                                        onchange="CariNo()" required>
+                                    @{
+                                        if (cariId != 0)
+                                        {
+                                            <option selected value="@cariId">@cariAdi</option>
+                                            foreach (var item in ViewBag.cariList)
+                                            {
+                                                <option value="@item.CariId">@item.CariAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Cari Seçin</option>
+                                            @foreach (var item in ViewBag.cariList)
+                                            {
+                                                <option value="@item.CariId">@item.CariAdi</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class=" row ">
+                                    <label for="inputDepartman" class="col-sm-4 col-form-label col-form-label-sm">Departman</label>
+                                    <div class="col-sm-8">
+                                        <select id="inputDepartman" class="form-control select2bs4" style="width: 100%;" onchange="Modul()"
+                                                asp-for="@Model.ServisDepartmanId" required>
+                                            @{
+                                                if (servisDepartmanId != 0)
+                                                {
+                                                    <option selected value="@servisDepartmanId">@servisDepartmanAdi</option>
+                                                    foreach (var item in ViewBag.servisDepartmanList)
+                                                    {
+                                                        <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option selected disabled value="">Departman Seçin</option>
+                                                    @foreach (var item in ViewBag.servisDepartmanList)
+                                                    {
+                                                        <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputModul" class="col-sm-4 col-form-label col-form-label-sm">Modül</label>
+                                    <div class="col-sm-8">
+                                        <select id="inputModul" class="form-control select2bs4" style="width: 100%;"
+                                                asp-for="@Model.ModulId" required>
+                                            @{
+                                                if (modulId != 0)
+                                                {
+                                                    <option selected value="@modulId">@modulAdi</option>
+                                                    foreach (var item in ViewBag.modulList)
+                                                    {
+                                                        <option value="@item.ModulId">@item.ModulAdi</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option selected disabled value=""> Modul Seçmek için Önce Departman Seçin</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputYetkili" class="col-sm-4 col-form-label col-form-label-sm">Dpt. Yetkili</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputYetkili" type="text" value="@departmanYetkilisi"
+                                               class="form-control form-control-sm text-capitalize" asp-for="@Model.DepartmanYetkilisi" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputKonu" class="col-sm-4 col-form-label col-form-label-sm">Konu</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputKonu" type="text" value="@konu" class="form-control form-control-sm text-capitalize"
+                                               asp-for="@Model.Konu" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputOncelik" class="col-sm-4 col-form-label col-form-label-sm">Öncelik</label>
+                                    <div class="col-sm-8">
+                                        <select id="inputOncelik" class="form-control select2bs4" style="width: 100%;"
+                                                asp-for="@Model.OncelikId" required>
+                                            @{
+                                                if (oncelikId != 0)
+                                                {
+                                                    <option selected value="@oncelikId">@oncelikAciklama</option>
+                                                    foreach (var item in ViewBag.oncelikList)
+                                                    {
+                                                        <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option selected disabled value="">Öncelik Seçin</option>
+                                                    @foreach (var item in ViewBag.oncelikList)
+                                                    {
+                                                        <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputServisSekli" class="col-sm-4 col-form-label col-form-label-sm">Servis Şekli</label>
+                                    <div class="col-sm-8">
+                                        <select id="inputServisSekli" class="form-control select2bs4" style="width: 100%;"
+                                                asp-for="@Model.ServisSekliId" required>
+                                            @{
+                                                if (servisSekliId != 0)
+                                                {
+                                                    <option selected value="@servisSekliId">@servisSekliAciklama</option>
+                                                    foreach (var item in ViewBag.servisSekliList)
+                                                    {
+                                                        <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option selected disabled value="">Servis Şekli Seçin</option>
+                                                    @foreach (var item in ViewBag.servisSekliList)
+                                                    {
+                                                        <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputServisTipi" class="col-sm-4 col-form-label col-form-label-sm">Servis Tipi</label>
+                                    <div class="col-sm-8">
+                                        <select id="inputServisTipi" class="form-control select2bs4" style="width: 100%;"
+                                                asp-for="@Model.ServisTipiId" required>
+                                            @{
+                                                if (servisTipiId != 0)
+                                                {
+                                                    <option selected value="@servisTipiId">@servisTipiAciklama</option>
+                                                    foreach (var item in ViewBag.servisTipiList)
+                                                    {
+                                                        <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option selected disabled value="">Servis Tipi Seçin</option>
+                                                    @foreach (var item in ViewBag.servisTipiList)
+                                                    {
+                                                        <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputSorumlu" class="col-sm-4 col-form-label col-form-label-sm">Sorumlu</label>
+                                    <div class="col-sm-8">
+                                        <select id="inputSorumlu" class="form-control select2bs4" style="width: 100%;"
+                                                asp-for="@Model.PersonelId" required>
+                                            @{
+                                                if (personelId != 0)
+                                                {
+                                                    <option selected value="@personelId">@personelAdi</option>
+                                                    foreach (var item in ViewBag.personelList)
+                                                    {
+                                                        <option value="@item.PersonelId">
+                                                            @item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                                                        </option>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <option selected disabled value="">Sorumlu Seçin</option>
+                                                    @foreach (var item in ViewBag.personelList)
+                                                    {
+                                                        <option value="@item.PersonelId">
+                                                            @item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                                                        </option>
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1 ">
+                                    <label for="inputTSuresi" class="col-sm-4 col-form-label col-form-label-sm">T. Süresi</label>
+                                    <div class="col-sm-8">
+                                        @if (tSuresi != 0)
+                                        {
+                                            <input id="inputTSuresi" type="number" value="@tSuresi"
+                                                   class="form-control form-control-sm text-capitalize" onkeyup="DakikaSaatT()"
+                                                   asp-for="@Model.TSuresi" placeholder="(Dakika)">
+                                        }
+                                        else
+                                        {
+                                            <input id="inputTSuresi" type="number" class="form-control form-control-sm text-capitalize"
+                                                   onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi" placeholder="(Dakika)">
+                                        }
+                                    </div>
+                                </div>
+                                <div class="row mb-1 ">
+                                    <label for="inputFTSuresi" class="col-sm-4 col-form-label col-form-label-sm">F.T. Süresi</label>
+                                    <div class="col-sm-8">
+                                        @if (fTSuresi != 0)
+                                        {
+                                            <input id="inputFTSuresi" type="number" value="@fTSuresi"
+                                                   class="form-control form-control-sm text-capitalize" onkeyup="DakikaSaatFT()"
+                                                   asp-for="@Model.FTSuresi" placeholder="(Dakika)">
+                                        }
+                                        else
+                                        {
+                                            <input id="inputFTSuresi" type="number" class="form-control form-control-sm text-capitalize"
+                                                   onkeyup="DakikaSaatFT()" asp-for="@Model.FTSuresi" placeholder="(Dakika)">
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row mb-1 ">
+                                    <label for="inputTarihSaat" class="col-sm-4 col-form-label col-form-label-sm">Tarih Saat</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputTarihSaat" value="@tarihSaat" class="form-control form-control-sm text-capitalize"
+                                               asp-for="@Model.TarihSaat" required>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-1">
+                                    <label for="inputPalanlananTarih" class="col-sm-4 col-form-label col-form-label-sm">
+                                        Plan.
+                                        Tarih
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input id="inputPalanlananTarih" value="@planlananTarih"
+                                               class="form-control form-control-sm text-capitalize" onchange="BaslangicZamani()"
+                                               asp-for="@Model.PlanlananTarih" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputTahminiSure" class="col-sm-4 col-form-label col-form-label-sm">Tah. Süre</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputTahiminiSure" type="number" value="@tahminiSure"
+                                               class="form-control form-control-sm text-capitalize" asp-for="@Model.TahminiSure" required
+                                               placeholder="(Saat)">
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputGercekSure" class="col-sm-4 col-form-label col-form-label-sm">Gerçek Süre</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputGercekSure" type="number" value="@gercekSure"
+                                               class="form-control form-control-sm text-capitalize" asp-for="@Model.GercekSure" required
+                                               placeholder="(Dakika)">
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputGirilenSure" class="col-sm-4 col-form-label col-form-label-sm">Girilen Süre</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputGirilenSure" type="number" value="@ViewBag.girilenSure"
+                                               class="form-control form-control-sm text-capitalize" asp-for="@Model.GirilenSure" required
+                                               placeholder="(Dakika)" readonly>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputSonDurumTarihi" class="col-sm-4 col-form-label col-form-label-sm">
+                                        Son
+                                        Dur.Tar.
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input id="inputSonDurumTarihi" value="@sonDurumTarihi"
+                                               class="form-control form-control-sm text-capitalize" asp-for="@Model.SonDurumTarihi" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+
+                                    <div class="col-sm-8">
+                                        <hr>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+
+                                    <div class="col-sm-8">
+                                        <br>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputTSuresiSaat" class="col-sm-4 col-form-label col-form-label-sm">Saat</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputTSuresiSaat" type="number" value="@tSuresiSaat"
+                                               class="form-control form-control-sm text-capitalize" readonly>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <label for="inputFTSuresiSaat" class="col-sm-4 col-form-label col-form-label-sm">Saat</label>
+                                    <div class="col-sm-8">
+                                        <input id="inputFTSuresiSaat" type="number" value="@fTSuresiSaat"
+                                               class="form-control form-control-sm text-capitalize" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="row mb-1">
+                            <label for="inputSonDurum" class="col-sm-2 col-form-label col-form-label-sm">Durum</label>
+                            <div class="col-sm-10">
+                                <select id="inputSonDurum" class="form-control select2bs4" style="width: 100%;"
+                                        asp-for="@Model.SonDurumID" required>
+                                    @{
+                                        if (sonDurumId != 0)
+                                        {
+                                            <option selected value="@sonDurumId">@sonDurumAciklama</option>
+                                            foreach (var item in ViewBag.sonDurumList)
+                                            {
+                                                <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected value="1">BEKLEMEDE</option>
+                                            @foreach (var item in ViewBag.sonDurumList)
+                                            {
+                                                <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        @* <button type="submit" form="frmServis" class="btn btn-primary">Şimdilik buradan kaydedecez
+                            mecbur</button> *@
+                    </div>
+                </div>
+                <div class="col-xl-7">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kalemler</h3>
+                            <div class="card-tools">
+                                <div class="input-group input-group-sm">
+                                    @* <a class="btn btn-default pull-right btn-sm add-row"><i class="fa fa-plus"></i></a> *@
+                                    <button type="submit" class="btn btn-sm btn-primary" form="frmServis">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#modalWizard">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    @* <a id="addRow" class="btn btn-sm btn-success mr-3" onclick="addRow()"><i class="bi
+                                        bi-plus-lg"></i></a> *@
+                                    @* <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                                        <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default">
+                                        <i class="fas fa-search"></i>
+                                        </button>
+                                        </div> *@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0" style="height: 477px;">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <table id="tbl" class="table table-head-fixed text-nowrap"
+                                               style='font-size:75%'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Başlama Zamanı</th>
+                                                    <th>Genel Açıklama</th>
+                                                    <th>İşlem Yapan</th>
+                                                    <th>İşlem Yeri</th>
+                                                    <th>Durum</th>
+                                                    <th>Bitiş Zamanı</th>
+                                                    <th>Süre</th>
+                                                    @* <th>Açıklama</th> *@
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if (Enumerable.Count(ViewBag.tempKalemList) != 0)
+                                                {
+                                                    @foreach (var item in ViewBag.tempKalemList)
+                                                    {
+                                                        string renk = "";
+                                                        switch (sdm.TGetByID(item.SonDurumId).SonDurumAciklama)
+                                                        {
+                                                            case "KUYRUKTA":
+                                                                renk = "bg-indigo";
+                                                                break;
+                                                            case "BEKLEMEDE":
+                                                                renk = "bg-yellow";
+                                                                break;
+                                                            case "PLANA ALINDI":
+                                                                renk = "bg-lightblue";
+                                                                break;
+                                                            case "DEVAM EDİYOR":
+                                                                renk = "bg-teal";
+                                                                break;
+                                                            case "TAMAMLANDI":
+                                                                renk = "bg-lime";
+                                                                break;
+                                                            case "MÜŞTERİ ONAYI":
+                                                                renk = "bg-orange";
+                                                                break;
+                                                            case "MÜŞTERİDEN BİLGİ BEKLENİYOR":
+                                                                renk = "bg-pink";
+                                                                break;
+                                                            case "IAS BİLGİ BEKLENİYOR":
+                                                                renk = "bg-gray";
+                                                                break;
+                                                            default:
+                                                                renk = "bg-white";
+                                                                break;
+                                                        }
+                                                        <tr id="tempKalemRow" class="@renk" ondblclick="doubleClick(@item.TempKalemId)"
+                                                            onclick="clickSummernote(@item.TempKalemId)">
+                                                            <td>@item.BaslamaZamani</td>
+                                                            <td>@item.GenelAciklama</td>
+                                                            <td>
+                                                                @pm.TGetByID(item.PersonelId).PersonelAdi @pm.TGetByID(item.PersonelId).PersonelAdi2
+                                                                @pm.TGetByID(item.PersonelId).PersonelSoyadi
+                                                            </td>
+                                                            <td>@iym.TGetByID(item.IslemYeriId).IslemYeriAdi</td>
+                                                            <td>@sdm.TGetByID(item.SonDurumId).SonDurumAciklama</td>
+                                                            <td>@item.BitisZamani</td>
+                                                            <td>@item.Sure</td>
+                                                            @* <td>@item.Aciklama</td> *@
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2">
+        <div class="card card-default">
+            <div class="card-header">
+                <h3 class="card-title">Dokümanlar</h3>
+            </div>
+            <div class="card-body">
+                <div id="actions" class="row">
+                    <div class="col-md-2">
+                        <div class="btn-group ">
+                            <span class="btn btn-success col fileinput-button">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <button type="submit" class="btn btn-primary col start">
+                                <i class="fas fa-upload"></i>
+                            </button>
+                            <button type="reset" class="btn btn-warning col cancel">
+                                <i class="fas fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 d-flex align-items-center">
+                        <div class="fileupload-process w-0">
+                            <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0"
+                                 aria-valuemax="100" aria-valuenow="0">
+                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table table-striped files" id="previews">
+                    <div id="template" class="row mt-2">
+                        <div class="col-auto">
+                            <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                        </div>
+                        <div class="col d-flex align-items-center">
+                            <p class="mb-0">
+                                <span class="lead" data-dz-name></span>
+                                (<span data-dz-size></span>)
+                            </p>
+                            <strong class="error text-danger" data-dz-errormessage></strong>
+                        </div>
+                        <div class="col-4 d-flex align-items-center">
+                            <div class="progress progress-striped active w-0" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                                 aria-valuenow="0">
+                                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                            </div>
+                        </div>
+                        <div class="col-auto d-flex align-items-center">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-primary start">
+                                    <i class="fas fa-upload"></i>
+                                    <span>Start</span>
+                                </button>
+                                <button data-dz-remove class="btn btn-sm btn-warning cancel">
+                                    <i class="fas fa-times-circle"></i>
+                                    <span>Cancel</span>
+                                </button>
+                                <button data-dz-remove class="btn btn-sm btn-danger delete">
+                                    <i class="fas fa-trash"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-10">
+        <textarea id="summernote1" name="kalemAciklamaAlt" readonly>  </textarea>
+    </div>
+</div>
+
+@{
+    var tempKalem = tskm.TGetList().Where(x => x.SonDegistiren == kullaniciId).LastOrDefault();
+    var tempServis = tsbm.TGetList().Where(x => x.SonDegistiren == kullaniciId).FirstOrDefault();
+    string lSure = "";
+    int lPersonelId = 0;
+    string lPersonelAdi = "";
+    string lPersonelAdi2 = "";
+    int lIslemYeriId = 0;
+    string lIslemYeriAdi = "";
+    int lSonDurumId = 0;
+    string lSonDurumAciklama = "";
+    string lGenelAciklama = "";
+    string lBaslangicZamani = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    string lBitisZamani = "";
+    if (tempServis != null)
+    {
+        lBaslangicZamani = tempServis.PlanlananTarih.ToString("yyyy-MM-ddTHH:mm");
+
+    }
+    if (tempKalem != null)
+    {
+        lPersonelId = tempKalem.PersonelId;
+        lPersonelAdi = pm.TGetByID(lPersonelId).PersonelAdi + " " + pm.TGetByID(lPersonelId).PersonelAdi2 + " " + pm.TGetByID(lPersonelId).PersonelSoyadi;
+        lIslemYeriId = tempKalem.IslemYeriId;
+        lIslemYeriAdi = iym.TGetByID(tempKalem.IslemYeriId).IslemYeriAdi;
+        lSonDurumId = tempKalem.SonDurumId;
+        lGenelAciklama = tempKalem.GenelAciklama;
+        lSonDurumAciklama = sdm.TGetByID(tempKalem.SonDurumId).SonDurumAciklama;
+        lBaslangicZamani = tempKalem.BaslamaZamani.ToString("yyyy-MM-ddThh:mm:ss");
+        lBitisZamani = tempKalem.BitisZamani.ToString("yyyy-MM-ddThh:mm:ss");
+        TimeSpan tsSure = tempKalem.BitisZamani - tempKalem.BaslamaZamani;
+        lSure = tsSure.TotalMinutes.ToString();
+    }
+}
+<div class="modal fade" id="modalKalemEkle" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Yeni Kalem</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmTempKalem" asp-action="TempKalemEkle" asp-controller="Servis" method="post">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Başlama Zamanı</label>
+                                <input id="kalemBaslangicZamani" type="datetime-local" name="kalemBaslangicTarih"
+                                       value="@lBaslangicZamani" class="form-control form-control-sm" onchange="KalanSureGetir()" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Bitiş Zamanı</label>
+                                <input id="kalemBitisTarihi" type="datetime-local" name="kalemBitisTarih" value="@lBitisZamani"
+                                       class="form-control form-control-sm" onchange="KalanSureGetir()" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">İşlem Yapan</label>
+                                <input value="@personelAdi" class="form-control form-control-sm" readonly>
+
+                                @* <select class="form-control select2bs4" name="kalemIslemYapanId" >
+                                    @if (lPersonelId!=0)
+                                    {
+                                    <option selected value="@lPersonelId">@lPersonelAdi</option>
+                                    @foreach (var item in ViewBag.personelList)
+                                    {
+                                    <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi</option>
+                                    }
+                                    }
+                                    else
+                                    {
+                                    <option selected disabled value="">İşlem Yapan Seçin</option>
+                                    @foreach (var item in ViewBag.personelList)
+                                    {
+                                    <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi</option>
+                                    }
+                                    }
+                                    </select> *@
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">İşlem Yeri</label>
+                                <select class="form-control select2bs4" name="kalemIslemYeriId" required>
+                                    @if (lIslemYeriId != 0)
+                                    {
+                                        <option selected value="@lIslemYeriId">@lIslemYeriAdi</option>
+                                        @foreach (var item in ViewBag.islemYeriList)
+                                        {
+                                            <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option selected disabled value="">İşlem Yeri Seçin</option>
+                                        @foreach (var item in ViewBag.islemYeriList)
+                                        {
+                                            <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Durum</label>
+                                <select class="form-control select2bs4" name="kalemSonDurumId" required>
+                                    @if (lSonDurumId != 0)
+                                    {
+                                        <option selected value="@lSonDurumId">@lSonDurumAciklama</option>
+                                        @foreach (var item in ViewBag.sonDurumList)
+                                        {
+                                            <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option selected disabled value="">Durum Seçin</option>
+                                        @foreach (var item in ViewBag.sonDurumList)
+                                        {
+                                            <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Süre</label>
+                                <input id="kalemSure" type="text" value="@lSure" name="kalemSure" class="form-control form-control-sm"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="col-form-label">Genel Açıklama</label>
+                                <input type="text" value="@lGenelAciklama" name="kalemGenelAciklama"
+                                       class="form-control form-control-sm" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <textarea id="summernote" name="kalemAciklamaEkle" required></textarea>
+                            @* <input id="summernote" name="kalemAciklama" required> *@
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button form="frmTempKalem" type="submit" class="btn btn-primary">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalKalemDuzenle" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Kalem Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmTempKalemDuzenle" asp-action="TempKalemDuzenle" asp-controller="Servis" method="post">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Başlama Zamanı</label>
+                                <input id="edtKalemBaslangicZamani" type="datetime-local" name="kalemBaslangicTarih"
+                                       onchange="KalanSureGetirEdt()" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Bitiş Zamanı</label>
+                                <input id="edtKalemBitisTarihi" type="datetime-local" name="kalemBitisTarih"
+                                       onchange="KalanSureGetirEdt()" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">İşlem Yapan</label>
+                                <input value="@personelAdi" class="form-control form-control-sm" readonly>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">İşlem Yeri</label>
+                                <select id="edtKalemIslemYeri" class="form-control select2bs4" name="kalemIslemYeriId" required>
+                                    @{
+                                        if (ViewBag.islemYeriId != null)
+                                        {
+                                            <option selected value="@ViewBag.islemYeriId">@ViewBag.islemYeriAdi</option>
+                                            foreach (var item in ViewBag.islemYeriList)
+                                            {
+                                                <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">İşlem Yeri Seçin</option>
+                                            @foreach (var item in ViewBag.islemYeriList)
+                                            {
+                                                <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Durum</label>
+                                <select id="edtKalemSonDurum" class="form-control select2bs4" name="kalemSonDurumId" required>
+                                    <option selected disabled value="">Durum Seçin</option>
+                                    @{
+                                        if (ViewBag.sonDurumId != null)
+                                        {
+                                            <option selected value="@ViewBag.sonDurumId">@ViewBag.sonDurumAciklama</option>
+                                            foreach (var item in ViewBag.sonDurumList)
+                                            {
+                                                <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Durum Seçin</option>
+                                            @foreach (var item in ViewBag.sonDurumList)
+                                            {
+                                                <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label class="col-form-label">Süre</label>
+                                <input id="edtKalemSure" type="text" name="kalemSure" class="form-control form-control-sm" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="col-form-label">Genel Açıklama</label>
+                                <input id="edtKalemGenelAciklama" type="text" name="kalemGenelAciklama"
+                                       class="form-control form-control-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="col-form-label">Açıklama</label>
+                                <textarea name="kalemAciklamaDuzenle" id="edtKalemAciklama" cols="30" rows="20"></textarea>
+                                @* <input class="form-control form-control-lg" id="edtKalemAciklama" name="kalemAciklama" required> *@
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="inputKalemId" name="id">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button name="btnKalemSil" id="btnTempKalemSil" form="frmTempKalemDuzenle" asp-action="TempKalemSil"
+                        asp-controller="Servis" type="submit" class="btn btn-danger">
+                    Sil
+                </button>
+                <button id="btnTempKalemDuzenle" form="frmTempKalemDuzenle" type="submit"
+                        class="btn btn-primary">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalWizard" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="form">
+        <div class="modal-content">
+            <div class="">
+                <div class="row  col-12 justify-content-between">
+                    <div class="m-2">
+                        <h4>Servis Ekle</h4>
+                    </div>
+                    <div class="m-2">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="height: 10px;" class="ml-4 ">
+                        <div class="all-steps" id="all-steps">
+                            <span class="step"><i class="fa fa-city"></i></span>
+                            <span class="step"><i class="fa fa-pen"></i></span>
+                            @* <span class="step"><i class="fa fa-file"></i></span> *@
+                            <span class="step"><i class="fa fa-eye"></i></span>
+                        </div>
+                    </div>
+                    <hr class="divider" style="width: 95%; margin: 1px 50px 1px 50px;">
+
+                </div>
+            </div>
+            <div class="modal-body mt-5">
+                <div class="tab">
+                    @*tab1*@
+                    <div class="container">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="inputCariW" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+                                <select id="inputCariW" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.CariId" onchange="CariNoW(); WSelectCari(this.id)" required>
+                                    @{
+                                        if (cariId != 0)
+                                        {
+                                            <option selected value="@cariId">@cariAdi</option>
+                                            foreach (var item in ViewBag.cariList)
+                                            {
+                                                <option value="@item.CariId">@item.CariAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Cari Seçin</option>
+                                            @foreach (var item in ViewBag.cariList)
+                                            {
+                                                <option value="@item.CariId">@item.CariAdi</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <label for="inputDepartmanW" class=" col-form-label col-form-label-sm">Departman</label>
+                                <select id="inputDepartmanW" class="form-control select2bs4" style="width: 100%;" onchange="ModulW();WSelectDepartman(this.id)"
+                                        asp-for="@Model.ServisDepartmanId" required>
+                                    @{
+                                        if (servisDepartmanId != 0)
+                                        {
+                                            <option selected value="@servisDepartmanId">@servisDepartmanAdi</option>
+                                            foreach (var item in ViewBag.servisDepartmanList)
+                                            {
+                                                <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Departman Seçin</option>
+                                            @foreach (var item in ViewBag.servisDepartmanList)
+                                            {
+                                                <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputModulW" class=" col-form-label col-form-label-sm">Modül</label>
+                                <select id="inputModulW" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.ModulId" onchange="WSelectModul(this.id)"
+                                        required>
+                                    @{
+                                        if (modulId != 0)
+                                        {
+                                            <option selected value="@modulId">@modulAdi</option>
+                                            foreach (var item in ViewBag.modulList)
+                                            {
+                                                <option value="@item.ModulId">@item.ModulAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value=""> Modul Seçmek için Önce Departman Seçin</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputYetkiliW" class=" col-form-label col-form-label-sm">Dpt. Yetkili</label>
+                                <input id="inputYetkiliW" type="text" value="@departmanYetkilisi" onchange="Wizard(this.id)"
+                                       class="form-control form-control-sm text-capitalize" asp-for="@Model.DepartmanYetkilisi" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputKonuW" class="col-form-label col-form-label-sm">Konu</label>
+                                <input id="inputKonuW" type="text" value="@konu" class="form-control form-control-sm text-capitalize" onchange="Wizard(this.id)"
+                                       asp-for="@Model.Konu" required>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="inputOncelikW" class=" col-form-label col-form-label-sm">Öncelik</label>
+                                <select id="inputOncelikW" class="form-control select2bs4" style="width: 100%;" onchange="WSelectOncelik(this.id)"
+                                        asp-for="@Model.OncelikId" required>
+                                    @{
+                                        if (oncelikId != 0)
+                                        {
+                                            <option selected value="@oncelikId">@oncelikAciklama</option>
+                                            foreach (var item in ViewBag.oncelikList)
+                                            {
+                                                <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Öncelik Seçin</option>
+                                            @foreach (var item in ViewBag.oncelikList)
+                                            {
+                                                <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputServisSekliW" class=" col-form-label col-form-label-sm">Servis Şekli</label>
+                                <select id="inputServisSekliW" class="form-control select2bs4" style="width: 100%;" onchange="WSelectServisSekli(this.id)"
+                                        asp-for="@Model.ServisSekliId" required>
+                                    @{
+                                        if (servisSekliId != 0)
+                                        {
+                                            <option selected value="@servisSekliId">@servisSekliAciklama</option>
+                                            foreach (var item in ViewBag.servisSekliList)
+                                            {
+                                                <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Servis Şekli Seçin</option>
+                                            @foreach (var item in ViewBag.servisSekliList)
+                                            {
+                                                <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputServisTipiW" class=" col-form-label col-form-label-sm">Servis Tipi</label>
+                                <select id="inputServisTipiW" class="form-control select2bs4" style="width: 100%;" onchange="WSelectServisTipi(this.id)"
+                                        asp-for="@Model.ServisTipiId" required>
+                                    @{
+                                        if (servisTipiId != 0)
+                                        {
+                                            <option selected value="@servisTipiId">@servisTipiAciklama</option>
+                                            foreach (var item in ViewBag.servisTipiList)
+                                            {
+                                                <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Servis Tipi Seçin</option>
+                                            @foreach (var item in ViewBag.servisTipiList)
+                                            {
+                                                <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputSorumluW" class=" col-form-label col-form-label-sm">Sorumlu</label>
+                                <select id="inputSorumluW" class="form-control select2bs4" style="width: 100%;" onchange="WSelectSorumlu(this.id)"
+                                        asp-for="@Model.PersonelId" required>
+                                    @{
+                                        if (personelId != 0)
+                                        {
+                                            <option selected value="@personelId">@personelAdi</option>
+                                            foreach (var item in ViewBag.personelList)
+                                            {
+                                                <option value="@item.PersonelId">
+                                                    @item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                                                </option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Sorumlu Seçin</option>
+                                            @foreach (var item in ViewBag.personelList)
+                                            {
+                                                <option value="@item.PersonelId">
+                                                    @item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                                                </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-md-3">
+                                <label for="inputTarihSaatW" class=" col-form-label col-form-label-sm">Tarih Saat</label>
+                                <input id="inputTarihSaatW" value="@tarihSaat" class="form-control form-control-sm text-capitalize" onchange="Wizard(this.id)"
+                                       asp-for="@Model.TarihSaat" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputPalanlananTarihW" class=" col-form-label col-form-label-sm">
+                                    Plan.
+                                    Tarih
+                                </label>
+                                <input id="inputPalanlananTarihW" value="@planlananTarih"
+                                       class="form-control form-control-sm text-capitalize" onchange="BaslangicZamani(); BaslangicZamaniW(); Wizard(this.id)"
+                                       asp-for="@Model.PlanlananTarih" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputTahminiSureW" class=" col-form-label col-form-label-sm">Tah. Süre</label>
+                                <input id="inputTahiminiSureW" type="number" value="@tahminiSure" onchange="Wizard(this.id)"
+                                       class="form-control form-control-sm text-capitalize" asp-for="@Model.TahminiSure" required
+                                       placeholder="(Saat)">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputGercekSureW" class=" col-form-label col-form-label-sm">Gerçek Süre</label>
+                                <input id="inputGercekSureW" type="number" value="@gercekSure" onchange="Wizard(this.id)"
+                                       class="form-control form-control-sm text-capitalize" asp-for="@Model.GercekSure" required
+                                       placeholder="(Dakika)">
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <label for="inputSonDurumTarihiW" class=" col-form-label col-form-label-sm">Son Dur.Tar.</label>
+                                <input id="inputSonDurumTarihiW" value="@sonDurumTarihi" onchange="Wizard(this.id)"
+                                       class="form-control form-control-sm text-capitalize" asp-for="@Model.SonDurumTarihi" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputTSuresiW" class=" col-form-label col-form-label-sm">T. Süresi</label>
+                                @if (tSuresi != 0)
+                                {
+                                    <input id="inputTSuresiW" type="number" value="@tSuresi" onchange="Wizard(this.id)"
+                                           class="form-control form-control-sm text-capitalize" onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi"
+                                           placeholder="(Dakika)">
+                                }
+                                else
+                                {
+                                    <input id="inputTSuresiW" type="number" class="form-control form-control-sm text-capitalize" onchange="Wizard(this.id)"
+                                           onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi" placeholder="(Dakika)">
+                                }
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputFTSuresiW" class=" col-form-label col-form-label-sm">F.T. Süresi</label>
+                                @if (fTSuresi != 0)
+                                {
+                                    <input id="inputFTSuresiW" type="number" value="@fTSuresi" onchange="Wizard(this.id)"
+                                           class="form-control form-control-sm text-capitalize" onkeyup="DakikaSaatFT()"
+                                           asp-for="@Model.FTSuresi" placeholder="(Dakika)">
+                                }
+                                else
+                                {
+                                    <input id="inputFTSuresiW" type="number" class="form-control form-control-sm text-capitalize" onchange="Wizard(this.id)"
+                                           onkeyup="DakikaSaatFT()" asp-for="@Model.FTSuresi" placeholder="(Dakika)">
+                                }
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputSonDurumW" class="col-sm-2 col-form-label col-form-label-sm">Durum</label>
+                                <select id="inputSonDurumW" class="form-control select2bs4" style="width: 100%;" onchange="WSelectSonDurum(this.id)"
+                                        asp-for="@Model.SonDurumID" required>
+                                    @{
+                                        if (sonDurumId != 0)
+                                        {
+                                            <option selected value="@sonDurumId">@sonDurumAciklama</option>
+                                            foreach (var item in ViewBag.sonDurumList)
+                                            {
+                                                <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected value="1">BEKLEMEDE</option>
+                                            @foreach (var item in ViewBag.sonDurumList)
+                                            {
+                                                <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab">
+                    @*tab2*@
+                    <div class="container">
+                        <form id="frmTempKalem" asp-action="TempKalemEkle" asp-controller="Servis" method="post">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Başlama Zamanı</label>
+                                        <input id="kalemBaslangicZamaniW" type="datetime-local" name="kalemBaslangicTarih"
+                                               value="@lBaslangicZamani" class="form-control form-control-sm" onchange="KalanSureGetirW(); Wizard(this.id)" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Bitiş Zamanı</label>
+                                        <input id="kalemBitisTarihiW" type="datetime-local" name="kalemBitisTarih" value="@lBitisZamani"
+                                               class="form-control form-control-sm" onchange="KalanSureGetirW(); Wizard(this.id)" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">İşlem Yapan</label>
+                                        <input id="kalemIslemYapanW" value="@personelAdi" class="form-control form-control-sm"  onchange="Wizard(this.id)"readonly>
+
+                                        @* <select class="form-control select2bs4" name="kalemIslemYapanId" >
+                                            @if (lPersonelId!=0)
+                                            {
+                                            <option selected value="@lPersonelId">@lPersonelAdi</option>
+                                            @foreach (var item in ViewBag.personelList)
+                                            {
+                                            <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi</option>
+                                            }
+                                            }
+                                            else
+                                            {
+                                            <option selected disabled value="">İşlem Yapan Seçin</option>
+                                            @foreach (var item in ViewBag.personelList)
+                                            {
+                                            <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi</option>
+                                            }
+                                            }
+                                            </select> *@
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">İşlem Yeri</label>
+                                        <select id="kalemIslemYeriW" class="form-control select2bs4" name="kalemIslemYeriId" onchange="WSelectIslemYeri(this.id)" required>
+                                            @if (lIslemYeriId != 0)
+                                            {
+                                                <option selected value="@lIslemYeriId">@lIslemYeriAdi</option>
+                                                @foreach (var item in ViewBag.islemYeriList)
+                                                {
+                                                    <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option selected disabled value="">İşlem Yeri Seçin</option>
+                                                @foreach (var item in ViewBag.islemYeriList)
+                                                {
+                                                    <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Durum</label>
+                                        <select id="kalemSonDurumW" class="form-control select2bs4" name="kalemSonDurumId" onchange="WSelectSonDurum(this.id)" required>
+                                            @if (lSonDurumId != 0)
+                                            {
+                                                <option selected value="@lSonDurumId">@lSonDurumAciklama</option>
+                                                @foreach (var item in ViewBag.sonDurumList)
+                                                {
+                                                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option selected disabled value="">Durum Seçin</option>
+                                                @foreach (var item in ViewBag.sonDurumList)
+                                                {
+                                                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Süre</label>
+                                        <input id="kalemSureW" type="text"  name="kalemSure" class="form-control form-control-sm"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Genel Açıklama</label>
+                                        <input id="kalemGenelAciklamaW" type="text"  name="kalemGenelAciklamaW" onchange="Wizard(this.id)"
+                                               class="form-control form-control-sm" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <textarea id="summernoteWizard" name="kalemAciklamaEkle" required></textarea>
+                                    @* <input id="summernote" name="kalemAciklama" required> *@
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+                <div class="tab">
+                    @*tab3*@
+                    <form id="frmWizard" asp-controller="Servis" asp-action="TempServisEkleWizard" method="post">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <div class="">
+                                    <div class="col-12 ">
+                                        <div class="card p-1">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputFirma" class=" col-sm-4 col-form-label col-form-label-sm">Firma</label>
+                                                        <div class="col-7 ">
+                                                            <input id="inputFirmaWL" type="text" class="form-control form-control-sm text-capitalize"
+                                                                   value="@firmaAdi" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="row ">
+                                                        <label for="inputCariNoWL" class="col-sm-4 col-form-label col-form-label-sm">Cari No</label>
+                                                        <div class="col-7">
+                                                            <input id="inputCariNoWL" type="text" value="@cariNo"
+                                                                   class="form-control form-control-sm text-capitalize" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class=" row ">
+                                                        <label for="inputServisNoWL" class="col-sm-5   col-form-label col-form-label-sm">Servis No</label>
+                                                        <div class="col-7">
+                                                            <input id="inputServisNoWL" type="text" class="form-control form-control-sm text-capitalize"
+                                                                   value="@ViewBag.cariNo-@ViewBag.servisSiraNo" asp-for="@Model.ServisNo" readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="divider">
+                                            <div class="row mb-1">
+                                                <label for="inputCariWL" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+                                                <div class="col-10">
+                                                    <select id="inputCariWL" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.CariId"
+                                                            onchange="CariNoWL();WLSelectCari(this.id)" required>
+                                                        @{
+                                                            if (cariId != 0)
+                                                            {
+                                                                <option selected value="@cariId">@cariAdi</option>
+                                                                foreach (var item in ViewBag.cariList)
+                                                                {
+                                                                    <option value="@item.CariId">@item.CariAdi</option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option selected disabled value="">Cari Seçin</option>
+                                                                @foreach (var item in ViewBag.cariList)
+                                                                {
+                                                                    <option value="@item.CariId">@item.CariAdi</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class=" row ">
+                                                        <label for="inputDepartmanWL" class="col-sm-4 col-form-label col-form-label-sm">Departman</label>
+                                                        <div class="col-sm-8">
+                                                            <select id="inputDepartmanWL" class="form-control select2bs4" style="width: 100%;" onchange="ModulWL();WLSelectDepartman(this.id)"
+                                                                    asp-for="@Model.ServisDepartmanId" required>
+                                                                @{
+                                                                    if (servisDepartmanId != 0)
+                                                                    {
+                                                                        <option selected value="@servisDepartmanId">@servisDepartmanAdi</option>
+                                                                        foreach (var item in ViewBag.servisDepartmanList)
+                                                                        {
+                                                                            <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option selected disabled value="">Departman Seçin</option>
+                                                                        @foreach (var item in ViewBag.servisDepartmanList)
+                                                                        {
+                                                                            <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputModulWL" class="col-sm-4 col-form-label col-form-label-sm">Modül</label>
+                                                        <div class="col-sm-8">
+                                                            <select id="inputModulWL" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.ModulId" onchange="WLSelectModul(this.id)"
+                                                                    required>
+                                                                @{
+                                                                    if (modulId != 0)
+                                                                    {
+                                                                        <option selected value="@modulId">@modulAdi</option>
+                                                                        foreach (var item in ViewBag.modulList)
+                                                                        {
+                                                                            <option value="@item.ModulId">@item.ModulAdi</option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option selected disabled value=""> Modul Seçmek için Önce Departman Seçin</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputYetkiliWL" class="col-sm-4 col-form-label col-form-label-sm">Dpt. Yetkili</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputYetkiliWL" type="text" value="@departmanYetkilisi"
+                                                                   class="form-control form-control-sm text-capitalize" asp-for="@Model.DepartmanYetkilisi" onchange="WizardL(this.id)" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputKonuWL" class="col-sm-4 col-form-label col-form-label-sm">Konu</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputKonuWL" type="text" value="@konu" class="form-control form-control-sm text-capitalize" onchange="WizardL(this.id)"
+                                                                   asp-for="@Model.Konu" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputOncelikWL" class="col-sm-4 col-form-label col-form-label-sm">Öncelik</label>
+                                                        <div class="col-sm-8">
+                                                            <select id="inputOncelikWL" class="form-control select2bs4" style="width: 100%;" onchange="WLSelectOncelik(this.id)"
+                                                                    asp-for="@Model.OncelikId" required>
+                                                                @{
+                                                                    if (oncelikId != 0)
+                                                                    {
+                                                                        <option selected value="@oncelikId">@oncelikAciklama</option>
+                                                                        foreach (var item in ViewBag.oncelikList)
+                                                                        {
+                                                                            <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option selected disabled value="">Öncelik Seçin</option>
+                                                                        @foreach (var item in ViewBag.oncelikList)
+                                                                        {
+                                                                            <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputServisSekliWL" class="col-sm-4 col-form-label col-form-label-sm">Servis Şekli</label>
+                                                        <div class="col-sm-8">
+                                                            <select id="inputServisSekliWL" class="form-control select2bs4" style="width: 100%;" onchange="WLSelectServisSekli(this.id)"
+                                                                    asp-for="@Model.ServisSekliId" required>
+                                                                @{
+                                                                    if (servisSekliId != 0)
+                                                                    {
+                                                                        <option selected value="@servisSekliId">@servisSekliAciklama</option>
+                                                                        foreach (var item in ViewBag.servisSekliList)
+                                                                        {
+                                                                            <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option selected disabled value="">Servis Şekli Seçin</option>
+                                                                        @foreach (var item in ViewBag.servisSekliList)
+                                                                        {
+                                                                            <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputServisTipiWL" class="col-sm-4 col-form-label col-form-label-sm">Servis Tipi</label>
+                                                        <div class="col-sm-8">
+                                                            <select id="inputServisTipiWL" class="form-control select2bs4" style="width: 100%;" onchange="WLSelectServisTipi(this.id)"
+                                                                    asp-for="@Model.ServisTipiId" required>
+                                                                @{
+                                                                    if (servisTipiId != 0)
+                                                                    {
+                                                                        <option selected value="@servisTipiId">@servisTipiAciklama</option>
+                                                                        foreach (var item in ViewBag.servisTipiList)
+                                                                        {
+                                                                            <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option selected disabled value="">Servis Tipi Seçin</option>
+                                                                        @foreach (var item in ViewBag.servisTipiList)
+                                                                        {
+                                                                            <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputSorumluWL" class="col-sm-4 col-form-label col-form-label-sm">Sorumlu</label>
+                                                        <div class="col-sm-8">
+                                                            <select id="inputSorumluWL" class="form-control select2bs4" style="width: 100%;" onchange="WLSelectSorumlu(this.id)"
+                                                                    asp-for="@Model.PersonelId" required>
+                                                                @{
+                                                                    if (personelId != 0)
+                                                                    {
+                                                                        <option selected value="@personelId">@personelAdi</option>
+                                                                        foreach (var item in ViewBag.personelList)
+                                                                        {
+                                                                            <option value="@item.PersonelId">
+                                                                                @item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                                                                            </option>
+                                                                        }
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option selected disabled value="">Sorumlu Seçin</option>
+                                                                        @foreach (var item in ViewBag.personelList)
+                                                                        {
+                                                                            <option value="@item.PersonelId">
+                                                                                @item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                                                                            </option>
+                                                                        }
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputTarihSaatWL" class="col-sm-4 col-form-label col-form-label-sm">Tarih Saat</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputTarihSaatWL" value="@tarihSaat" class="form-control form-control-sm text-capitalize"
+                                                                   asp-for="@Model.TarihSaat" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row mb-1">
+                                                        <label for="inputPalanlananTarihWL" class="col-sm-4 col-form-label col-form-label-sm">
+                                                            Plan.
+                                                            Tarih
+                                                        </label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputPalanlananTarihWL" value="@planlananTarih"
+                                                                   class="form-control form-control-sm text-capitalize" onchange="BaslangicZamani()"
+                                                                   asp-for="@Model.PlanlananTarih" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1">
+                                                        <label for="inputTahminiSureWL" class="col-sm-4 col-form-label col-form-label-sm">Tah. Süre</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputTahiminiSureWL" type="number" value="@tahminiSure"
+                                                                   class="form-control form-control-sm text-capitalize" asp-for="@Model.TahminiSure" required
+                                                                   placeholder="(Saat)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1">
+                                                        <label for="inputGercekSureWL" class="col-sm-4 col-form-label col-form-label-sm">Gerçek Süre</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputGercekSureWL" type="number" value="@gercekSure"
+                                                                   class="form-control form-control-sm text-capitalize" asp-for="@Model.GercekSure" required
+                                                                   placeholder="(Dakika)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1">
+                                                        <label for="inputGirilenSureWL" class="col-sm-4 col-form-label col-form-label-sm">Girilen Süre</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputGirilenSureWL" type="number" value="@ViewBag.girilenSure"
+                                                                   class="form-control form-control-sm text-capitalize" asp-for="@Model.GirilenSure" required
+                                                                   placeholder="(Dakika)" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1">
+                                                        <label for="inputSonDurumTarihiWL" class="col-sm-4 col-form-label col-form-label-sm">Son Dur.Tar.</label>
+                                                        <div class="col-sm-8">
+                                                            <input id="inputSonDurumTarihiWL" value="@sonDurumTarihi"
+                                                                   class="form-control form-control-sm text-capitalize" asp-for="@Model.SonDurumTarihi" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputTSuresiWL" class="col-sm-4 col-form-label col-form-label-sm">T. Süresi</label>
+                                                        <div class="col-sm-8">
+                                                            @if (tSuresi != 0)
+                                                            {
+                                                                <input id="inputTSuresiWL" type="number" value="@tSuresi"
+                                                                       class="form-control form-control-sm text-capitalize" onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi"
+                                                                       placeholder="(Dakika)">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input id="inputTSuresiWL" type="number" class="form-control form-control-sm text-capitalize"
+                                                                       onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi" placeholder="(Dakika)">
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-1 ">
+                                                        <label for="inputFTSuresiWL" class="col-sm-4 col-form-label col-form-label-sm">F.T. Süresi</label>
+                                                        <div class="col-sm-8">
+                                                            @if (fTSuresi != 0)
+                                                            {
+                                                                <input id="inputFTSuresiWL" type="number" value="@fTSuresi"
+                                                                       class="form-control form-control-sm text-capitalize" onkeyup="DakikaSaatFT()"
+                                                                       asp-for="@Model.FTSuresi" placeholder="(Dakika)">
+                                                            }
+                                                            else
+                                                            {
+                                                                <input id="inputFTSuresiWL" type="number" class="form-control form-control-sm text-capitalize"
+                                                                       onkeyup="DakikaSaatFT()" asp-for="@Model.FTSuresi" placeholder="(Dakika)">
+                                                            }
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="divider">
+                                            <div class="row mb-1">
+                                                <label for="inputSonDurumWL" class="col-sm-2 col-form-label col-form-label-sm">Durum</label>
+                                                <div class="col-sm-10">
+                                                    <select id="inputSonDurumWL" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.SonDurumID" onchange="WLSelectSonDurum(this.id)"
+                                                            required>
+                                                        @{
+                                                            if (sonDurumId != 0)
+                                                            {
+                                                                <option selected value="@sonDurumId">@sonDurumAciklama</option>
+                                                                foreach (var item in ViewBag.sonDurumList)
+                                                                {
+                                                                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                <option selected value="1">BEKLEMEDE</option>
+                                                                @foreach (var item in ViewBag.sonDurumList)
+                                                                {
+                                                                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                                                }
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="card p-1">
+                                    <div class="row mb-1 ">
+                                        <label class="col-sm-4 col-form-label col-form-label-sm">Başlama Zamanı</label>
+                                        <div class="col">
+
+                                            <input id="kalemBaslangicZamaniWL" type="datetime-local" name="kalemBaslangicTarihWL" value="@lBaslangicZamani"
+                                                   class="form-control form-control-sm" onchange="KalanSureGetirWL(); WizardL(this.id)" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 ">
+                                        <label class="col-sm-4 col-form-label col-form-label-sm">Bitiş Zamanı</label>
+                                        <div class="col">
+
+                                            <input id="kalemBitisTarihiWL" type="datetime-local" name="kalemBitisTarihWL"
+                                                   class="form-control form-control-sm" onchange="KalanSureGetirWL(); WizardL(this.id)" required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 ">
+                                        <label class="col-sm-4 col-form-label col-form-label-sm">İşlem Yapan</label>
+                                        <div class="col">
+
+                                            <input id="kalemIslemYapanWL" name="kalemIslemYapanIdWL" value="@personelAdi"
+                                                   class="form-control form-control-sm" required readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label for="kalemIslemYeriWL" class="col-sm-4 col-form-label col-form-label-sm">İşlem Yeri</label>
+                                        <div class="col-sm-8">
+                                            <select id="kalemIslemYeriWL" name="kalemIslemYeriIdWL" class="form-control select2bs4" name="kalemIslemYeriId" onchange="WLSelectIslemYeriKalem(this.id)" required>
+                                                @{
+                                                    if (ViewBag.islemYeriId != null)
+                                                    {
+                                                        <option selected value="@ViewBag.islemYeriId">@ViewBag.islemYeriAdi</option>
+                                                        foreach (var item in ViewBag.islemYeriList)
+                                                        {
+                                                            <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <option selected disabled value="">İşlem Yeri Seçin</option>
+                                                        @foreach (var item in ViewBag.islemYeriList)
+                                                        {
+                                                            <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <label for="kalemSonDurumWL" class="col-sm-4 col-form-label col-form-label-sm">Son Durum</label>
+                                        <div class="col-sm-8">
+                                            <select id="kalemSonDurumWL" name="kalemSonDurumIdWL" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.SonDurumID" onchange="WLSelectSonDurumKalem(this.id)"
+                                                    required>
+                                                @{
+                                                    if (sonDurumId != 0)
+                                                    {
+                                                        <option selected value="@sonDurumId">@sonDurumAciklama</option>
+                                                        foreach (var item in ViewBag.sonDurumList)
+                                                        {
+                                                            <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        <option selected value="1">BEKLEMEDE</option>
+                                                        @foreach (var item in ViewBag.sonDurumList)
+                                                        {
+                                                            <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 ">
+                                        <label class="col-sm-4 col-form-label col-form-label-sm">Süre</label>
+                                        <div class="col">
+
+                                            <input id="kalemSureWL" name="kalemSureWL"
+                                                   class="form-control form-control-sm" readonly required>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1 ">
+                                        <label class="col-sm-4 col-form-label col-form-label-sm">Genel Açıklama</label>
+                                        <div class="col">
+                                            <input id="kalemGenelAciklamaWL" name="kalemGenelAciklamaWL" onchange="WizardL(this.id)"
+                                                   class="form-control form-control-sm" required>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-sm-12">
+                                            <textarea id="summernoteWizardL" name="kalemAciklamaWL"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <button form="frmWizard"  type="submit" class="btn btn-primary col-11">Kaydet</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div style="overflow:auto;" id="nextprevious">
+                    <div style="float:right;">
+                        <button type="button" id="prevBtn" onclick="nextPrev(-1)"><i class="fa fa-angle-double-left"></i></button>
+                        <button type="button" id="nextBtn" onclick="nextPrev(1)"><i class="fa fa-angle-double-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

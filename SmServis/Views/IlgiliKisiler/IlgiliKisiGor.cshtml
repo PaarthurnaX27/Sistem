@@ -1,0 +1,168 @@
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    var id=ViewBag.id;
+    CariManager cm = new CariManager(new EfCariDal());
+    CariPersonelManager cpm=new CariPersonelManager(new EfCariPersonelDal());
+    IlgiliKisilerManager im = new IlgiliKisilerManager(new EfIlgiliKisilerDal());
+    IlceManager ilcem = new IlceManager(new EfIlceDal());
+    SehirManager sm = new SehirManager(new EfSehirDal());
+    UlkeManager um = new UlkeManager(new EfUlkeDal());
+    CariDurumManager cdm = new CariDurumManager(new EfCariDurumDal());
+    ParaBirimiManager pbm = new ParaBirimiManager(new EfParaBirimiDal());
+    AnaSektorManager asm = new AnaSektorManager(new EfAnaSektorDal());
+    BagliSektorManager bsm = new BagliSektorManager(new EfBagliSektorDal());
+    CinsiyetManager cnsm = new CinsiyetManager(new EfCinsiyetDal());
+    CariTipiManager ctm = new CariTipiManager(new EfCariTipiDal());
+    DepartmanManager dptm = new DepartmanManager(new EfDepartmanDal());
+    PozisyonManager pzm = new PozisyonManager(new EfPozisyonDal());
+    UnvanManager unvm=new UnvanManager(new EfUnvanDal());
+    var ilgiliKisi=im.TGetByID(id);
+    var personel=cpm.TGetByID(ilgiliKisi.PersonelId);
+    var cari=cm.TGetByID(ilgiliKisi.CariId);
+}
+<div class="row">
+    <div class="col-md-6">
+        <div id="divContent" class="card bg-light">
+            <div class="card-header">
+                <h5 class=" text-center text-bold">Personel</h5>
+            </div>
+            <div class="card-body p-3">
+                <dl class="row">
+                  <dt class="col-sm-4">Personel Kodu</dt>
+                  <dd class="col-sm-8 text-uppercase">@personel.CariPersonelKodu</dd>
+                  <dt class="col-sm-4">Personel Adı</dt>
+                  <dd class="col-sm-8 text-capitalize">@personel.CariPersonelAdi @personel.CariPersonelAdi2</dd>
+                  @* <dd class="col-sm-8 offset-sm-4">Donec id elit non mi porta gravida at eget metus.</dd> *@
+                  <dt class="col-sm-4">Personel Soyadı</dt>
+                  <dd class="col-sm-8">@personel.CariPersonelSoyadi</dd>
+                  <dt class="col-sm-4">Cinsiyet</dt>
+                  <dd class="col-sm-8">@cnsm.TGetByID(personel.CinsiyetId).CinsiyetAciklama</dd>
+                  <dt class="col-sm-4">Mail</dt>
+                  <dd class="col-sm-8">@personel.Mail</dd>
+                  <dt class="col-sm-4">Telefon</dt>
+                  <dd class="col-sm-8">@personel.Telefon</dd>
+                  <dt class="col-sm-4">Unvan</dt>
+                  <dd class="col-sm-8">@unvm.TGetByID(personel.UnvanId).UnvanAciklama</dd>
+                  <dt class="col-sm-4">Departman</dt>
+                  <dd class="col-sm-8">@dptm.TGetByID(personel.DepartmanId).DepartmanAdi</dd>
+                  <dt class="col-sm-4">Pozisyon</dt>
+                  <dd class="col-sm-8">@pzm.TGetByID(personel.PozisyonId).PozisyonAdi</dd>
+                  <dt class="col-sm-4">Çalışma Durumu</dt>
+                  @{
+                    string calismaDurumu="";
+                    if (personel.CalismaDurumu==true)
+                    {
+                        calismaDurumu="Çalışıyor";
+                    }
+                    else if(personel.CalismaDurumu==false)
+                    {
+                        calismaDurumu="Ayrıldı";
+                    }
+                  }
+                  <dd class="col-sm-8">@calismaDurumu</dd>
+                  <dt class="col-sm-4">Servis Maili Gönderilsin</dt>
+                  @{
+                    string servisMaili="";
+                   if (personel.SerivsMailGonder==true)
+                   {
+                    servisMaili="Evet";
+                   }
+                   else
+                   {
+                    servisMaili="Hayır";
+                   }
+                  }
+                  <dd class="col-sm-8">@servisMaili</dd>
+                  <dt class="col-sm-4">Servis Faturası Gönderilsin</dt>
+                  @{
+                    string servisFatura="";
+                   if (personel.ServisFaturaGonder==true)
+                   {
+                    servisFatura="Evet";
+                   }
+                   else
+                   {
+                    servisFatura="Hayır";
+                   }
+                  }
+                  <dd class="col-sm-8">@servisFatura</dd>
+                  <dt class="col-sm-4 mb-4">Adres</dt>
+                  <dd class="col-sm-8 ">@personel.Adres1</dd>
+                  <dt class="col-sm-4 ">Adres 2</dt>
+                  <dd class="col-sm-8">@personel.Adres2</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div id="divContent" class="card bg-light">
+             <div class="card-header">
+                <h5 class=" text-center text-bold">Cari</h5>
+            </div>
+            <div class="card-body p-3">
+               <dl class="row">
+                  <dt class="col-sm-4">Firma No</dt>
+                  <dd class="col-sm-8 text-uppercase">@cari.FirmaNo</dd>
+                  <dt class="col-sm-4">Cari Adı</dt>
+                  <dd class="col-sm-8 text-capitalize">@cari.CariAdi</dd>
+                  @* <dd class="col-sm-8 offset-sm-4">Donec id elit non mi porta gravida at eget metus.</dd> *@
+                  <dt class="col-sm-4">Hesap Kodu</dt>
+                  <dd class="col-sm-8">@cari.HesapKodu</dd>
+                  <dt class="col-sm-4">Vergi Dairesi</dt>
+                  <dd class="col-sm-8">@cari.VergiDairesi</dd>
+                  <dt class="col-sm-4">Vergi No</dt>
+                  <dd class="col-sm-8">@cari.VergiNo</dd>
+                  <dt class="col-sm-4">Telefon</dt>
+                  <dd class="col-sm-8">@cari.Telefon1</dd>
+                  <dt class="col-sm-4">Telefon 2</dt>
+                  <dd class="col-sm-8">@cari.Telefon2</dd>
+                  <dt class="col-sm-4">Ülke</dt>
+                  <dd class="col-sm-8">@um.TGetByID(cari.UlkeId).UlkeAdi</dd>
+                  <dt class="col-sm-4">Şehir</dt>
+                  <dd class="col-sm-8">@sm.TGetByID(cari.SehirId).SehirAdi</dd>
+                  <dt class="col-sm-4">İlçe</dt>
+                  <dd class="col-sm-8">@ilcem.TGetByID(cari.IlceId).IlceAdi</dd>
+                  <dt class="col-sm-4">Cari Durum</dt>
+                  <dd class="col-sm-8">@cdm.TGetByID(cari.CariDurumId).CariDurumAciklama</dd>
+                  <dt class="col-sm-4">Para Birimi</dt>
+                  <dd class="col-sm-8">@pbm.TGetByID(cari.ParaBirimiId).ParaBirimiAdi @pbm.TGetByID(cari.ParaBirimiId).ParaBirimiSimge</dd>
+                  <dt class="col-sm-4">Ana Sektör</dt>
+                  <dd class="col-sm-8">@asm.TGetByID(cari.AnaSektorId).AnaSektorAdi</dd>
+                  <dt class="col-sm-4">Bağlı Sektör</dt>
+                  <dd class="col-sm-8">@bsm.TGetByID(cari.BagliSektorId).BagliSektorAdi</dd>
+               <dt class="col-sm-4">e-Fatura Mükellefi</dt>
+                  @{
+                    string eFatura="";
+                    if (cari.eFaturaMukellefi==true)
+                    {
+                        eFatura="Evet";
+                    }
+                    else
+                    {
+                        eFatura="Hayır";
+                    }
+                  }
+                  <dd class="col-sm-8">@eFatura</dd>
+                  <dt class="col-sm-4">e-İrsaliye Mükellefi</dt>
+                  @{
+                    string eIrsaliye="";
+                   if (cari.eIrsaliyeMukellefi==true)
+                   {
+                    eIrsaliye="Evet";
+                   }
+                   else 
+                   {
+                    eIrsaliye="Hayır";
+                   }
+                  }
+                  <dd class="col-sm-8">@eIrsaliye</dd>
+                  <dt class="col-sm-4 mb-4">Adres</dt>
+                  <dd class="col-sm-8 ">@cari.Adres</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,172 @@
+﻿@model EntityLayer.Concrete.CariPersonel
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Ekleme İşlemi Başarısız Oldu'
+                })
+            };</script>
+    }
+}
+<div class="card p-3">
+    <div class="card-header">
+        <div class="row justify-content-between">
+            <div class="col-md-4">
+                <h5>Cari Personel Kartı Ekle</h5>
+            </div>
+            <div class="col-md-1">
+                  <a asp-action="AddCari" asp-controller="Cari" class="bi bi-x-circle-fill btn btn-lg btn-danger"></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="TempCariPersonelKartiEkle" asp-controller="TempCariPersonelKarti" method="post">
+            <div class="form-group">
+                <div class="row mb-1">
+                    <div class="col-md-3 mb-1">
+                        <label>Personel Kodu</label>
+                        <input type="text" class="form-control text-capitalize" asp-for="@Model.CariPersonelKodu"
+                            required placeholder="Personel Kodu">
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Adı</label>
+                        <input type="text" class="form-control text-capitalize" placeholder="Personel Adı" required
+                            asp-for="@Model.CariPersonelAdi">
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>İkinci Adı</label>
+                        <input type="text" class="form-control text-capitalize" placeholder="İkinci Adı"
+                            asp-for="@Model.CariPersonelAdi2">
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Soyadı</label>
+                        <input type="text" class="form-control text-capitalize" placeholder="Soyadı" required
+                            asp-for="@Model.CariPersonelSoyadi">
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-3 mb-1">
+                        <label>Cinsiyet</label>
+                        <select class="form-control select2bs4" style="width: 100%;" asp-for="@Model.CinsiyetId"
+                            required>
+                            <option selected disabled value="">Cinsiyet Seç</option>
+                            @foreach (var cinsiyet in ViewBag.cinsiyetList)
+                            {
+                                <option value="@cinsiyet.CinsiyetId">@cinsiyet.CinsiyetAciklama</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Telefon</label>
+                        <input type="text" class="form-control form-control" placeholder="Telefon" required
+                            asp-for="@Model.Telefon">
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Adres</label>
+                        <textarea class="form-control text-capitalize" placeholder="Adres" required
+                            asp-for="@Model.Adres1"></textarea>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Adres</label>
+                        <textarea class="form-control text-capitalize" placeholder="Adres 2" required
+                            asp-for="@Model.Adres2"></textarea>
+                    </div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-3 mb1">
+                    <label>Mail</label>
+                        <input type="text" class="form-control form-control" placeholder="Mail" asp-for="@Model.Mail"
+                            required>
+                    </div>
+                    @* <div class="col-md-3 mb1">
+                    <input type="text" class="form-control form-control" placeholder="Parola"
+                    asp-for="@Model.Parola">
+                    </div> *@
+                    <div class="col-md-3">
+                        <label>İşe Giriş Tarihi</label>
+                        <div class="form-group">
+                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#reservationdate" placeholder="İşe Giriş Tarihi Seçin" name="iseGiris"
+                                    required />
+                                <div class="input-group-append" data-target="#reservationdate"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="divider" />
+                <div class="row mb-1">
+                    <div class="col-md-3 mb-1">
+                        <label>Unvan</label>
+                        <select id="ikUnvanId" class="form-control select2bs4" style="width: 100%;" required
+                            asp-for="@Model.UnvanId" required>
+                            <option selected disabled value="">Unvan Seç</option>
+                            @foreach (var unvan in ViewBag.unvanList)
+                            {
+                                <option value="@unvan.UnvanId">@unvan.UnvanAciklama</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Departman</label>
+                        <select id="ikDepartmanId" class="form-control select2bs4" onchange="FillPozisyon()" 
+                            asp-for="@Model.DepartmanId" style="width: 100%;" required>
+                            <option selected disabled value="">Departman Seç</option>
+                            @foreach (var departman in ViewBag.departmanList)
+                            {
+                                <option value="@departman.DepartmanId">@departman.DepartmanAdi</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Pozisyon</label>
+                        <select id="ikPozisyonId" class="form-control select2bs4" asp-for="@Model.PozisyonId" 
+                            style="width: 100%;" required>
+                            <option selected disabled value="">Pozisyon Seçmek İçin Önce Departman Seçin</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-1">
+                        <label>Çalıma Durumu</label>
+                       <select id="ikCalismaDurumuId" class="form-control select2bs4"  
+                            asp-for="@Model.CalismaDurumuId" style="width: 100%;" required>
+                            <option selected disabled value="">Çalışma Durumu Seç</option>
+                            @foreach (var calismaDurumus in ViewBag.calismaDurumuList)
+                            {
+                                <option value="@calismaDurumus.CalismaDurumuId">@calismaDurumus.CalismaDurumuAciklama</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3 mb-1">
+                    <div class="col-md-3 mr-4">
+                        <input class=" mr-3" type="checkbox" asp-for="@Model.SerivsMailGonder">
+                        <label class="form-check-label mr-3">Servis Maili Gönderilecek Mi?</label>
+                    </div>
+                    <div class="col-md-3">
+                        <input class="form-check-input" type="checkbox" asp-for="@Model.ServisFaturaGonder">
+                        <label class="form-check-label">Servis Faturası Gönderilecek Mi?</label>
+                    </div>
+
+                </div>
+                <div class="row mt-3 justify-content-end">
+                    <button type="submit" class="btn btn-primary col-md-3">Ekle</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

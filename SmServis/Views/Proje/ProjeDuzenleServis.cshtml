@@ -1,0 +1,837 @@
+﻿@model EntityLayer.Concrete.TempServisProjeIcerik
+@using Microsoft.AspNetCore.Http;
+
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+        var Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+
+        Toast.fire({
+          icon: 'error',
+          title: '@TempData["Error"]'
+        })
+      };</script>
+    }
+
+
+    var firmaAdi = Context.Session.GetString("firma").ToString();
+    CariManager cm = new CariManager(new EfCariDal());
+    PersonelManager pm = new PersonelManager(new EfPersonelDal());
+    ModulManager mm = new ModulManager(new EfModulDal());
+    ParaBirimiManager pbm = new ParaBirimiManager(new EfParaBirimiDal());
+    ProgramManager prgm = new ProgramManager(new EfProgramDal());
+    CariPersonelManager cpm = new CariPersonelManager(new EfCariPersonelDal());
+    FaturalamaPeriyoduManager fpm = new FaturalamaPeriyoduManager(new EfFaturalamaPeriyoduDal());
+    TempCariProgramManager tcpm = new TempCariProgramManager(new EfTempCariProgramDal());
+    var kullaniciId = (int)Context.Session.GetInt32("kullanici");
+    int? projePeriyotId = Context.Session.GetInt32("projePeriyotId");
+    int? projeProgramId = Context.Session.GetInt32("projeProgramId");
+    var tempCariProgram = tcpm.TGetList().Where(x => x.SonDegistiren == kullaniciId).FirstOrDefault();
+    string cariAdi = "Cari Seçin";
+    string programAdi = "Program Seçin";
+    string personelAdi = "Personel Seçin";
+    int cariId = (int)Context.Session.GetInt32("projeCariId");
+    int programId =(int)Context.Session.GetInt32("projeProgramId");
+    int periyotId = (int)Context.Session.GetInt32("projePeriyotId");
+    int personelId = 0;
+    string periyotAciklama = "Periyot Seçin";
+    if (cariId != null)
+    {
+        
+        cariAdi = cm.TGetByID(cariId).CariAdi;
+
+    }
+    if (programId != null)
+    {
+       
+        programAdi = prgm.TGetByID(programId).ProgramAdi;
+    }
+    if (periyotId != null)
+    {
+       
+        periyotAciklama = fpm.TGetByID(periyotId).FaturalamaPeriyoduAciklama;
+    }
+
+}
+
+<style>
+  .select2-selection__rendered {
+    line-height: 31px !important;
+  }
+
+  .select2-container .select2-selection--single {
+    height: 31px !important;
+  }
+body {
+    background: #eee
+}
+
+#regForm {
+    background-color: #ffffff;
+    margin: 0px auto;
+    font-family: Raleway;
+    padding: 40px;
+    border-radius: 10px
+}
+
+#register{
+
+  color: #6A1B9A;
+}
+
+h1 {
+    text-align: center
+}
+
+@* input {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+
+    border: 1px solid #aaaaaa;
+    border-radius: 10px;
+    -webkit-appearance: none;
+} *@
+
+
+
+.tab input:focus{
+
+  border:1px solid #6a1b9a !important;
+  outline: none;
+}
+
+input.invalid {
+
+    border:1px solid #e03a0666;
+}
+
+.tab {
+    display: none
+}
+
+button {
+    background-color: #6A1B9A;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    padding: 10px 20px;
+    font-size: 17px;
+    font-family: Raleway;
+    cursor: pointer
+}
+
+button:hover {
+    opacity: 0.8
+}
+
+button:focus{
+
+  outline: none !important;
+}
+
+#prevBtn {
+    background-color: #bbbbbb
+}
+
+
+.all-steps{
+      text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.step {
+       height: 40px;
+    width: 40px;
+    margin: 0 2px;
+    background-color: #bbbbbb;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color: #6a1b9a;
+    opacity: 0.5;
+}
+
+.step.active {
+    opacity: 1
+}
+
+
+.step.finish {
+   color: #fff;
+   background: #6a1b9a;
+   opacity: 1;
+
+}
+
+
+
+.all-steps {
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 30px
+}
+
+.thanks-message {
+    display: none
+}
+  @*.row{margin-bottom:20px;}.button.button-small{height:30px;line-height:30px;padding:0px10px;}tdinput[type=text],tdselect{width:100%;height:30px;margin:0;padding:2px8px;}th:last-child{text-align:right;}td:last-child{text-align:right;}td:last-child.button{width:30px;height:30px;text-align:center;padding:0px;margin-bottom:0px;margin-right:5px;background-color:#FFF;}td:last-child.button.fa{line-height:30px;width:30px;}*@
+</style>
+<div id="updateDiv" class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3><i class="bi bi-globe"></i> Servis Projesi Ekle</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmProje" class=" align-right btn btn-info btn-lg float-right" value="1"
+                                    name="bitir">
+                                <i class="bi bi-database-add"></i>
+                            </button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <h4>
+                            <button type="button" class=" align-right btn btn-warning btn-lg float-right" data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="KaydetmedenCik" asp-controller="Proje" class=" btn btn-lg btn-danger">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-light">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+                <a class="nav-link active btn btn-white" data-toggle="tab" data-target="#fiyatListTab" role="tab">
+                    <i class="bi bi-card-list"></i>
+                    Fiyat Listesi
+                </a>
+                <a class="nav-link btn btn-white" data-toggle="tab" data-target="#personelTab" onclick="isFirstPersonel()" role="tab">
+                    <i class="bi bi-card-list"></i>
+                    Fatura Mailleri
+                </a>
+            </div>
+        </nav>
+        <div class="container-fluid bg-white">
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="fiyatListTab" role="tabpanel">
+                    <form id="frmProje" asp-controller="Proje" asp-action="ProjeEkleServisG" asp-route-servisProjeId="@ViewBag.projeId" method="post"
+                          asp-area="" data-ajax-loading="#loading" data-ajax-mode="replace" data-ajax-update="#updateDiv"
+                          data-ajax-success="Success" data-ajax-failure="Failure" data-ajax="true">
+                        <div class="row mb-2 mx-4">
+                            <div class="col-md-4">
+                                <label for="cariProje" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+                                <input value="@cariAdi" class="form-control form-control-sm" readonly />
+                            </div>
+                            <div class="col-md-4">
+                                <label for="projeProgram1" class="col-sm-4 col-form-label col-form-label-sm">Program</label>
+                                <select id="projeProgram1" class="form-control select2bs4" style="width: 100%;" name="programId" onchange="projeProgramF()"
+                                        required>
+                                    @{
+                                        if (programId != 0)
+                                        {
+                                            <option selected value="@projeProgramId">@prgm.TGetList().Where(x => x.ProgramId == projeProgramId).FirstOrDefault().ProgramAdi</option>
+                                            foreach (var item in ViewBag.programList)
+                                            {
+                                                <option value="@item.ProgramId">@item.ProgramAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Program Seçin</option>
+                                            foreach (var item in ViewBag.programList)
+                                            {
+                                                <option value="@item.ProgramId">@item.ProgramAdi</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="projePeriyot1" class="col-sm-4 col-form-label col-form-label-sm">Periyot</label>
+                                <select id="projePeriyot1" class="form-control select2bs4" style="width: 100%;" name="periyotId" form="frmProje" onchange="projePeriyotF()"
+                                        required>
+                                    @{
+                                        if (periyotId != 0)
+                                        {
+                                            <option selected value="@projePeriyotId">@fpm.TGetList().Where(x => x.FaturalamaPeriyoduId == projePeriyotId).FirstOrDefault().FaturalamaPeriyoduAciklama</option>
+                                            foreach (var item in ViewBag.periyotList)
+                                            {
+                                                <option value="@item.FaturalamaPeriyoduId">@item.FaturalamaPeriyoduAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Periyot Seçin</option>
+                                            foreach (var item in ViewBag.periyotList)
+                                            {
+                                                <option value="@item.FaturalamaPeriyoduId">@item.FaturalamaPeriyoduAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Fiyat Listesi</h3>
+                                        <div class="card-tools">
+                                            <div class="input-group input-group-sm">
+                                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalFiyatEkle">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body table-responsive p-0" style="height: 477px;">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table id="tbl" class="table table-head-fixed text-nowrap table-hover table-striped"
+                                                           style='font-size:75%'>
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <th>Geçerlilik Tarih Başlangıç</th>
+                                                                <th>Geçerlilik Tarih Bitiş</th>
+                                                                <th>Servis</th>
+                                                                <th>Fiyat</th>
+                                                                <th>Para Birimi</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Enumerable.Count(ViewBag.servisProjeList) != 0)
+                                                            {
+
+                                                                foreach (var item in ViewBag.servisProjeList)
+                                                                {
+
+                                                                    <tr ondblclick="doubleClickServisProjeGuncelle(@item.ServisProjeIcerikId)">
+                                                                        <td class="text-center">@item.GecerlilikTarihBaslangic.ToShortDateString() </td>
+                                                                        <td class="text-center">@item.GecerlilikTarihBitis.ToShortDateString()</td>
+                                                                        <td class="text-center">@mm.TGetByID(item.ModulId).ModulAdi</td>
+                                                                        <td class="text-center col-2">@item.Fiyat</td>
+                                                                        <td class="text-center">@pbm.TGetByID(item.ParaBirimiId).ParaBirimiAdi @pbm.TGetByID(item.ParaBirimiId).ParaBirimiSimge</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            @if (Enumerable.Count(ViewBag.tempServisProjeList) != 0)
+                                                            {
+                                                                foreach (var item in ViewBag.tempServisProjeList)
+                                                                {
+                                                                    <tr ondblclick="doubleClickTempServisProjeGuncelle(@item.TempServisProjeIcerikId)">
+                                                                        <td class="text-center">@item.GecerlilikTarihBaslangic.ToShortDateString() </td>
+                                                                        <td class="text-center">@item.GecerlilikTarihBitis.ToShortDateString()</td>
+                                                                        <td class="text-center">@mm.TGetByID(item.ModulId).ModulAdi</td>
+                                                                        <td class="text-center col-2">@item.Fiyat</td>
+                                                                        <td class="text-center">@pbm.TGetByID(item.ParaBirimiId).ParaBirimiAdi @pbm.TGetByID(item.ParaBirimiId).ParaBirimiSimge</td>
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="personelTab" role="tabpanel" data-toggle="tab">
+                    <div class="row mb-2 mx-4">
+                        <div class="col-md-4">
+                            <label for="cariProje" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+                            <input value="@cariAdi" class="form-control form-control-sm" readonly />
+                        </div>
+                        <div class="col-md-4">
+                                <label for="projeProgram2" class="col-sm-4 col-form-label col-form-label-sm">Program</label>
+                                <select id="projeProgram2" class="form-control select2bs4" style="width: 100%;" name="programId" onchange="projeProgramL()"
+                                        required>
+                                    @{
+                                        if (programId != 0)
+                                        {
+                                            <option selected value="@projeProgramId">@prgm.TGetList().Where(x => x.ProgramId == projeProgramId).FirstOrDefault().ProgramAdi</option>
+                                            foreach (var item in ViewBag.programList)
+                                            {
+                                                <option value="@item.ProgramId">@item.ProgramAdi</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Program Seçin</option>
+                                            foreach (var item in ViewBag.programList)
+                                            {
+                                                <option value="@item.ProgramId">@item.ProgramAdi</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="projePeriyot2" class="col-sm-4 col-form-label col-form-label-sm">Periyot</label>
+                                <select id="projePeriyot2" class="form-control select2bs4" style="width: 100%;" name="periyotId" form="frmProje" onchange="projePeriyotL()"
+                                        required>
+                                    @{
+                                        if (periyotId != 0)
+                                        {
+                                            <option selected value="@projePeriyotId">@fpm.TGetList().Where(x => x.FaturalamaPeriyoduId == projePeriyotId).FirstOrDefault().FaturalamaPeriyoduAciklama</option>
+                                            foreach (var item in ViewBag.periyotList)
+                                            {
+                                                <option value="@item.FaturalamaPeriyoduId">@item.FaturalamaPeriyoduAciklama</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option selected disabled value="">Periyot Seçin</option>
+                                            foreach (var item in ViewBag.periyotList)
+                                            {
+                                                <option value="@item.FaturalamaPeriyoduId">@item.FaturalamaPeriyoduAciklama</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                    </div>
+                    <input type="hidden" name="cariId" value="@cariId" />
+                    <form>
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Fatura Mailleri</h3>
+                                        <div class="card-tools">
+                                            <div class="input-group input-group-sm">
+                                                @*<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPersonelEkle">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>*@
+                                                <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#modalPersonelEkle2">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body table-responsive p-0" style="height: 477px;">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <table id="tbl" class="table table-head-fixed text-nowrap table-hover table-striped"
+                                                           style='font-size:75%'>
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <th class="text-left">Seç</th>
+                                                                <th>Personel</th>
+                                                                <th>Servis Maili Gönderilecek Mi?</th>
+                                                                <th>Fatura Maili Gönerilecek Mi?</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @if (Enumerable.Count(ViewBag.tempFaturaMailList) != 0)
+                                                            {
+                                                                foreach (var item in ViewBag.tempFaturaMailList)
+                                                                {
+                                                                    <tr ondblclick="doubleClickFaturaMailG(@item.TempFaturaMailId)">
+                                                                        <td><input name="radio" type="radio" value="@item.TempFaturaMailId" /></td>
+                                                                        <td class="text-center">@cpm.TGetByID(item.CariPersonelId).CariPersonelAdi @cpm.TGetByID(item.CariPersonelId).CariPersonelAdi2 @cpm.TGetByID(item.CariPersonelId).CariPersonelSoyadi</td>
+                                                                        @if (item.ServisMailiGonderilecekMi == true)
+                                                                        {
+
+                                                                            <td class="text-center">Evet</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="text-center">Hayır</td>
+                                                                        }
+                                                                        @if (item.FaturaMailiGonderilecekMi == true)
+                                                                        {
+
+                                                                            <td class="text-center">Evet</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="text-center">Hayır</td>
+                                                                        }
+                                                                    </tr>
+                                                                }
+                                                            }
+                                                            @*@if (Enumerable.Count(ViewBag.tempFaturaList) != 0)
+                                                            {
+                                                                foreach (var item in ViewBag.tempFaturaList)
+                                                                {
+                                                                    <tr ondblclick="doubleClickTempFaturaMailG(@item.TempFaturaMailId)">
+                                                                        <td><input name="radio" type="radio" value="@item.TempFaturaMailId" /></td>
+                                                                        <td class="text-center">@cpm.TGetByID(item.CariPersonelId).CariPersonelAdi @cpm.TGetByID(item.CariPersonelId).CariPersonelAdi2 @cpm.TGetByID(item.CariPersonelId).CariPersonelSoyadi</td>
+                                                                        @if (item.ServisMailiGonderilecekMi == true)
+                                                                        {
+
+                                                                            <td class="text-center">Evet</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="text-center">Hayır</td>
+                                                                        }
+                                                                        @if (item.FaturaMailiGonderilecekMi == true)
+                                                                        {
+
+                                                                            <td class="text-center">Evet</td>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <td class="text-center">Hayır</td>
+                                                                        }
+                                                                    </tr>
+                                                                }
+                                                            }*@
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalFiyatEkle" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Proje Fiyat Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="TempProjeEkleServisG" asp-route-projeId="@ViewBag.projeId" asp-conttoller="Proje" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="inputGecerlilikBaslangicServisProje" class=" col-form-label col-form-label-sm">Geçerlilik Tarih Başlangıç</label>
+                            <input id="inputGecerlilikBaslangicServisProje" asp-for="@Model.GecerlilikTarihBaslangic" type="date" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="inputGecerlilikBitisServisProje" class=" col-form-label col-form-label-sm">Geçerlilik Tarih Bitiş</label>
+                            <input id="inputGecerlilikBitisServisProje" asp-for="@Model.GecerlilikTarihBitis " type="date" class="form-control form-control-sm" required />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label for="selectModulServisProje" class=" col-form-label col-form-label-sm">Modül</label>
+                            <select id="selectModulServisProje" class="form-control select2bs4 text-sm " asp-for="@Model.ModulId" style="width: 100%;" required>
+                                @{
+                                    <option class="text-sm" disabled selected value="">Modül Seçin</option>
+                                    foreach (var item in ViewBag.modulList)
+                                    {
+                                        <option value="@item.ModulId">@item.ModulAdi </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="inputFiyatServisProje" class=" col-form-label col-form-label-sm">Fiyat</label>
+                            <input id="inputFiyatServisProje" type="number" asp-for="@Model.Fiyat" class="form-control form-control-sm" placeholder="0" required />
+                        </div>
+                        <div class="col-md-5">
+                            <label for="selectParaBirimiServisProje" class=" col-form-label col-form-label-sm">Para Birimi</label>
+                            <select id="selectParaBirimiServisProje" class="form-control select2bs4 text-sm " asp-for="@Model.ParaBirimiId" style="width: 100%;" required>
+                                @{
+                                    <option class="text-sm" disabled selected value="">Para Birimi Seçin</option>
+                                    foreach (var paraBirimi in ViewBag.paraBirimiList)
+                                    {
+                                        <option value="@paraBirimi.ParaBirimiId">@paraBirimi.ParaBirimiAdi @paraBirimi.ParaBirimiSimge</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row justify-content-end">
+                        <button type="submit" class="btn btn-primary">Ekle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalFiyatDuzenle" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Proje Fiyat Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmTempFiyatDuzenle" asp-action="TempServisProjeDuzenleG" asp-conttoller="Proje" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="edtInputGecerlilikBaslangicServisProje" class=" col-form-label col-form-label-sm">Geçerlilik Tarih Başlangıç</label>
+                            <input id="edtInputGecerlilikBaslangicServisProje" asp-for="@Model.GecerlilikTarihBaslangic" type="date" class="form-control form-control-sm" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edtInputGecerlilikBitisServisProje" class=" col-form-label col-form-label-sm">Geçerlilik Tarih Bitiş</label>
+                            <input id="edtInputGecerlilikBitisServisProje" asp-for="@Model.GecerlilikTarihBitis" type="date" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label for="edtSelectModulServisProje" class=" col-form-label col-form-label-sm">Personel Tipi</label>
+                            <select id="edtSelectModulServisProje" class="form-control select2bs4 text-sm " asp-for="@Model.ModulId" style="width: 100%;" required>
+                                @{
+                                    <option class="text-sm" disabled selected>Modül Seçin</option>
+                                    foreach (var item in ViewBag.modulList)
+                                    {
+                                        <option value="@item.ModulId">@item.ModulAdi </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="edtInputFiyatServisProje" class=" col-form-label col-form-label-sm">Fiyat</label>
+                            <input id="edtInputFiyatServisProje" type="number" asp-for="@Model.Fiyat" class="form-control form-control-sm" required />
+                        </div>
+                        <div class="col-md-5">
+                            <label for="edtSelectParaBirimiServisProje" class=" col-form-label col-form-label-sm">Para Birimi</label>
+                            <select id="edtSelectParaBirimiServisProje" class="form-control select2bs4 text-sm " asp-for="@Model.ParaBirimiId" style="width: 100%;" required>
+                                @{
+                                    <option class="text-sm" disabled selected>Para Birimi Seçin</option>
+                                    foreach (var paraBirimi in ViewBag.paraBirimiList)
+                                    {
+                                        <option value="@paraBirimi.ParaBirimiId">@paraBirimi.ParaBirimiAdi @paraBirimi.ParaBirimiSimge</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="inputServisProjeH" name="tempServisProjeIcerikId">
+                    <input type="hidden" id="inputProjeId" name="servisProjeId" value="@ViewBag.projeId" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button name="id" id="btnTempFiyatSilServisProje" form="frmTempFiyatDuzenle" asp-action="TempFiyatSilServisProje"
+                        asp-controller="Proje" type="submit" class="btn btn-danger">
+                    Sil
+                </button>
+                <button id="btnTempFiyatListDuzenle" form="frmTempFiyatDuzenle" type="submit"
+                        class="btn btn-primary">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalFiyatDuzenleMevcut" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Proje Fiyat Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmTempFiyatDuzenleM" asp-action="ServisProjeDuzenleG" asp-conttoller="Proje" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="edtInputGecerlilikBaslangicServisProjeM" class=" col-form-label col-form-label-sm">Geçerlilik Tarih Başlangıç</label>
+                            <input id="edtInputGecerlilikBaslangicServisProjeM" asp-for="@Model.GecerlilikTarihBaslangic" type="date" class="form-control form-control-sm" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edtInputGecerlilikBitisServisProjeM" class=" col-form-label col-form-label-sm">Geçerlilik Tarih Bitiş</label>
+                            <input id="edtInputGecerlilikBitisServisProjeM" asp-for="@Model.GecerlilikTarihBitis" type="date" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label for="edtSelectModulServisProjeM" class=" col-form-label col-form-label-sm">Personel Tipi</label>
+                            <select id="edtSelectModulServisProjeM" class="form-control select2bs4 text-sm " asp-for="@Model.ModulId" style="width: 100%;" required>
+                                @{
+                                    <option class="text-sm" disabled selected>Modül Seçin</option>
+                                    foreach (var item in ViewBag.modulList)
+                                    {
+                                        <option value="@item.ModulId">@item.ModulAdi </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="edtInputFiyatServisProjeM" class=" col-form-label col-form-label-sm">Fiyat</label>
+                            <input id="edtInputFiyatServisProjeM" type="number" asp-for="@Model.Fiyat" class="form-control form-control-sm" value="250" />
+                        </div>
+                        <div class="col-md-5">
+                            <label for="edtSelectParaBirimiServisProjeM" class=" col-form-label col-form-label-sm">Para Birimi</label>
+                            <select id="edtSelectParaBirimiServisProjeM" class="form-control select2bs4 text-sm " asp-for="@Model.ParaBirimiId" style="width: 100%;" required>
+                                @{
+                                    <option class="text-sm" disabled selected>Para Birimi Seçin</option>
+                                    foreach (var paraBirimi in ViewBag.paraBirimiList)
+                                    {
+                                        <option value="@paraBirimi.ParaBirimiId">@paraBirimi.ParaBirimiAdi @paraBirimi.ParaBirimiSimge</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" id="inputServisProjeHM" name="tempServisProjeIcerikId">
+                    <input type="hidden" id="inputProjeIdM" name="servisProjeId" value="@ViewBag.projeId" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button name="id" id="btnTempFiyatSilServisProjeM" form="frmTempFiyatDuzenleM" asp-action="TempFiyatSilServisProje"
+                        asp-controller="Proje" type="submit" class="btn btn-danger">
+                    Sil
+                </button>
+                <button id="btnTempFiyatListDuzenleM" form="frmTempFiyatDuzenleM" type="submit"
+                        class="btn btn-primary">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPersonelEkle2" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Proje Perosnel Ekle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="TempFaturaMailEkleG" asp-conttoller="Proje" method="post" asp-route-projeId="@ViewBag.projeId" asp-route-isFirst="false" asp-route-proje="servis">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="col-12 text-center">Fatura Maili Gönderilecek Personel</label>
+                                <select class="form-control select2bs4" name="cariPersonelId" required>
+                                    @{
+                                        <option selected disabled value="">Personel Seçin</option>
+
+                                        foreach (var item in ViewBag.cariPersonelList2)
+                                        {
+                                            <option value="@item.CariPersonelId">@item.CariPersonelAdi @item.CariPersonelAdi2 @item.CariPersonelSoyadi  </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="divider" />
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label for="faturaMailiProjeEdt" class=" col-form-label col-form-label-sm">Fatura Maili</label>
+                            <input name="faturaMaili" id="faturaMailiProjeEdt" type="checkbox" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="servisMailiProjeEdt" class=" col-form-label col-form-label-sm">Servis Maili</label>
+                            <input name="servisMaili" id="servisMailiProjeEdt" type="checkbox" />
+                        </div>
+                    </div>
+                    <div class="row justify-content-end">
+                        <button type="submit" class="btn btn-primary">Ekle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPersonelDuzenle" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" role="form">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Personel Düzenle</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmTempPersonelDuzenle" asp-action="TempFaturaMailDuzenleG" asp-conttoller="Proje" asp-route-projeId="@ViewBag.projeId" asp-route-proje="servis" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="personelProjeEdt" class="col-sm-4 col-form-label col-form-label-sm">Personel</label>
+                            <input id="personelProjeEdt" value="" class="form-control form-control-sm" readonly />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-5">
+                            <label for="faturaMailiProjeEdtG" class=" col-form-label col-form-label-sm">Fatura Maili</label>
+                            <input name="faturaMaili" id="faturaMailiProjeEdtG" type="checkbox" checked="@ViewBag.chckSilindi" />
+                        </div>
+                        <div class="col-md-2">
+                            <label for="servisMailiProjeEdtG" class=" col-form-label col-form-label-sm">Servis Maili</label>
+                            <input name="servisMaili" id="servisMailiProjeEdtG" type="checkbox" checked="@ViewBag.chckSilindi" />
+                        </div>
+                    </div>
+                    <input type="hidden" id="personelIdH" name="personelId">
+                    <input type="hidden" id="tempFaturaMailId" name="tempFaturaMailId" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                <button name="id" id="btnTempPersonelSil" form="frmTempPersonelDuzenle" asp-action="TempFaturaMailSilG"
+                        asp-controller="Proje" asp-route-proje="servis" asp-route-projeId="@ViewBag.projeId" type="submit" class="btn btn-danger">
+                    Sil
+                </button>
+                <button id="btnTempFiyatListDuzenle" form="frmTempPersonelDuzenle" type="submit"
+                        class="btn btn-primary">
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalSil">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">Proje Silinecek</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Silmek istediğinizden emin misiniz?&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">İptal</button>
+                <a href="/Proje/ProjeSil/@ViewBag.projeId" class="btn btn-outline-light">Sil</a>
+            </div>
+        </div>
+    </div>
+</div>

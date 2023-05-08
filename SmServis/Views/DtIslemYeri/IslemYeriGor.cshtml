@@ -1,0 +1,66 @@
+@model EntityLayer.Concrete.IslemYeri
+@{
+    IslemYeriManager iym=new IslemYeriManager(new EfIslemYeriDal());
+    KullaniciManager km=new KullaniciManager(new EfKullaniciDal());
+    int islemYeriId=ViewBag.id;
+    var tblIslemYeri=iym.TGetByID(islemYeriId);
+    var olusturan=km.TGetByID(tblIslemYeri.Olusturan);
+    var sonDegistiren=km.TGetByID(tblIslemYeri.SonDegistiren);
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>İşlem Yeri Gör</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmIslemYeriEkle"
+                                class=" align-right btn btn-primary btn-lg float-right not-allowed" disabled><i class="bi bi-database-add "></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtIslemYeri" asp-controller="DtIslemYeri" class=" btn btn-lg btn-danger "><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <form id="frmIslemYeriEkle" asp-controller="DtIslemYeri" asp-action="IslemYeriEkle" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">İşlem Yeri</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblIslemYeri.IslemYeriAdi</label>
+                        </div>
+                    </div>
+                    <hr class=" divider">
+                    <div class="row mb-2">
+                          <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturan</label>
+                            <label class="form-control form-control-sm text-capitalize">@olusturan.KullaniciAdi @olusturan.KullaniciAdi2 @olusturan.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturulma Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblIslemYeri.OlusturulmaTarih</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştiren</label>
+                            <label class="form-control form-control-sm text-capitalize">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciAdi2 @sonDegistiren.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştirilme Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblIslemYeri.SonDegistirmeTarih</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

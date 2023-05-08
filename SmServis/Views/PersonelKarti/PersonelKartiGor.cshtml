@@ -1,0 +1,113 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    CinsiyetManager cnsm = new CinsiyetManager(new EfCinsiyetDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    PersonelManager pm = new PersonelManager(new EfPersonelDal());
+    IlgiliKisilerManager ikm=new IlgiliKisilerManager(new EfIlgiliKisilerDal());
+    var tblPersonel = pm.TGetByID(ViewBag.id);
+    var sonDegistiren = km.TGetByID(tblPersonel.SonDegistiren);
+    var olusturan = km.TGetByID(tblPersonel.Olusturan);
+
+}
+<div id="divContent" class="card  bg-light">
+    <form method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Personel Adı</label>
+                        <label class="form-control text-capitalize">@tblPersonel.PersonelAdi @tblPersonel.PersonelAdi2</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Personel Soyadı</label>
+                        <label class="form-control text-capitalize">@tblPersonel.PersonelSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Cinsiyet</label>
+                        <label class="form-control text-capitalize">@cnsm.TGetByID(tblPersonel.CinsiyetId).CinsiyetAciklama</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Kullanıcı Adı</label>
+                        <label class="form-control text-capitalize">@tblPersonel.PersonelKullaniciAdi</label>
+                    </div>
+                </div>
+                 <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Adres</label>
+                        <label class="form-control text-capitalize">@tblPersonel.Adres1</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Adres 2</label>
+                        <label class="form-control text-capitalize">@tblPersonel.Adres2</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Çalışma Durumu</label>
+                         @{
+                            string calismaDurumu = "";
+                            try
+                            {
+                                // calismaDurumu=ikm.TGetList().Where(x=>x.PersonelId==tblPersonel.PersonelId).FirstOrDefault().CalismaDurumu.ToString();
+                            }
+                            catch (System.Exception ex)
+                            {
+                                 calismaDurumu="none";
+                            }
+                           
+
+                            if (calismaDurumu == "False")
+                            {
+                                <label class="form-control ">Ayrıldı</label>
+                            }
+                            else if(calismaDurumu=="True")
+                            {
+                                <label class="form-control ">Çalışıyor</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Boşta</label>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        <label>Durum</label>
+                        @{
+                            if (tblPersonel.Silindi == false)
+                            {
+                                <label class="form-control ">Mevcut</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Silindi</label>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Oluşturan</label>
+                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Oluşturulma Tarihi</label>
+                        <label class="form-control">@tblPersonel.OlusturulmaTarih.Date.ToShortDateString()</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştiren</label>
+                        <label class="form-control ">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştirilme Tarihi</label>
+                        <label class="form-control">@tblPersonel.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Telefon</label>
+                        <label class="form-control text-capitalize">@tblPersonel.Telefon</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

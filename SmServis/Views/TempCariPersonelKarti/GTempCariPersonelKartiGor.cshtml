@@ -1,0 +1,161 @@
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+
+    #region Manager
+    ;
+    TempCariPersonelManager pm = new TempCariPersonelManager(new EfTempCariPersonelDal());
+    TempCariManager tcm = new TempCariManager(new EfTempCariDal());
+    CariManager cm = new CariManager(new EfCariDal());
+    IlceManager ilcem = new IlceManager(new EfIlceDal());
+    SehirManager sm = new SehirManager(new EfSehirDal());
+    UlkeManager um = new UlkeManager(new EfUlkeDal());
+    CariDurumManager cdm = new CariDurumManager(new EfCariDurumDal());
+    ParaBirimiManager pbm = new ParaBirimiManager(new EfParaBirimiDal());
+    AnaSektorManager asm = new AnaSektorManager(new EfAnaSektorDal());
+    BagliSektorManager bsm = new BagliSektorManager(new EfBagliSektorDal());
+    CariTipiManager ctm = new CariTipiManager(new EfCariTipiDal());
+    DepartmanManager dptm = new DepartmanManager(new EfDepartmanDal());
+    PozisyonManager pzm = new PozisyonManager(new EfPozisyonDal());
+    CariPersonelManager apm = new CariPersonelManager(new EfCariPersonelDal());
+    UnvanManager unvm = new UnvanManager(new EfUnvanDal());
+    PozisyonManager pznm = new PozisyonManager(new EfPozisyonDal());
+    CinsiyetManager cnsm = new CinsiyetManager(new EfCinsiyetDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    Ana_BagliSektorManager a_bm = new Ana_BagliSektorManager(new EfAna_BagliSektorDal());
+    #endregion
+
+    var tblCariPersonel = pm.TGetByID(ViewBag.id);
+    var sonDegistiren = km.TGetByID(tblCariPersonel.SonDegistiren);
+    var olusturan = km.TGetByID(tblCariPersonel.Olusturan);
+
+}
+@{
+    var error = TempData["error"];
+    // int id=(int)HttpContext.Session.GetInt32("CariId");
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Güncelleme İşlemi Başarısız Oldu'
+                })
+            };</script>
+    }
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-10">
+                <h4>Cari Personel Kartı</h4>
+            </div>
+            <div class="col-md-2">
+                <div class="row  justify-content-end">
+                    <div class="col-2">
+                        <button  class=" btn-lg btn btn-info" disabled><i class="bi bi-database-fill-add"></i></button>
+                    </div>
+                    <div class="col-2"></div>
+                  <a asp-action="CariGuncelle" asp-controller="Cari" asp-route-id="@ViewBag.cariId" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <div class="row mb-1">
+                <div class="col-md-3 mb-1">
+                    <label class="col-form-label col-form-label-sm">Personel Kodu</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.CariPersonelKodu" readonly>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label class="col-form-label col-form-label-sm">Personel Adı</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.CariPersonelAdi @tblCariPersonel.CariPersonelAdi2" readonly>
+                </div>
+
+                <div class="col-md-3 mb-1">
+                    <label class="col-form-label col-form-label-sm">Personel Soyadı</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.CariPersonelSoyadi" readonly>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label>Cinsiyet</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@cnsm.TGetByID(tblCariPersonel.CinsiyetId).CinsiyetAciklama" readonly>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 mb-1">
+                    <label class="col-form-label col-form-label-sm">Telefon</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.Telefon" readonly>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label class="col-form-label col-form-label-sm">Adres</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.Adres1" readonly>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label class="col-form-label col-form-label-sm">Adres 2</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.Adres2" readonly>
+                </div>
+                <div class="col-md-3 mb1">
+                    <label class="col-form-label col-form-label-sm">Mail</label>
+                    <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.Mail" readonly>
+                </div>
+            </div>
+        </div>
+        <hr class="divider" />
+        <div class="row mb-1">
+            <div class="col-md-3 mb-1">
+                <label class="col-form-label col-form-label-sm">Unvan</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@unvm.TGetByID(tblCariPersonel.UnvanId).UnvanAciklama" readonly>
+            </div>
+            <div class="col-md-3 mb-1">
+                <label class="col-form-label col-form-label-sm">Departman</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@dptm.TGetByID(tblCariPersonel.DepartmanId).DepartmanAdi" readonly>
+            </div>
+            <div class="col-md-3 mb-1">
+                <label class="col-form-label col-form-label-sm">Pozisyon</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@pznm.TGetByID(tblCariPersonel.PozisyonId).PozisyonAdi" readonly>
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm">İşe Giriş Tarihi</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.IseGirisTarihi.ToString("dd/MM/yyyy")" readonly>
+            </div>
+
+        </div>
+        <div class="row mt-3 mb-1 ml-3">
+            <div class="col-md-3 mr-4">
+                <input class="form-check-input bg-blue" type="checkbox" checked="@tblCariPersonel.SerivsMailGonder" onclick="return false;">
+                <label class="form-check-label">Servis Mail Gönderilecek Mi?</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-check-input bg-blue" type="checkbox" checked="@tblCariPersonel.ServisFaturaGonder" onclick="return false;">
+                <label class="form-check-label">Servis Faturası Gönderilecek Mi?</label>
+            </div>
+
+        </div>
+        <hr class="divider" />
+        <div class="row mb-2">
+            <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm">Oluşturan</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi" readonly>
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm">Oluşturulma Tarihi</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.OlusturulmaTarih.Date.ToShortDateString()" readonly>
+
+            </div>
+            <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm">Son Değiştirme Tarihi</label>
+                <input type="Text" class="form-control  form-control-sm text-capitalize" value="@tblCariPersonel.SonDegistirmeTarih.Date.ToShortDateString()" readonly>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+

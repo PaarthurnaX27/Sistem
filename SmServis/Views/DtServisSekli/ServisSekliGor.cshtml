@@ -1,0 +1,66 @@
+@model EntityLayer.Concrete.ServisSekli
+@{
+    ServisSekliManager ssm=new ServisSekliManager(new EfServisSekliDal());
+    KullaniciManager km=new KullaniciManager(new EfKullaniciDal());
+    int servisSekliId=ViewBag.id;
+    var tblServisSekli=ssm.TGetByID(servisSekliId);
+    var olusturan=km.TGetByID(tblServisSekli.Olusturan);
+    var sonDegistiren=km.TGetByID(tblServisSekli.SonDegistiren);
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>Servis Şekli Gör</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmServisSekliEkle"
+                                class=" align-right btn btn-primary btn-lg float-right not-allowed" disabled><i class="bi bi-database-add "></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtServisSekli" asp-controller="DtServisSekli" class=" btn btn-lg btn-danger "><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <form id="frmServisSekliEkle" asp-controller="DtServisSekli" asp-action="ServisSekliEkle" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Servis Şekli</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblServisSekli.ServisSekliAciklama</label>
+                        </div>
+                    </div>
+                    <hr class=" divider">
+                    <div class="row mb-2">
+                          <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturan</label>
+                            <label class="form-control form-control-sm text-capitalize">@olusturan.KullaniciAdi @olusturan.KullaniciAdi2 @olusturan.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturulma Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblServisSekli.OlusturulmaTarih</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştiren</label>
+                            <label class="form-control form-control-sm text-capitalize">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciAdi2 @sonDegistiren.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştirilme Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblServisSekli.SonDegistirmeTarih</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,64 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    BagliSektorManager bsm = new BagliSektorManager(new EfBagliSektorDal());
+    AnaSektorManager asm = new AnaSektorManager(new EfAnaSektorDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    int bagliSektorId = ViewBag.id;
+    var tblBagliSektor = bsm.TGetByID(bagliSektorId);
+    var anaSektorAdi = asm.TGetByID(tblBagliSektor.AnaSektorId);
+    var sonDegistiren = km.TGetByID(tblBagliSektor.SonDegistiren);
+    var olusturan = km.TGetByID(tblBagliSektor.Olusturan);
+
+}
+<div id="divContent" class="card  bg-light">
+
+    <form method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>BagliSektor</label>
+                        <label class="form-control ">@tblBagliSektor.BagliSektorAdi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>AnaSektor</label>
+                        <label class="form-control">@anaSektorAdi.AnaSektorAdi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Durum</label>
+                        @{
+                            if (tblBagliSektor.Silindi == false)
+                            {
+                                <label class="form-control ">Mevcut</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Silindi</label>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Oluşturan</label>
+                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Oluşturulma Tarihi</label>
+                        <label class="form-control">@tblBagliSektor.OlusturulmaTarih.Date.ToShortDateString()</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştiren</label>
+                        <label class="form-control ">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştirilme Tarihi</label>
+                        <label class="form-control">@tblBagliSektor.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

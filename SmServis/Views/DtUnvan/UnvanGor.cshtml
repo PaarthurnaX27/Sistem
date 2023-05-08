@@ -1,0 +1,60 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    UnvanManager unvm = new UnvanManager(new EfUnvanDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    int unvanId = ViewBag.id;
+    var tblUnvan = unvm.TGetByID(unvanId);
+    var sonDegistiren = km.TGetByID(tblUnvan.SonDegistiren);
+    var olusturan = km.TGetByID(tblUnvan.Olusturan);
+
+}
+<div id="divContent" class="card  bg-light">
+    <form method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Unvan</label>
+                        <label class="form-control text-capitalize">@tblUnvan.UnvanAciklama</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Unvan Kısaltma</label>
+                        <label class="form-control text-uppercase">@tblUnvan.UnvanKisaltma</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Durum</label>
+                        @{
+                            if (tblUnvan.Silindi == false)
+                            {
+                                <label class="form-control ">Mevcut</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Silindi</label>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Oluşturan</label>
+                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Oluşturulma Tarihi</label>
+                        <label class="form-control">@tblUnvan.OlusturulmaTarih.Date.ToShortDateString()</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştiren</label>
+                        <label class="form-control ">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştirilme Tarihi</label>
+                        <label class="form-control">@tblUnvan.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

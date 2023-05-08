@@ -1,0 +1,1058 @@
+@model EntityLayer.Concrete.TempServisBilgi
+@using Microsoft.AspNetCore.Http;
+@{
+  var error = TempData["error"];
+  if (error != null)
+  {
+    <script type="text/javascript">window.onload = function () {
+        var Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+
+        Toast.fire({
+          icon: 'error',
+          title: 'Ekleme İşlemi Başarısız Oldu'
+        })
+      };</script>
+  }
+
+  var firmaAdi = Context.Session.GetString("firma").ToString();
+  CariManager cm = new CariManager(new EfCariDal());
+  ServisDepartmanManager sdptm = new ServisDepartmanManager(new EfServisDepartmanDal());
+  ModulManager mm = new ModulManager(new EfModulDal());
+  ServisTipiManager stm = new ServisTipiManager(new EfServisTipiDal());
+  ServisSekliManager ssm = new ServisSekliManager(new EfServisSekliDal());
+  KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+  SonDurumManager sdm = new SonDurumManager(new EfSonDurumDal());
+  OncelikManager om = new OncelikManager(new EfOncelikDal());
+  PersonelManager pm = new PersonelManager(new EfPersonelDal());
+  IslemYeriManager iym = new IslemYeriManager(new EfIslemYeriDal());
+  TempServisBilgiManager tsbm = new TempServisBilgiManager(new EfTempServisBilgiDal());
+  TempServisKalemManager tskm=new TempServisKalemManager(new EfTempServisKalemDal());
+  ServisBilgiManager sbm=new ServisBilgiManager(new EfServisBilgiDal());
+  var kullaniciId =(int)Context.Session.GetInt32("kullanici");
+  var tblServis=sbm.TGetByID(ViewBag.servisId);
+  if(tsbm.TGetList().OrderBy(x=>x.TempServisId).LastOrDefault()!=null)
+  {
+    tblServis=tsbm.TGetList().OrderBy(x=>x.TempServisId).LastOrDefault();
+  }
+  int cariId = 0;
+  string cariAdi = "";
+  string cariNo="";
+  int servisDepartmanId = 0;
+  string servisDepartmanAdi = "";
+  int modulId = 0;
+  string modulAdi = "";
+  string departmanYetkilisi = "";
+  string konu = "";
+  int oncelikId = 0;
+  string oncelikAciklama = "";
+  int servisSekliId = 0;
+  string servisSekliAciklama = "";
+  int servisTipiId = 0;
+  string servisTipiAciklama = "";
+ int personelId = pm.TGetList().Where(x=>x.PersonelKodu==km.TGetByID(kullaniciId).KullaniciKodu).FirstOrDefault().PersonelId;
+  string personelAdi = pm.TGetByID(personelId).PersonelAdi+" "+pm.TGetByID(personelId).PersonelAdi2+" "+pm.TGetByID(personelId).PersonelSoyadi;
+  int sonDurumId=0;
+  string sonDurumAciklama="";
+  int tSuresi=0;
+  int fTSuresi=0;
+  string tSuresiSaat="";
+  string tarihSaat=DateTime.Now.ToString("yyy-MM-ddTHH:mm");
+  string planlananTarih=DateTime.Now.ToString("yyy-MM-ddTHH:mm");
+  string sonDurumTarihi=DateTime.Now.ToString("yyy-MM-ddTHH:mm");
+  string fTSuresiSaat="";
+  string tahminiSure="";
+  string gercekSure="";
+  bool kapandi=false;
+  bool musteriOnayi=false;
+  if (tblServis != null)
+  {
+    cariId = tblServis.CariId;
+    cariAdi = cm.TGetByID(cariId).CariAdi;
+    cariNo=cm.TGetByID(cariId).HesapKodu;
+    servisDepartmanId = tblServis.ServisDepartmanId;
+    servisDepartmanAdi = sdptm.TGetByID(servisDepartmanId).ServisDepartmanAdi;
+    modulId = tblServis.ModulId;
+    modulAdi = mm.TGetByID(modulId).ModulAdi;
+    departmanYetkilisi = tblServis.DepartmanYetkilisi;
+    konu = tblServis.Konu;
+    oncelikId = tblServis.OncelikId;
+    oncelikAciklama = om.TGetByID(oncelikId).OncelikAciklama;
+    servisSekliId = tblServis.ServisSekliId;
+    servisSekliAciklama = ssm.TGetByID(servisSekliId).ServisSekliAciklama;
+    servisTipiId = tblServis.ServisTipiId;
+    servisTipiAciklama = stm.TGetByID(servisTipiId).ServisTipiAciklama;
+    personelId = tblServis.PersonelId;
+    personelAdi = pm.TGetByID(personelId).PersonelAdi+" "+ pm.TGetByID(personelId).PersonelAdi2+" "+ pm.TGetByID(personelId).PersonelSoyadi;
+    sonDurumId=tblServis.SonDurumID;
+    sonDurumAciklama=sdm.TGetByID(sonDurumId).SonDurumAciklama;
+    tSuresi = Convert.ToInt32(tblServis.TSuresi);
+    tSuresiSaat = (tSuresi / 60).ToString();
+    fTSuresi = Convert.ToInt32(tblServis.FTSuresi);
+    tarihSaat = tblServis.TarihSaat.ToString("yyyy-MM-ddTHH:mm");
+    planlananTarih = tblServis.PlanlananTarih.ToString("yyyy-MM-ddTHH:mm");
+    sonDurumTarihi = tblServis.SonDurumTarihi.ToString("yyyy-MM-ddTHH:mm");
+ //   TimeSpan kalan=tblServis.PlanlananTarih-tblServis.TarihSaat;
+    tahminiSure=tblServis.TahminiSure;
+    fTSuresiSaat = (fTSuresi / 60).ToString();
+    kapandi=tblServis.Kapandi;
+    musteriOnayi=tblServis.MusteriOnayi;
+   // tahminiSure=tblServis.TahminiSure;
+    gercekSure=tblServis.GercekSure;
+  }
+}
+<style>
+  .select2-selection__rendered {
+    line-height: 31px !important;
+  }
+
+  .select2-container .select2-selection--single {
+    height: 31px !important;
+  }
+
+  @*.row{margin-bottom:20px;}.button.button-small{height:30px;line-height:30px;padding:0px10px;}tdinput[type=text],tdselect{width:100%;height:30px;margin:0;padding:2px8px;}th:last-child{text-align:right;}td:last-child{text-align:right;}td:last-child.button{width:30px;height:30px;text-align:center;padding:0px;margin-bottom:0px;margin-right:5px;background-color:#FFF;}td:last-child.button.fa{line-height:30px;width:30px;}*@
+</style>
+<div id="updateDiv" class="card">
+  <div class="card-header bg-gray">
+    <div class="row justify-content-between">
+      <div class="col-md-3">
+        <div class="row">
+          <h3><i class="bi bi-globe"></i> Servis Formu Güncelle</h3>
+        </div>
+      </div>
+       <div class="form-check">
+          <input id="inputKapandi"class="form-check-input" type="checkbox" asp-for="@Model.Kapandi" form="frmServis" checked="@kapandi" >
+          <label class="form-check-label">Kapandı</label>
+        </div>                       
+       <div class="form-check">
+          <input id="inputMusteriOnayi"class="form-check-input" type="checkbox" asp-for="@Model.MusteriOnayi"  form="frmServis" checked="@musteriOnayi">
+          <label class="form-check-label">Onaylandı</label>
+        </div>
+       <div class="col-md-2">
+         <div class="row justify-content-end">
+          <div class="col-4">
+            <h4>
+              <button type="submit" form="frmServis" class=" align-right btn btn-info btn-lg float-right" value="1" name="bitir" ><i
+                  class="bi bi-database-add"></i></button>
+            </h4>
+          </div>
+          <div class="col-4">
+            <a asp-action="KaydetmedenCik" asp-controller="Servis" class=" btn btn-lg btn-danger"><i
+                class="bi bi-x-lg"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  class="bg-light">
+    <form id="frmServis" asp-controller="Servis" asp-action="TempServisEkleG"  method="post" onsubmit="ShowModal()" asp-area="" data-ajax-loading="#loading" data-ajax-mode="replace" data-ajax-update="#updateDiv" data-ajax-success="Success" data-ajax-failure="Failure" data-ajax="true">
+      <div class="row">
+        <div class="col-lg-5 ">
+          <div class="card p-1">
+            <div class="row">
+              <div class="col-4">
+                <div class="row mb-1 ">
+                  <label for="inputFirma" class=" col-sm-4 col-form-label col-form-label-sm">Firma</label>
+                  <div class="col-7 ">
+                    <input id="inputFirma" type="text" class="form-control form-control-sm text-capitalize"
+                      value="@firmaAdi" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row ">
+                  <label for="inputCariNo" class="col-sm-4 col-form-label col-form-label-sm">Cari No</label>
+                  <div class="col-7">
+                    <input id="inputCariNo" type="text" value="@cariNo" class="form-control form-control-sm text-capitalize" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class=" row ">
+                  <label for="inputServisNo" class="col-sm-5   col-form-label col-form-label-sm">Servis No</label>
+                  <div class="col-7">
+                    <input id="inputServisNo" type="text" class="form-control form-control-sm text-capitalize"
+                      value="@ViewBag.servisNo" asp-for="@Model.ServisNo" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="divider">
+            <div class="row mb-1">
+              <label for="inputCari" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+              <div class="col-10">
+                <select id="inputCari" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.CariId"
+                  onchange="CariNo()" required >
+                  @{
+                    if (cariId != 0)
+                    {
+                      <option selected value="@cariId">@cariAdi</option>
+                      foreach (var item in ViewBag.cariList)
+                      {
+                        <option value="@item.CariId">@item.CariAdi</option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">Cari Seçin</option>
+                      @foreach (var item in ViewBag.cariList)
+                      {
+                        <option value="@item.CariId">@item.CariAdi</option>
+                      }
+                    }
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class=" row ">
+                  <label for="inputDepartman" class="col-sm-4 col-form-label col-form-label-sm">Departman</label>
+                  <div class="col-sm-8">
+                    <select id="inputDepartman" class="form-control select2bs4" style="width: 100%;" onchange="Modul()"
+                      asp-for="@Model.ServisDepartmanId" required>
+                      @{
+                        if (servisDepartmanId != 0)
+                        {
+                          <option selected value="@servisDepartmanId">@servisDepartmanAdi</option>
+                          foreach (var item in ViewBag.servisDepartmanList)
+                          {
+                            <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                          }
+                        }
+                        else
+                        {
+                          <option selected disabled value="">Departman Seçin</option>
+                          @foreach (var item in ViewBag.servisDepartmanList)
+                          {
+                            <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                          }
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputModul" class="col-sm-4 col-form-label col-form-label-sm">Modül</label>
+                  <div class="col-sm-8">
+                    <select id="inputModul" class="form-control select2bs4" style="width: 100%;"
+                      asp-for="@Model.ModulId" required>
+                      @{
+                        if (modulId != 0)
+                        {
+                          <option selected value="@modulId">@modulAdi</option>
+                          foreach (var item in ViewBag.modulList)
+                          {
+                            <option value="@item.ModulId">@item.ModulAdi</option>
+                          }
+                        }
+                        else
+                        {
+                          <option selected disabled value=""> Modul Seçmek için Önce Departman Seçin</option>
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputYetkili" class="col-sm-4 col-form-label col-form-label-sm">Dpt. Yetkili</label>
+                  <div class="col-sm-8">
+                    <input id="inputYetkili" type="text" value="@departmanYetkilisi"
+                      class="form-control form-control-sm text-capitalize" asp-for="@Model.DepartmanYetkilisi" required>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputKonu" class="col-sm-4 col-form-label col-form-label-sm">Konu</label>
+                  <div class="col-sm-8">
+                    <input id="inputKonu" type="text" value="@konu" class="form-control form-control-sm text-capitalize"
+                      asp-for="@Model.Konu" required>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputOncelik" class="col-sm-4 col-form-label col-form-label-sm">Öncelik</label>
+                  <div class="col-sm-8">
+                    <select id="inputOncelik" class="form-control select2bs4" style="width: 100%;"
+                      asp-for="@Model.OncelikId" required>
+                      @{
+                        if (oncelikId != 0)
+                        {
+                          <option selected value="@oncelikId">@oncelikAciklama</option>
+                          foreach (var item in ViewBag.oncelikList)
+                          {
+                            <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                          }
+                        }
+                        else
+                        {
+                          <option selected disabled value="">Öncelik Seçin</option>
+                          @foreach (var item in ViewBag.oncelikList)
+                          {
+                            <option value="@item.OncelikId">@item.OncelikAciklama</option>
+                          }
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputServisSekli" class="col-sm-4 col-form-label col-form-label-sm">Servis Şekli</label>
+                  <div class="col-sm-8">
+                    <select id="inputServisSekli" class="form-control select2bs4" style="width: 100%;"
+                      asp-for="@Model.ServisSekliId" required>
+                      @{
+                        if (servisSekliId != 0)
+                        {
+                          <option selected value="@servisSekliId">@servisSekliAciklama</option>
+                          foreach (var item in ViewBag.servisSekliList)
+                          {
+                            <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                          }
+                        }
+                        else
+                        {
+                          <option selected disabled value="">Servis Şekli Seçin</option>
+                          @foreach (var item in ViewBag.servisSekliList)
+                          {
+                            <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                          }
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputServisTipi" class="col-sm-4 col-form-label col-form-label-sm">Servis Tipi</label>
+                  <div class="col-sm-8">
+                    <select id="inputServisTipi" class="form-control select2bs4" style="width: 100%;"
+                      asp-for="@Model.ServisTipiId" required>
+                      @{
+                        if (servisTipiId != 0)
+                        {
+                          <option selected value="@servisTipiId">@servisTipiAciklama</option>
+                          foreach (var item in ViewBag.servisTipiList)
+                          {
+                            <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                          }
+                        }
+                        else
+                        {
+                          <option selected disabled value="">Servis Tipi Seçin</option>
+                          @foreach (var item in ViewBag.servisTipiList)
+                          {
+                            <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                          }
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputSorumlu" class="col-sm-4 col-form-label col-form-label-sm">Sorumlu</label>
+                  <div class="col-sm-8">
+                    <select id="inputSorumlu" class="form-control select2bs4" style="width: 100%;"
+                      asp-for="@Model.PersonelId" required>
+                      @{
+                        if (personelId != 0)
+                        {
+                          <option selected value="@personelId">@personelAdi</option>
+                          foreach (var item in ViewBag.personelList)
+                          {
+                            <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                            </option>
+                          }
+                        }
+                        else
+                        {
+                          <option selected disabled value="">Sorumlu Seçin</option>
+                          @foreach (var item in ViewBag.personelList)
+                          {
+                            <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                            </option>
+                          }
+                        }
+                      }
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row mb-1 ">
+                  <label for="inputTSuresi" class="col-sm-4 col-form-label col-form-label-sm">T. Süresi</label>
+                  <div class="col-sm-8">
+                    @if (tSuresi!=0)
+                    {
+                    <input id="inputTSuresi" type="number" value="@tSuresi" class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi"  placeholder="(Dakika)">
+                    }
+                    else
+                    {
+                      <input id="inputTSuresi" type="number"  class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatT()" asp-for="@Model.TSuresi"  placeholder="(Dakika)">
+                    }
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputFTSuresi" class="col-sm-4 col-form-label col-form-label-sm">F.T. Süresi</label>
+                  <div class="col-sm-8">
+                    @if (fTSuresi!=0)
+                    {
+                       <input id="inputFTSuresi" type="number" value="@fTSuresi" class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatFT()" asp-for="@Model.FTSuresi"  placeholder="(Dakika)">
+                    }
+                    else
+                    {
+                       <input id="inputFTSuresi" type="number" class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatFT()" asp-for="@Model.FTSuresi"  placeholder="(Dakika)">
+                    }
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row mb-1 ">
+                  <label for="inputTarihSaat" class="col-sm-4 col-form-label col-form-label-sm">Tarih Saat</label>
+                  <div class="col-sm-8">
+                    <input id="inputTarihSaat" value="@tarihSaat" class="form-control form-control-sm text-capitalize"
+                      asp-for="@Model.TarihSaat" required>
+                  </div>
+                </div>
+
+                <div class="row mb-1">
+                  <label for="inputPalanlananTarih" class="col-sm-4 col-form-label col-form-label-sm">Plan.
+                    Tarih</label>
+                  <div class="col-sm-8">
+                    <input id="inputPalanlananTarih" value="@planlananTarih" class="form-control form-control-sm text-capitalize" onchange="BaslangicZamani()"
+                      placeholder="sd" asp-for="@Model.PlanlananTarih" required>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputTahminiSure" class="col-sm-4 col-form-label col-form-label-sm">Tah. Süre</label>
+                  <div class="col-sm-8">
+                       <input id="inputTahiminiSure" type="number" value="@tahminiSure" class="form-control form-control-sm text-capitalize"
+                      asp-for="@Model.TahminiSure" required placeholder="(Saat)" > 
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputGercekSure" class="col-sm-4 col-form-label col-form-label-sm">Gerçek Süre</label>
+                  <div class="col-sm-8">
+                      <input id="inputGercekSure" type="number" value="@gercekSure" class="form-control form-control-sm text-capitalize"
+                      asp-for="@Model.GercekSure" required placeholder="(Dakika)">
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputGirilenSure" class="col-sm-4 col-form-label col-form-label-sm">Girilen Süre</label>
+                  <div class="col-sm-8">
+                    <input id="inputGirilenSure" type="number" value="@ViewBag.girilenSure" class="form-control form-control-sm text-capitalize"
+                      asp-for="@Model.GirilenSure" required placeholder="(Dakika)" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputSonDurumTarihi" class="col-sm-4 col-form-label col-form-label-sm">Son Dur.Tar.</label>
+                  <div class="col-sm-8">
+                    <input id="inputSonDurumTarihi" value="@sonDurumTarihi" class="form-control form-control-sm text-capitalize"
+                      asp-for="@Model.SonDurumTarihi" required>
+                  </div>
+                </div>
+                <div class="row mb-1">
+
+                  <div class="col-sm-8">
+                    <hr>
+                  </div>
+                </div>
+                <div class="row mb-1">
+
+                  <div class="col-sm-8">
+                    <br>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputTSuresiSaat"  class="col-sm-4 col-form-label col-form-label-sm">Saat</label>
+                  <div class="col-sm-8">
+                    <input id="inputTSuresiSaat" type="number" value="@tSuresiSaat" class="form-control form-control-sm text-capitalize"
+                      readonly>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputFTSuresiSaat" class="col-sm-4 col-form-label col-form-label-sm">Saat</label>
+                  <div class="col-sm-8">
+                      <input id="inputFTSuresiSaat" type="number" value="@fTSuresiSaat" class="form-control form-control-sm text-capitalize"
+                      readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="divider">
+            <div class="row mb-1">
+              <label for="inputSonDurum" class="col-sm-2 col-form-label col-form-label-sm">Durum</label>
+              <div class="col-sm-10">
+                <select id="inputSonDurum" class="form-control select2bs4" style="width: 100%;"
+                  asp-for="@Model.SonDurumID" required>
+                  @{
+                    if (sonDurumId != 0)
+                    {
+                      <option selected value="@sonDurumId">@sonDurumAciklama</option>
+                      foreach (var item in ViewBag.sonDurumList)
+                      {
+                        <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">Durum Seçin</option>
+                      @foreach (var item in ViewBag.sonDurumList)
+                      {
+                        <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                      }
+                    }
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-7">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Kalemler</h3>
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                  @* <a class="btn btn-default pull-right btn-sm add-row"><i class="fa fa-plus"></i></a> *@
+                  <button   type="submit" class="btn btn-sm btn-primary" form="frmServis"><i
+                      class="fa fa-plus"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body table-responsive p-0" style="height: 477px;">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table id="tbl" class="table table-head-fixed text-nowrap"
+                      style='font-size:75%'>
+                      <thead>
+                        <tr>
+                          <th>Başlama Zamanı</th>
+                          <th>Genel Açıklama</th>
+                          <th>İşlem Yapan</th>
+                          <th>İşlem Yeri</th>
+                          <th>Durum</th>
+                          <th>Bitiş Zamanı</th>
+                          <th>Süre</th>
+                          @* <th>Açıklama</th> *@
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @if (Enumerable.Count(ViewBag.kalemList) != 0)
+                        {
+                          @foreach (var item in ViewBag.kalemList)
+                          {
+                            string renk = "";
+                            string hidden="";
+                            switch (sdm.TGetByID(item.SonDurumId).SonDurumAciklama)
+                            {
+                              case "KUYRUKTA":
+                                renk = "bg-indigo";
+                                break;
+                              case "BEKLEMEDE":
+                                renk = "bg-yellow";
+                                break;
+                              case "PLANA ALINDI":
+                                renk = "bg-lightblue";
+                                break;
+                              case "DEVAM EDİYOR":
+                                renk = "bg-teal";
+                                break;
+                              case "TAMAMLANDI":
+                                renk = "bg-lime";
+                                break;
+                              case "MÜŞTERİ ONAYI":
+                                renk = "bg-orange";
+                                break;
+                              case "MÜŞTERİDEN BİLGİ BEKLENİYOR":
+                                renk = "bg-pink";
+                                break;
+                              case "IAS BİLGİ BEKLENİYOR":
+                                renk = "bg-gray";
+                                break;
+                              default:
+                                renk = "bg-white";
+                                break;
+                            }
+                            if (Enumerable.Count(ViewBag.tempKalemList) != 0)
+                            {
+                              foreach (var item1 in ViewBag.tempKalemList)
+                              {
+                                if (item1.ServisKalemNo==item.ServisKalemNo)
+                                {
+                                  hidden="hidden";
+                                }
+                              }
+
+                            }
+                            <tr id="kalemRow" @hidden class="@renk" ondblclick="doubleClickG(@item.KalemId)"
+                              onclick="clickSummernoteG(@item.KalemId)">
+                              <td>@item.BaslamaZamani</td>
+                              <td>@item.GenelAciklama</td>
+                              <td>@pm.TGetByID(item.PersonelId).PersonelAdi @pm.TGetByID(item.PersonelId).PersonelAdi2
+                                @pm.TGetByID(item.PersonelId).PersonelSoyadi</td>
+                              <td>@iym.TGetByID(item.IslemYeriId).IslemYeriAdi</td>
+                              <td>@sdm.TGetByID(item.SonDurumId).SonDurumAciklama</td>
+                              <td>@item.BitisZamani</td>
+                              <td>@item.Sure</td>
+                              @* <td>@item.Aciklama</td> *@
+                            </tr>
+                          }
+                        }
+
+                       
+                        @if (Enumerable.Count(ViewBag.tempKalemList) != 0)
+                        {
+                          
+                          @foreach (var item in ViewBag.tempKalemList)
+                          {
+                            string renk = "";
+                            switch (sdm.TGetByID(item.SonDurumId).SonDurumAciklama)
+                            {
+                              case "KUYRUKTA":
+                                renk = "bg-indigo";
+                                break;
+                              case "BEKLEMEDE":
+                                renk = "bg-yellow";
+                                break;
+                              case "PLANA ALINDI":
+                                renk = "bg-lightblue";
+                                break;
+                              case "DEVAM EDİYOR":
+                                renk = "bg-teal";
+                                break;
+                              case "TAMAMLANDI":
+                                renk = "bg-lime";
+                                break;
+                              case "MÜŞTERİ ONAYI":
+                                renk = "bg-orange";
+                                break;
+                              case "MÜŞTERİDEN BİLGİ BEKLENİYOR":
+                                renk = "bg-pink";
+                                break;
+                              case "IAS BİLGİ BEKLENİYOR":
+                                renk = "bg-gray";
+                                break;
+                              default:
+                                renk = "bg-white";
+                                break;
+                            }
+                            <tr id="tempKalemRow" class="@renk" ondblclick="doubleClick(@item.TempKalemId)"
+                              onclick="clickSummernote(@item.TempKalemId)">
+                              <td>@item.BaslamaZamani</td>
+                              <td>@item.GenelAciklama</td>
+                              <td>@pm.TGetByID(item.PersonelId).PersonelAdi @pm.TGetByID(item.PersonelId).PersonelAdi2
+                                @pm.TGetByID(item.PersonelId).PersonelSoyadi</td>
+                              <td>@iym.TGetByID(item.IslemYeriId).IslemYeriAdi</td>
+                              <td>@sdm.TGetByID(item.SonDurumId).SonDurumAciklama</td>
+                              <td>@item.BitisZamani</td>
+                              <td>@item.Sure</td>
+                            </tr>
+                          }
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-2">
+    <div class="card card-default">
+      <div class="card-header">
+        <h3 class="card-title">Dokümanlar</h3>
+      </div>
+      <div class="card-body">
+        <div id="actions" class="row">
+          <div class="col-md-2">
+            <div class="btn-group ">
+              <span class="btn btn-success col fileinput-button">
+                <i class="fas fa-plus"></i>
+              </span>
+              <button type="submit" class="btn btn-primary col start">
+                <i class="fas fa-upload"></i>
+              </button>
+              <button type="reset" class="btn btn-warning col cancel">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 d-flex align-items-center">
+            <div class="fileupload-process w-0">
+              <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0"
+                aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table table-striped files" id="previews">
+          <div id="template" class="row mt-2">
+            <div class="col-auto">
+              <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+            </div>
+            <div class="col d-flex align-items-center">
+              <p class="mb-0">
+                <span class="lead" data-dz-name></span>
+                (<span data-dz-size></span>)
+              </p>
+              <strong class="error text-danger" data-dz-errormessage></strong>
+            </div>
+            <div class="col-4 d-flex align-items-center">
+              <div class="progress progress-striped active w-0" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-primary start">
+                  <i class="fas fa-upload"></i>
+                  <span>Start</span>
+                </button>
+                <button data-dz-remove class="btn btn-sm btn-warning cancel">
+                  <i class="fas fa-times-circle"></i>
+                  <span>Cancel</span>
+                </button>
+                <button data-dz-remove class="btn btn-sm btn-danger delete">
+                  <i class="fas fa-trash"></i>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-10">
+    <textarea id="summernote1" name="kalemAciklamaAlt" readonly>  </textarea>
+  </div>
+</div>
+
+@{
+  var tempKalem=tskm.TGetList().LastOrDefault();
+  string lSure="";
+  int lPersonelId=0;
+  string lPersonelAdi="";
+  string lPersonelAdi2="";
+  int lIslemYeriId=0;
+  string lIslemYeriAdi="";
+  int lSonDurumId=0;
+  string lSonDurumAciklama="";
+  string lGenelAciklama="";
+  string lBaslangicZamani=tblServis.PlanlananTarih.ToString("yyyy-MM-ddTHH:mm");
+  string lBitisZamani="";
+    var personel=pm.TGetList().Where(x=>x.PersonelKodu==km.TGetByID(kullaniciId).KullaniciKodu).FirstOrDefault().PersonelId;
+    lPersonelAdi=pm.TGetByID(personel).PersonelAdi+" "+pm.TGetByID(personel).PersonelAdi2+" "+ pm.TGetByID(personel).PersonelSoyadi;
+  if (tempKalem!=null)
+  {
+  
+      //lPersonelAdi=pm.TGetByID(personelId).PersonelAdi+" "+pm.TGetByID(personelId).PersonelAdi2+" "+pm.TGetByID(personelId).PersonelSoyadi;
+   lIslemYeriId=tempKalem.IslemYeriId;
+   lIslemYeriAdi=iym.TGetByID(tempKalem.IslemYeriId).IslemYeriAdi;
+   lSonDurumId=tempKalem.SonDurumId;
+   lGenelAciklama=tempKalem.GenelAciklama;
+   lSonDurumAciklama=sdm.TGetByID(tempKalem.SonDurumId).SonDurumAciklama;
+    lBaslangicZamani = tempKalem.BaslamaZamani.ToString("yyyy-MM-ddThh:mm:ss");
+    lBitisZamani = tempKalem.BitisZamani.ToString("yyyy-MM-ddThh:mm:ss");
+     TimeSpan tsSure=tempKalem.BitisZamani-tempKalem.BaslamaZamani;
+   lSure=tsSure.TotalMinutes.ToString(); 
+  }
+}
+
+<div class="modal fade" id="modalKalemEkle" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="form">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Yeni Kalem</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="frmTempKalem" asp-action="TempKalemEkleG" asp-controller="Servis" asp-route-servisId="@ViewBag.servisId" method="post">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Başlama Zamanı</label>
+                <input id="kalemBaslangicZamani" type="datetime-local" name="kalemBaslangicTarih" value="@lBaslangicZamani" class="form-control form-control-sm" onchange="KalanSureGetir()" required>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Bitiş Zamanı</label>
+                <input id="kalemBitisTarihi" type="datetime-local" name="kalemBitisTarih" value="@lBitisZamani" class="form-control form-control-sm" onchange="KalanSureGetir()" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">İşlem Yapan</label>
+                <input value="@lPersonelAdi" class="form-control form-control-sm" readonly>
+                @* <select class="form-control select2bs4" name="kalemIslemYapanId" required>
+                  @if (lPersonelId!=0)
+                  {
+                    <option selected value="@lPersonelId">@lPersonelAdi</option>
+                  @foreach (var item in ViewBag.personelList)
+                  {
+                    <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi</option>
+                  }
+                  }
+                  else
+                  {
+                  <option selected disabled value="">İşlem Yapan Seçin</option>
+                  @foreach (var item in ViewBag.personelList)
+                  {
+                    <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi</option>
+                  }
+                  }
+                </select> *@
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">İşlem Yeri</label>
+                <select class="form-control select2bs4" name="kalemIslemYeriId" required>
+                  @if (lIslemYeriId!=0)
+                  {
+                    <option selected  value="@lIslemYeriId">@lIslemYeriAdi</option>
+                  @foreach (var item in ViewBag.islemYeriList)
+                  {
+                    <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                  }
+                  }
+                  else
+                  {
+                  <option selected disabled value="">İşlem Yeri Seçin</option>
+                  @foreach (var item in ViewBag.islemYeriList)
+                  {
+                    <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                  }
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Durum</label>
+                <select class="form-control select2bs4" name="kalemSonDurumId" required>
+                  @if (lSonDurumId!=0)
+                  {
+                    <option selected  value="@lSonDurumId">@lSonDurumAciklama</option>
+                  @foreach (var item in ViewBag.sonDurumList)
+                  {
+                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                  }
+                  }
+                  else
+                  {
+                  <option selected disabled value="">Durum Seçin</option>
+                  @foreach (var item in ViewBag.sonDurumList)
+                  {
+                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                  }
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Süre</label>
+                <input id="kalemSure" type="text" value="@lSure" name="kalemSure" class="form-control form-control-sm" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label class="col-form-label">Genel Açıklama</label>
+                <input type="text" value="@lGenelAciklama" name="kalemGenelAciklama" class="form-control form-control-sm" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <textarea id="summernote" name="kalemAciklamaEkle" required></textarea>
+              @* <input id="summernote" name="kalemAciklama" required> *@
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button form="frmTempKalem" type="submit" class="btn btn-primary">Ekle</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="modalKalemDuzenle" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="form">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Kalem Düzenle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="frmTempKalemDuzenle" asp-action="TempKalemDuzenleG" asp-controller="Servis" asp-route-servisId="@ViewBag.servisId" method="post">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Başlama Zamanı</label>
+                <input id="edtKalemBaslangicZamani" type="datetime-local" name="kalemBaslangicTarih" onchange="KalanSureGetirEdt()"
+                  class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Bitiş Zamanı</label>
+                <input id="edtKalemBitisTarihi" type="datetime-local" name="kalemBitisTarih" onchange="KalanSureGetirEdt()"
+                  class="form-control form-control-sm">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">İşlem Yapan</label>
+                 <input id="edtKalemIslemYapan" class="form-control form-control-sm" readonly>
+                @* <select id="edtKalemIslemYapan" class="form-control select2bs4" name="kalemIslemYapanId" required>
+                  <option selected disabled value="">İşlem Yapan Seçin</option>
+                  @{
+                    if (ViewBag.personelId != null)
+                    {
+                      <option selected value="@ViewBag.personelId">@ViewBag.personelAdi @ViewBag.personelAdi2
+                        @ViewBag.personelSoyadi</option>
+                      foreach (var item in ViewBag.personelList)
+                      {
+                        <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                        </option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">Sorumlu Seçin</option>
+                      @foreach (var item in ViewBag.personelList)
+                      {
+                        <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                        </option>
+                      }
+                    }
+                  }
+                </select> *@
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">İşlem Yeri</label>
+                <select id="edtKalemIslemYeri" class="form-control select2bs4" name="kalemIslemYeriId" required>
+                  @{
+                    if (ViewBag.islemYeriId != null)
+                    {
+                      <option selected value="@ViewBag.islemYeriId">@ViewBag.islemYeriAdi</option>
+                      foreach (var item in ViewBag.islemYeriList)
+                      {
+                        <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">İşlem Yeri Seçin</option>
+                      @foreach (var item in ViewBag.islemYeriList)
+                      {
+                        <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                      }
+                    }
+                  }
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Durum</label>
+                <select id="edtKalemSonDurum" class="form-control select2bs4" name="kalemSonDurumId" required>
+                  <option selected disabled value="">Durum Seçin</option>
+                  @{
+                    if (ViewBag.sonDurumId != null)
+                    {
+                      <option selected value="@ViewBag.sonDurumId">@ViewBag.sonDurumAciklama</option>
+                      foreach (var item in ViewBag.sonDurumList)
+                      {
+                        <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">Durum Seçin</option>
+                      @foreach (var item in ViewBag.sonDurumList)
+                      {
+                        <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                      }
+                    }
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Süre</label>
+                <input id="edtKalemSure" type="text" name="kalemSure" class="form-control form-control-sm" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label class="col-form-label">Genel Açıklama</label>
+                <input id="edtKalemGenelAciklama" type="text" name="kalemGenelAciklama"
+                  class="form-control form-control-sm">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label class="col-form-label">Açıklama</label>
+                <textarea name="kalemAciklamaDuzenle" id="edtKalemAciklama" cols="30" rows="20"></textarea>
+                @* <input class="form-control form-control-lg" id="edtKalemAciklama" name="kalemAciklama" required> *@
+              </div>
+            </div>
+          </div>
+          <input type="hidden" id="inputKalemId" name="id">
+          <input type="hidden" id="inputMevcutKalem" name="mevcutKalem">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button name="btnKalemSil" id="btnTempKalemSil" form="frmTempKalemDuzenle" asp-action="TempKalemSil"
+          asp-controller="Servis" type="submit" class="btn btn-danger">Sil</button>
+        <button id="btnTempKalemDuzenle" form="frmTempKalemDuzenle" type="submit"
+          class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+@model EntityLayer.Concrete.FaturalamaPeriyodu
+@{
+    FaturalamaPeriyoduManager fpm = new FaturalamaPeriyoduManager(new EfFaturalamaPeriyoduDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    int faturalamaPeriyoduId = ViewBag.id;
+    var tblFaturalamaPeriyodu = fpm.TGetByID(faturalamaPeriyoduId);
+    var olusturan = km.TGetByID(tblFaturalamaPeriyodu.Olusturan);
+    var sonDegistiren = km.TGetByID(tblFaturalamaPeriyodu.SonDegistiren);
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>Faturalama Periyodu Gör</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmFaturalamaPeriyoduEkle"
+                                    class=" align-right btn btn-primary btn-lg float-right not-allowed" disabled>
+                                <i class="bi bi-database-add "></i>
+                            </button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtFaturalamaPeriyodu" asp-controller="DtFaturalamaPeriyodu" class=" btn btn-lg btn-danger "><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <form id="frmFaturalamaPeriyoduEkle" asp-controller="DtFaturalamaPeriyodu" asp-action="FaturalamaPeriyoduEkle" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Faturalama Periyodu</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblFaturalamaPeriyodu.FaturalamaPeriyoduAciklama</label>
+                        </div>
+                    </div>
+                    <hr class=" divider">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturan</label>
+                            <label class="form-control form-control-sm text-capitalize">@olusturan.KullaniciAdi @olusturan.KullaniciAdi2 @olusturan.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturulma Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblFaturalamaPeriyodu.OlusturulmaTarih</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştiren</label>
+                            <label class="form-control form-control-sm text-capitalize">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciAdi2 @sonDegistiren.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştirilme Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblFaturalamaPeriyodu.SonDegistirmeTarih</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form asp-controller="DtFaturalamaPeriyodu" asp-action="FaturalamaPeriyoduGor" method="post">
+    <div class="col-md-3">
+        <label>Tarih</label>
+        <div class="form-group">
+            <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input"
+                       data-target="#reservationdate" placeholder="İşe Giriş Tarihi Seçin" name="tarih"
+                       required />
+                <div class="input-group-append" data-target="#reservationdate"
+                     data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label class="col-form-label-sm">Periyot</label>
+        <select id="slctPeriyot"  class="form-control select2bs4" style="width: 100%;" name="periyotId" required>
+            <option selected disabled>Periyot Seçin</option>
+            @foreach (var item in ViewBag.faturaList)
+            {
+                <option value="@item.FaturalamaPeriyoduId">@item.FaturalamaPeriyoduAciklama</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">btn</button>
+</form>
+<label class="form-control form-control-sm col-3 text-capitalize">@ViewBag.baslangic</label>
+<label class="form-control form-control-sm col-3 text-capitalize">@ViewBag.bitis</label>
+<label class="form-control form-control-sm col-3 text-capitalize">@ViewBag.gun</label>

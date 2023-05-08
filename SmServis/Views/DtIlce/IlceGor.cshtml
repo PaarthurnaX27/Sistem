@@ -1,0 +1,68 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    IlceManager ilcem = new IlceManager(new EfIlceDal());
+    SehirManager sm = new SehirManager(new EfSehirDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    int ilceId = ViewBag.id;
+    var tblIlce = ilcem.TGetByID(ilceId);
+    var sehirAdi = sm.TGetByID(tblIlce.SehirId);
+    var sonDegistiren = km.TGetByID(tblIlce.SonDegistiren);
+    var olusturan = km.TGetByID(tblIlce.Olusturan);
+
+}
+<div id="divContent" class="card  bg-light">
+
+    <form method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Ilce</label>
+                        <label class="form-control">@tblIlce.IlceAdi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Sehir</label>
+                        <label class="form-control">@sehirAdi.SehirAdi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Durum</label>
+                        @{
+                            if (tblIlce.Silindi == false)
+                            {
+                                <label class="form-control ">Mevcut</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Silindi</label>
+                            }
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        <label>Posta Kodu</label>
+                        <label class="form-control">@tblIlce.PostaKodu</label>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Oluşturan</label>
+                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Oluşturulma Tarihi</label>
+                        <label class="form-control">@tblIlce.OlusturulmaTarih.Date.ToShortDateString()</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştiren</label>
+                        <label class="form-control ">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştirilme Tarihi</label>
+                        <label class="form-control">@tblIlce.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>

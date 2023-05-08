@@ -1,0 +1,191 @@
+@using BusinessLayer.ValidationRules
+@model EntityLayer.Concrete.IlgiliKisiler
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    CariPersonelManager pm = new CariPersonelManager(new EfCariPersonelDal());
+    IlgiliKisilerManager ikm = new IlgiliKisilerManager(new EfIlgiliKisilerDal());
+}
+
+
+
+<div class="mb-3 px-3 py-2">
+   @if (ViewBag.Message != null)
+    {
+    <script type="text/javascript">window.onload = function () {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+            Toast.fire({
+                icon: 'error',
+                title: 'Güncelleme İşlemi Başarısız Oldu'
+            })
+        };</script>
+    }
+    <h1>Guncelle</h1>
+
+ 
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+
+            <a class="nav-link active btn btn-white" data-toggle="tab" data-target="#ilgiliKisilerTab" role="tab">
+                <i class="bi bi-card-list"></i>
+                İlgili Kişiler
+            </a>
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#muhasebeTab" role="tab">
+                <i class="bi bi-card-list"></i> Muhasebe
+            </a>
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#projeTab" role="tab">
+                <i class="bi bi-card-list"></i>
+                Proje
+            </a>
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#eklenenlerTab" role="tab">
+                <i class="bi bi-card-list"></i> Eklenenler
+            </a>
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#danismanBilgileriTab" role="tab">
+                <i class="bi bi-card-list"></i> Danışman Bilgileri
+            </a>
+            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#faturaTab" role="tab">
+                <i class="bi bi-card-list"></i> Fatura
+            </a>
+        </div>
+    </nav>
+    <div class=" container-fluid bg-white p-4 ">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="ilgiliKisilerTab" role="tabpanel">
+                <div class="card p-3">
+                    <div class="card-body">
+                        <hr class="divider">
+                        <div id="ilgiliPersonel">
+                            <form asp-action="IlgiliKisiler" asp-controller="IlgiliKisiler" method="post">
+                                <div class="row mb-2 justify-content-between">
+                                    <div class="col-md-3">
+                                        <select id="ilgiliKisiCari" asp-for="@Model.CariId" class="form-control select2bs4" style="width: 100%;" required>
+                                            <option selected disabled>Cari Seçin</option>
+                                            @foreach (var cari in ViewBag.cariList)
+                                            {
+                                                <option value="@cari.CariId">@cari.CariAdi</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <input class="invisible" id="lblPersonelId" asp-for="@Model.PersonelId">
+                                <div class="form-group">
+                                    <table id="tblIlgili" class="table table-hover">
+                                        <thead>
+                                            <tr style="white-space:nowrap">
+                                                <th>Seç</th>
+                                                <th>Personel Kodu</th>
+                                                <th>Adı</th>
+                                                <th>Soyadı</th>
+                                                <th>Telefon</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var personel in ViewBag.personelList)
+                                            {
+                                                string personelAdi2 = personel.CariPersonelAdi2;
+                                                personelAdi2 = (personelAdi2 == null) ? personelAdi2 = "" : personelAdi2 = personelAdi2;
+                                                <tr>
+                                                    <td><input name="radio" type="radio" value="@personel.CariPersonelId" /></td>
+                                                    <td>@personel.CariPersonelKodu.ToUpper()</td>
+                                                    <td>@personel.CariPersonelAdi.ToUpper() @personel.CariPersonelAdi2.ToUpper() </td>
+                                                    <td>@personel.CariPersonelSoyadi.ToUpper()</td>
+                                                    <td>@personel.Telefon</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <hr class="divider" />
+                                    <div class="row mb-1">
+                                        <div class="col-md-3 mb-1">
+                                            @* <select id="ikUnvanId" class="form-control select2bs4" style="width: 100%;" asp-for="@Model.UnvanId" required>
+                                                <option selected disabled>Unvan Seç</option>
+                                                @foreach (var unvan in ViewBag.unvanList)
+                                                {
+                                                    <option value="@unvan.UnvanId">@unvan.UnvanAciklama</option>
+                                                }
+                                            </select> *@
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            @* <select id="ikDepartmanId" class="form-control select2bs4" onchange="FillPozisyon()" asp-for="@Model.DepartmanId" style="width: 100%;" required>
+                                                <option selected disabled>Departman Seç</option>
+                                                @foreach (var departman in ViewBag.departmanList)
+                                                {
+                                                    <option value="@departman.DepartmanId">@departman.DepartmanAdi</option>
+                                                }
+                                            </select> *@
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            @* <select id="ikPozisyonId" class="form-control select2bs4" asp-for="@Model.PozisyonId" style="width: 100%;" required>
+                                                <option selected disabled>Pozisyon Seçmek İçin Önce Departman Seçin</option>
+                                            </select> *@
+                                        </div>
+                                        <div class="col-md-3 mb-1">
+                                            @* <select class="form-control select2bs4" asp-for="@Model.CalismaDurumu" style="width: 100%;" required>
+                                                <option selected disabled>Çalışma Durumu</option>
+                                                <option value="@true">Devam Ediyor</option>
+                                                <option value="@false">Ayrıldı</option>
+                                            </select> *@
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3 mb-1">
+                                        <div class="col-md-3 mr-4">
+                                            @* <input class=" mr-3" type="checkbox" asp-for="@Model.SerivsMailGonder"> *@
+                                            <label class="form-check-label mr-3">Servis Maili Gönderilecek Mi?</label>
+                                        </div>
+                                        <div class="col-md-3">
+                                        @* <input class="form-check-input" type="checkbox" asp-for="@Model.ServisFaturaGonder"> *@
+                                            <label class="form-check-label">Servis Faturası Gönderilecek Mi?</label>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row mt-3 justify-content-end">
+                                        <button type="submit" class="btn btn-primary col-md-3" onclick="ilgiliKisiIsSelected()">Ekle</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="muhasebeTab" role="tabpanel" data-toggle="tab">
+                Sonradan Analizi Yapılacak
+            </div>
+            <div class="tab-pane fade" id="projeTab" role="tabpanel" data-toggle="tab">
+                Sekme içerisinde müşteriye yapılan satışlarla ilgili
+                projeler satır bazlı görünecek. Satırda olması gerekenler
+                proje modülünde tanıtılacak. Proje modülünde girişi yapılıp
+                bilgi olarak satırda görünmesi gereken alanlar satış şekli,
+                çalışma şekli, satış şekli ünvanı, satış tarihi, bakım
+                faturası tarihi, bakım periyodu olacak. Bu alanlar proje
+                modülünde anlatılacaktır. Satıra çift tıklayınca yada
+                projeye git gibi bir seçenekle ilgili satırdan projeye
+                ulaşılacak.
+            </div>
+            <div class="tab-pane fade" id="eklenenlerTab" role="tabpanel" data-toggle="tab">
+                Cariye özel eklenmesi gereken dosyalar, resimler, dökümanlar
+                vb eklenebilecek. Proje bazlı eklenmesi gereken bir durumda
+                proje modülünden ilgili projeye eklenecek.
+            </div>
+            <div class="tab-pane fade" id="danismanBilgileriTab" role="tabpanel" data-toggle="tab">
+                Müşterinin projesine tanımlanmış danışmanları proje bazlı
+                görebileceğimiz sekme.
+            </div>
+            <div class="tab-pane fade" id="faturaTab" role="tabpanel" data-toggle="tab">
+                Fatura Mailleri
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

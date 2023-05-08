@@ -1,0 +1,206 @@
+﻿@{
+    @model List<Sehir>
+        //Tuple<Sehir>
+    var db = new DataAccessLayer.Concrete.SmServisContext();
+}
+
+@{ if (ViewBag.addorupdate == "update")
+    {
+    <div class="card">
+        <div class="m-2 mb-3 ">
+            <div class="col ">
+
+          
+                <form >
+                    <div class="row  ">
+                        <div class="col-md-4 mb-1">
+                            <input type="text" class="form-control form-control" id="sehirAdiFlt" placeholder="Şehir Adı">
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <input type="number" class="form-control" id="plakaKoduFlt" placeholder="Plaka Kodu">
+
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <input type="number" class="form-control" id="telefonKoduFlt" placeholder="Telefon Kodu">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-1 ">
+                            <select id="sUlkeFilter" class="form-control select2bs4" style="width: 100%;" required>
+                                <option selected disabled>Ülke Seçin</option>
+                                @foreach (var ulke in ViewBag.ulkeList)
+                                {
+                                    <option value="@ulke.UlkeId">@ulke.UlkeAdi</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <input type="text" class="form-control" id="olusturanFlt" placeholder="Oluşturan">
+
+                        </div>
+                        <div class="col-md-4 mb-1">
+                            <input type="text" class="form-control" id="sonDegistirenflt" placeholder="Son Değiştiren ">
+                        </div>
+
+                    </div>
+
+                    <hr class="divider">
+                    <div class="row ">
+                        <div class="form-check col-4">
+                            <input name="filter" type="checkbox" value="Müşteri" onclick="return filter_type3(this)"
+                                   id="Müşteri" />
+                            <label class="form-check-label" for="checkboxMusteri">
+                                Silindi
+                            </label>
+                        </div>
+                        <div class="form-check col-4">
+                            <input name="filter" type="checkbox" value="Tedarikçi" onclick="return filter_type3(this)"
+                                   id="Tedarikçi" />
+                            <label class="form-check-label" for="checkboxTedarikci">
+                                Mevcut
+                            </label>
+                        </div>
+                        <div class="form-check col-4">
+                            <input name="default-radio-1" type="checkbox" value="" id="radioAll" />
+                            <label class="form-check-label" for="checkboxAll"> Hepsi </label>
+                        </div>
+
+                    </div>
+                    <hr class="divider">
+                    <div class="row">
+                        <button onclick="sehirFiltre()" class="btn btn-primary">Filtrele</button>
+                        @*<button id="btnFilter" onclick="filterSh(); " class="btn btn-primary">Filtrele</button>*@
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+        <div class="card">
+            <div class="card-header">
+              
+                <div class="row">
+                    <h3 class=" col-9 card-title">Şehir Destek Tablosu</h3>
+                    <a asp-action="Edit" asp-controller="DestekTablosu" asp-route-table="sehir" asp-route-addorupdate="add" class=" col-3 btn btn-primary">Yeni Ekle</a>
+                </div>
+
+            </div>
+            <!-- ./card-header -->
+            <div class="card-body">
+                <table id="tblSehir" class="table table-bordered table-hover  ">
+                    <thead>
+                        <tr>
+                            <th>Seç</th>
+                            <th>Şehir Adı</th>
+                            <th>Plaka Kodu</th>
+                            <th>Telefon Kodu</th>
+                            <th>Ülke </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+
+
+                            int ulkeId = item.UlkeId;
+                            var tblUlke = db.Ulkes.Where(x => x.UlkeId == ulkeId).FirstOrDefault();
+                        
+                            <tr data-widget="expandable-table" aria-expanded="false">
+                                <td><input name="radio" type="radio" /></td>
+                                <td>@item.SehirAdi</td>
+                                <td>@item.PlakaKodu </td>
+                                <td>@item.TelefonKodu </td>
+                                <td>@tblUlke.UlkeAdi</td>
+
+
+                            </tr>
+                            <tr class="expandable-body">
+                                <td colspan="5">
+                                    <div class="card  bg-light">
+
+                                        <form asp-controller="DestekTablosu" asp-action="EditAndAddSehir" asp-route-id="@item.SehirId" asp-route-addorupdate="update" asp-route-table="@ViewBag.table" method="post">
+                                            <div class="form-group ">
+                                                <div class="card-body p-3">
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-3">
+                                                            <input type="Text" class="form-control " id="unvan" value="@item.SehirAdi" placeholder="Şehir Adı" name="SehirAdi">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="Text" class="form-control " id="vergiDairesi" value="@item.PlakaKodu" name="PlakaKodu"
+                                                                   placeholder="Plaka Kodu">
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input class="form-control" placeholder="Telefon Kodu" type="text" value="@item.TelefonKodu" name="TelefonKodu" />
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <select id="ulke2" class="form-control select2bs4" style="width: 100%;" required>
+                                                                <option selected disabled>Ülke Seçin</option>
+                                                                @foreach (var ulke in ViewBag.ulkeList)
+                                                                {
+                                                                    <option value="@ulke.UlkeId">@ulke.UlkeAdi</option>
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix">
+                                                    <button type="submit" class=" align-right btn btn-primary m-3 col-2 float-right"> Güncelle</button>
+                                                </div>
+
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else if (ViewBag.addorupdate == "add")
+    {
+        <form asp-controller="DestekTablosu" asp-action="EditAndAddSehir" asp-route-addorupdate="add" asp-route-table="@ViewBag.table" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <input type="Text" class="form-control "  placeholder="Şehir Adı" name="SehirAdi">
+                        </div>
+                        <div class="col-md-3">
+
+                            <input type="Text" class="form-control "  name="PlakaKodu"
+                                   placeholder="Plaka Kodu">
+                        </div>
+
+                        <div class="col-md-3">
+                            <input class="form-control" placeholder="Telefon Kodu" type="text" name="TelefonKodu" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <select id="ulke" class="form-control select2bs4" style="width: 100%;" name="UlkeId" required>
+                                <option selected disabled>Ülke Seçin</option>
+                                @foreach (var ulke in ViewBag.ulkeList)
+                                {
+                                    <option value="@ulke.UlkeId">@ulke.UlkeAdi</option>
+                                }
+
+
+                            </select>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <button type="submit" class=" align-right btn btn-primary m-3 col-2 float-right"> Ekle</button>
+                </div>
+
+            </div>
+        </form>
+    }
+}

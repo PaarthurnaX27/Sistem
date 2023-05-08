@@ -1,0 +1,959 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@using Microsoft.AspNetCore.Http;
+@{
+
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    string session = SmServis.Controllers.LoginController.a.ToString();
+    var kullaniciId = Context.Session.GetInt32("kullanici").ToString();
+    var firmaAdi = Context.Session.GetString("firma").ToString();
+    var kullanici = km.TGetByID(Int32.Parse(kullaniciId));
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | Dashboard</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet"
+          href="~/AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/AdminLTE/dist/css/adminlte.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.css">
+    <link rel="stylesheet" href="~/AdminLTE/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/AdminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet"
+          href="~/AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/summernote/summernote-bs4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="~/AdminLTE/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <style>
+        .not-allowed {
+            cursor: not-allowed !important;
+        }
+    </style>
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+
+        <!-- Preloader -->
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake" src="~/AdminLTE/dist/img/sistem.png" alt="AdminLTELogo" height="70"
+                 width="100">
+        </div>
+
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-primary navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                        <i class="fas fa-bars"
+                           style="color:white"></i>
+                    </a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link  text-light">Ana Sayfa</a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav navbar-fixed ml-auto">
+                <!-- Navbar Search -->
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                        <i class="fas fa-search" style="color:white"></i>
+                    </a>
+                    <div class="navbar-search-block">
+                        <form class="form-inline">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-navbar" type="search" placeholder="Search"
+                                       aria-label="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-navbar" type="submit">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+
+                <!-- Messages Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments" style="color:white"></i>
+                        <span class="badge badge-danger navbar-badge">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="~/AdminLTE/dist/img/user1-128x128.jpg" alt="User Avatar"
+                                     class="img-size-50 mr-3 img-circle">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Brad Diesel
+                                        <span class="float-right text-sm text-danger">
+                                            <i class="fas fa-star"></i>
+                                        </span>
+                                    </h3>
+                                    <p class="text-sm">Call me whenever you can...</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="~/AdminLTE/dist/img/user8-128x128.jpg" alt="User Avatar"
+                                     class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        John Pierce
+                                        <span class="float-right text-sm text-muted">
+                                            <i class="fas fa-star"></i>
+                                        </span>
+                                    </h3>
+                                    <p class="text-sm">I got your message bro</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <!-- Message Start -->
+                            <div class="media">
+                                <img src="~/AdminLTE/dist/img/user3-128x128.jpg" alt="User Avatar"
+                                     class="img-size-50 img-circle mr-3">
+                                <div class="media-body">
+                                    <h3 class="dropdown-item-title">
+                                        Nora Silvester
+                                        <span class="float-right text-sm text-warning">
+                                            <i class="fas fa-star"></i>
+                                        </span>
+                                    </h3>
+                                    <p class="text-sm">The subject goes here</p>
+                                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                                </div>
+                            </div>
+                            <!-- Message End -->
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                    </div>
+                </li>
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell" style="color:white"></i>
+                        <span class="badge badge-warning navbar-badge">15</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> 4 new messages
+                            <span class="float-right text-muted text-sm">3 mins</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> 8 friend requests
+                            <span class="float-right text-muted text-sm">12 hours</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-file mr-2"></i> 3 new reports
+                            <span class="float-right text-muted text-sm">2 days</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                        <i class="fas fa-expand-arrows-alt" style="color:white;"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
+                       role="button">
+                        <i class="fas fa-th-large" style="color:white"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-light-primary elevation-4">
+            <!-- Brand Logo -->
+            <div asp-action="Index" asp-controller="Home" class="brand-link bg-primary" style="color:white">
+                <img src="~/AdminLTE/dist/img/AdminLTELogo.png" alt="AdminLTE Logo"
+                     class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">@firmaAdi</span>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel (optional) -->
+
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2"
+                             alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">@kullanici.KullaniciAdi @kullanici.KullaniciSoyadi</a>
+                    </div>
+                </div>
+
+
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                               aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-card-text"></i>
+                                <p>
+                                    &nbsp; Cari Kart
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="Index" asp-controller="Cari" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cari Kart</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="IlgiliKisiler" asp-controller="IlgiliKisiler" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>İlgili Kişi Ekle</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="CariPersonelKarti" asp-controller="CariPersonelKarti"
+                                       class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cari Personel Kartı</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-person-vcard"></i>
+                                <p>
+                                    &nbsp; Personel Kartı
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="PersonelKarti" asp-controller="PersonelKarti" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Personel Kartı</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-diagram-3"></i>
+                                <p>
+                                    &nbsp; Proje Modülü
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="Proje" asp-controller="Proje" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Proje</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-postcard"></i>
+                                <p>
+                                    &nbsp; Malzeme Kartı
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="" asp-controller="" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-wallet2"></i>
+                                <p>
+                                    &nbsp; Hedef-Bütçe Modülü
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="" asp-controller="" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-file-ruled"></i>
+                                <p>
+                                    &nbsp; Servis Modülü
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="ServisBilgileri" asp-controller="Servis" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Servis Bilgileri</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="DestekTablosu" class="nav-link">
+                                <i class="bi bi-newspaper"></i>
+                                <p>
+                                    &nbsp; Destek Tablosu
+
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="CıkısYap" asp-controller="Home" class="nav-link">
+                                <i class="bi bi-x-circle"></i>
+                                <p>
+                                    &nbsp; Çıkış Yap
+
+                                </p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                @* <div class="container-fluid">
+                    <div class="row mb-2">
+                    <div class="col-sm-6">
+                    <h1 class="m-0"></h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                    </div><!-- /.col -->
+                    </div><!-- /.row -->
+                    </div><!-- /.container-fluid --> *@
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+
+                    @RenderBody()
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2022 <a href="https://www.sistemyazilim.com.tr/" target="_blank">Sistem Yazılım</a>.</strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 3.2.0
+            </div>
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+
+    <!-- ./wrapper -->
+    <!-- jQuery -->
+    <script src="~/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="~/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>$.widget.bridge('uibutton', $.ui.button)</script>
+    <!-- Bootstrap 4 -->
+    <script src="~/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/AdminLTE/plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="~/AdminLTE/plugins/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="~/AdminLTE/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="~/AdminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="~/AdminLTE/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="~/AdminLTE/plugins/moment/moment.min.js"></script>
+    <script src="~/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="~/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="~/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="~/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/AdminLTE/dist/js/adminlte.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="~/AdminLTE/dist/js/demo.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="~/AdminLTE/dist/js/pages/dashboard.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/AdminLTE/plugins/jszip/jszip.min.js"></script>
+    <script src="~/AdminLTE/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/AdminLTE/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/AdminLTE/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="~/AdminLTE/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <!-- Select2 -->
+    <script src="~/AdminLTE/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="~/AdminLTE/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <!-- dropzonejs -->
+    <script src="~/AdminLTE/plugins/dropzone/min/dropzone.min.js"></script>
+    <!-- ChartJS -->
+    <script src="~/AdminLTE/plugins/chart.js/Chart.min.js"></script>
+    <script src="~/AdminLTE/plugins/inputmask/jquery.inputmask.min.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="~/AdminLTE/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+    <script>$('.duallistboxFaturaMaili').bootstrapDualListbox()</script>
+    <script>$('.duallistboxServisMaili').bootstrapDualListbox()</script>
+    <script>$(function () {
+            // Summernote
+            $('#summernote').summernote({
+                height: 250,
+            })
+        })
+        $(function () {
+            // Summernote
+            $('#summernoteWizard').summernote({
+                height: 250,
+            })
+        })
+        $(function () {
+            // Summernote
+            $('#summernoteWizardL').summernote({
+                height: 150,
+            })
+        })
+        $(function () {
+            // Summernote
+            $('#summernote1').summernote({
+                height: 300
+            })
+        })
+        $(function () {
+            // Summernote
+            $('#summernote1').summernote('disable')
+        })
+        $(function () {
+            // Summernote
+            $('#summernoteGor').summernote('disable')
+        })
+        $(function () {
+            // Summernote
+            $('#edtKalemAciklama').summernote({
+                height: 250
+            })
+        })</script>
+    @* <script>
+            var donutChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var donutData = {
+                labels: [
+                    'Beklemede',
+                    'Kuyrukta',
+                    'Plana Alındı',
+                    'Müşteri Onayı',
+                    'Devam Ediyor',
+                    'Müş. Bilgi Bekleniyor',
+                    'Tamamlandı',
+                    'IAS Bilgi Bekleniyor'
+                ],
+                datasets: [
+                    {
+                        data: [700, 500, 400, 600, 300, 100, 200, 50],
+                        backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#00c0ef', '#3c8dbc'],
+                    }
+                ]
+            }
+
+            //-------------
+            //- PIE CHART -
+            //-------------
+            // Get context with jQuery - using jQuery's .get() method.
+            var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+            var pieData = donutData;
+            var pieOptions = {
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: false // Hide legend
+                },
+            }
+            //Create pie or douhnut chart
+            // You can switch between pie and douhnut using the method below.
+            new Chart(pieChartCanvas, {
+                type: 'pie',
+                data: pieData,
+                options: pieOptions
+            })
+
+        </script> *@
+    <script>//Bootstrap Duallistbox
+        $('.duallistbox').bootstrapDualListbox()
+
+        $(function () {
+            $("#example13").DataTable({
+                "responsive": true, "lengthChange": true, "autoWidth": true,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        });
+
+        $("#example1").DataTable({
+
+            language: {
+                info: "_TOTAL_ kayıttan _START_ - _END_ kayıt gösteriliyor.",
+                infoEmpty: "Gösterilecek hiç kayıt yok.",
+                loadingRecords: "Kayıtlar yükleniyor.",
+                zeroRecords: "Tablo boş",
+                search: "Genel Arama:",
+                infoFiltered: "(toplam _MAX_ kayıttan filtrelenenler)",
+                lengthMenu: "Gösterilecek Satır _MENU_ ",
+
+                paginate: {
+                    first: "İlk",
+                    previous: "Önceki",
+                    next: "Sonraki",
+                    last: "Son"
+
+                },
+            },
+
+
+            "responsive": false,
+            "lengthChange": false,
+            "autoWidth": false,
+            "ordering": true,
+            "pageLength": 10,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+        $("#tblDestek").DataTable({
+
+            language: {
+                info: "_TOTAL_ kayıttan _START_ - _END_ kayıt gösteriliyor.",
+                infoEmpty: "Gösterilecek hiç kayıt yok.",
+                loadingRecords: "Kayıtlar yükleniyor.",
+                zeroRecords: "Tablo boş",
+                search: "Genel Arama:",
+                infoFiltered: "(toplam _MAX_ kayıttan filtrelenenler)",
+                lengthMenu: "Gösterilecek Satır _MENU_ ",
+
+                paginate: {
+                    first: "İlk",
+                    previous: "Önceki",
+                    next: "Sonraki",
+                    last: "Son"
+
+                },
+            },
+
+
+            "responsive": false,
+            "lengthChange": true,
+            "autoWidth": false,
+            "ordering": true,
+            "pageLength": 10,
+            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+
+        }).buttons().container().appendTo('#tblDestek_wrapper .col-md-6:eq(0)');
+
+        $(function () {
+            //Initialize Select2 Elements
+            $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+
+            //Datemask dd/mm/yyyy
+            $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+            //Datemask2 mm/dd/yyyy
+            $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+            //Money Euro
+            $('[data-mask]').inputmask()
+
+            //Date picker
+            $('#reservationdate').datetimepicker({
+                format: 'DD/MM/YYYY',
+                locale: 'tr'
+
+            });
+
+            //Date and time picker
+            $('#reservationdatetime').datetimepicker({ icons: { time: 'far fa-clock' } });
+            $('#reservationdatetime1').datetimepicker({ icons: { time: 'far fa-clock' } });
+
+            //Date range picker
+            $('#reservation').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            })
+            $('#reservationProje1').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            })
+            $('#reservationProje2').daterangepicker({
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            })
+            //Date range picker with time picker
+            $('#reservationtime').daterangepicker({
+                timePicker: true,
+                timePickerIncrement: 30,
+                locale: {
+                    format: 'DD/MM/YYYY hh:mm A'
+                }
+            })
+            //Date range as a button
+            $('#daterange-btn').daterangepicker(
+                {
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    startDate: moment().subtract(29, 'days'),
+                    endDate: moment()
+                },
+                function (start, end) {
+                    $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+                }
+            )
+
+            //Timepicker
+            $('#timepicker').datetimepicker({
+                format: 'LT'
+            })
+
+            //Bootstrap Duallistbox
+            $('.duallistbox').bootstrapDualListbox()
+
+            //Colorpicker
+            $('.my-colorpicker1').colorpicker()
+            //color picker with addon
+            $('.my-colorpicker2').colorpicker()
+
+            $('.my-colorpicker2').on('colorpickerChange', function (event) {
+                $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+            })
+
+            $("input[data-bootstrap-switch]").each(function () {
+                $(this).bootstrapSwitch('state', $(this).prop('checked'));
+            })
+
+        })
+
+        // BS-Stepper Init
+
+        // DropzoneJS Demo Code Start
+        Dropzone.autoDiscover = false
+
+        // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+        var previewNode = document.querySelector("#template")
+        previewNode.id = ""
+        var previewTemplate = previewNode.parentNode.innerHTML
+        previewNode.parentNode.removeChild(previewNode)
+
+        var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+            url: "/target-url", // Set the url
+            thumbnailWidth: 80,
+            thumbnailHeight: 80,
+            parallelUploads: 20,
+            previewTemplate: previewTemplate,
+            autoQueue: false, // Make sure the files aren't queued until manually added
+            previewsContainer: "#previews", // Define the container to display the previews
+            clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+        })
+
+        myDropzone.on("addedfile", function (file) {
+            // Hookup the start button
+            file.previewElement.querySelector(".start").onclick = function () { myDropzone.enqueueFile(file) }
+        })
+
+        // Update the total progress bar
+        myDropzone.on("totaluploadprogress", function (progress) {
+            document.querySelector("#total-progress .progress-bar").style.width = progress + "%"
+        })
+
+        myDropzone.on("sending", function (file) {
+            // Show the total progress bar when upload starts
+            document.querySelector("#total-progress").style.opacity = "1"
+            // And disable the start button
+            file.previewElement.querySelector(".start").setAttribute("disabled", "disabled")
+        })
+
+        // Hide the total progress bar when nothing's uploading anymore
+        myDropzone.on("queuecomplete", function (progress) {
+            document.querySelector("#total-progress").style.opacity = "0"
+        })
+
+        // Setup the buttons for all transfers
+        // The "add files" button doesn't need to be setup because the config
+        // `clickable` has already been specified.
+        document.querySelector("#actions .start").onclick = function () {
+            myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED))
+        }
+        document.querySelector("#actions .cancel").onclick = function () {
+            myDropzone.removeAllFiles(true)
+        }
+        // DropzoneJS Demo Code End</script>
+    <script>if (window.history.replaceState) {
+
+            window.history.replaceState(null, null, window.location.href);
+
+        }</script>
+
+    <script>var currentTab = 0;
+        document.addEventListener("DOMContentLoaded", function (event) {
+
+
+            showTab(currentTab);
+
+        });
+
+        function showTab(n) {
+            var x = document.getElementsByClassName("tab");
+            x[n].style.display = "block";
+            if (n == 0) {
+                document.getElementById("prevBtn").style.display = "none";
+            } else {
+                document.getElementById("prevBtn").style.display = "inline";
+            }
+            if (n == (x.length - 1)) {
+                document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+            }
+            else {
+                document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+            }
+            if (n == 2) {
+
+                document.getElementById("nextBtn").style.display = "none";
+            }
+            else {
+                document.getElementById("nextBtn").style.display = "inline";
+                document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+            }
+
+            fixStepIndicator(n)
+        }
+
+        function nextPrev(n) {
+            var x = document.getElementsByClassName("tab");
+            // if (n == 1 && !validateForm()) return false;
+            x[currentTab].style.display = "none";
+            currentTab = currentTab + n;
+            if (currentTab >= x.length) {
+
+                document.getElementById("nextprevious").style.display = "none";
+                document.getElementById("all-steps").style.display = "none";
+                document.getElementById("register").style.display = "none";
+                document.getElementById("text-message").style.display = "block";
+            }
+            showTab(currentTab);
+        }
+
+        function validateForm() {
+            var x, y, i, valid = true;
+            x = document.getElementsByClassName("tab");
+            y = x[currentTab].getElementsByTagName("input");
+            for (i = 0; i < y.length; i++) {
+                if (y[i].value == "") {
+                    y[i].className += " invalid";
+                    valid = false;
+                }
+
+
+            }
+            if (valid) {
+                document.getElementsByClassName("step")[currentTab].className += " finish";
+            }
+            return valid;
+        }
+
+        function fixStepIndicator(n) {
+            var i, x = document.getElementsByClassName("step");
+            for (i = 0; i < x.length; i++) {
+                x[i].className = x[i].className.replace(" active", "");
+            }
+            x[n].className += " active";
+        }</script>
+</body>
+
+</html>

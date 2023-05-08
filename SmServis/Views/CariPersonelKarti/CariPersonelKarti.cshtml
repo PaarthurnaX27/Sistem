@@ -1,0 +1,144 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    var pm = new PersonelManager(new EfPersonelDal());
+    var km = new KullaniciManager(new EfKullaniciDal());
+    var cm = new CinsiyetManager(new EfCinsiyetDal());
+
+}
+
+<label id="personelId">a</label>
+<div class="card">
+    <div class="card-header">
+        <div class="col-md-12 mb-1 d-flex justify-content-between">
+            <button type="submit" form="fltAreaCariPersonel" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Ara
+                <i class="bi bi-binoculars"></i>
+            </button>
+            <a onclick="icerikGor('CariPersonel')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Gör
+                <i class="bi bi-eye"></i>
+            </a>
+            <button id="btnDegistirCariPersonel" form="formCariGuncelle" asp-action="CariPersonelKartiGuncelle" name="personelId" asp-controller="CariPersonelKarti"  class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            @* <button form="formCariGuncelle"  onclick="guncelle('CariPersonel')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1"> *@
+                Değiştir
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+            <button form="formCariGuncelle" asp-action="GTempCariPersonelKartiEkle" asp-controller="TempCariPersonelKarti"
+                class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Ekle
+                <i class="bi bi-clipboard-plus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tblDestek" class="table table-borderless table-hover  ">
+            <thead>
+                <tr>
+                    <th>Seç</th>
+                    <th>Personel Adı</th>
+                    <th>Personel Soyadı</th>
+                    <th>Cinsiyet</th>
+                    <th>Telefon</th>
+                    <th>Adres</th>
+                    <th>Adres 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.personelList)
+                {
+                    string cinsiyet = cm.TGetByID(item.CinsiyetId).CinsiyetAciklama;
+                    var olusturan = km.TGetByID(item.Olusturan);
+                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
+                    <tr>
+                        <td><input name="radio" type="radio" value="@item.CariPersonelId" /></td>
+                        <td class="text-capitalize">@item.CariPersonelAdi @item.CariPersonelAdi2</td>
+                        <td class="text-capitalize"> @item.CariPersonelSoyadi</td>
+                        <td class="text-capitalize">@cinsiyet</td>
+                        <td class="text-capitalize"> @item.Telefon</td>
+                        <td class="text-capitalize"> @item.Adres1</td>
+                        <td class="text-capitalize"> @item.Adres2</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@{
+   }
+@if (Enumerable.Count(ViewBag.tempPersonelList)!=0)
+{
+    <div class="card bg-warning">
+    <div class="card-header">
+        <div class="col-md-12 mb-1 d-flex justify-content-center">
+            
+            <a onclick="icerikGor('TempCariPersonel')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Gör
+                <i class="bi bi-eye"></i>
+            </a>
+            <button  id="btnDegistirCariPersonelG" form="formCariGuncelle" asp-action="GTempCariPersonelKartiGuncelle" name="personelIdg" asp-controller="TempCariPersonelKarti"  class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            @* <button  onclick="guncelle('GTempCariPersonel')" form="formCariGuncelle" asp-action="GTempCariPersonelKartiGuncelle" name="personelIdg" asp-controller="CariPersonelKarti"  class="btn btn-outline-primary rounded-1 col-md-3 mb-1"> *@
+                Değiştir
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+            
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tblDestekG" class="table table-borderless table-hover  ">
+            <thead>
+                <tr>
+                    <th>Seç</th>
+                    <th>Personel Adı</th>
+                    <th>Personel Soyadı</th>
+                    <th>Cinsiyet</th>
+                    <th>Telefon</th>
+                    <th>Adres</th>
+                    <th>Adres 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.tempPersonelList)
+                {
+                    string cinsiyet = cm.TGetByID(item.CinsiyetId).CinsiyetAciklama;
+                    var olusturan = km.TGetByID(item.Olusturan);
+                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
+                    <tr>
+                        <td><input name="radio" type="radio" value="@item.CariPersonelId" /></td>
+                        <td class="text-capitalize">@item.CariPersonelAdi @item.CariPersonelAdi2</td>
+                        <td class="text-capitalize"> @item.CariPersonelSoyadi</td>
+                        <td class="text-capitalize">@cinsiyet</td>
+                        <td class="text-capitalize"> @item.Telefon</td>
+                        <td class="text-capitalize"> @item.Adres1</td>
+                        <td class="text-capitalize"> @item.Adres2</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+}
+
+
+
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">UYARI</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Lütfen Seçim Yapınız&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+

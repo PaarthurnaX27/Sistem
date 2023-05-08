@@ -1,0 +1,635 @@
+@using Microsoft.AspNetCore.Http;
+@{
+  var error = TempData["error"];
+  if (error != null)
+  {
+    <script type="text/javascript">window.onload = function () {
+        var Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000
+        });
+
+        Toast.fire({
+          icon: 'error',
+          title: 'Ekleme İşlemi Başarısız Oldu'
+        })
+      };</script>
+  }
+
+  var firmaAdi = Context.Session.GetString("firma").ToString();
+  int servisId=ViewBag.id;
+  CariManager cm = new CariManager(new EfCariDal());
+  ServisDepartmanManager sdptm = new ServisDepartmanManager(new EfServisDepartmanDal());
+  ModulManager mm = new ModulManager(new EfModulDal());
+  ServisTipiManager stm = new ServisTipiManager(new EfServisTipiDal());
+  ServisSekliManager ssm = new ServisSekliManager(new EfServisSekliDal());
+  PersonelManager km = new PersonelManager(new EfPersonelDal());
+  SonDurumManager sdm = new SonDurumManager(new EfSonDurumDal());
+  OncelikManager om = new OncelikManager(new EfOncelikDal());
+  PersonelManager pm = new PersonelManager(new EfPersonelDal());
+  IslemYeriManager iym = new IslemYeriManager(new EfIslemYeriDal());
+  ServisBilgiManager sbm=new ServisBilgiManager(new EfServisBilgiDal());
+    var tblServis=sbm.TGetByID(servisId);
+   var cariId = tblServis.CariId;
+   var cariAdi = cm.TGetByID(cariId).CariAdi;
+   var cariNo=cm.TGetByID(cariId).HesapKodu;
+   var servisDepartmanId = tblServis.ServisDepartmanId;
+   var servisDepartmanAdi = sdptm.TGetByID(servisDepartmanId).ServisDepartmanAdi;
+   var modulId = tblServis.ModulId;
+   var modulAdi = mm.TGetByID(modulId).ModulAdi;
+   var departmanYetkilisi = tblServis.DepartmanYetkilisi;
+   var konu = tblServis.Konu;
+   var oncelikId = tblServis.OncelikId;
+   var oncelikAciklama = om.TGetByID(oncelikId).OncelikAciklama;
+   var servisSekliId = tblServis.ServisSekliId;
+   var servisSekliAciklama = ssm.TGetByID(servisSekliId).ServisSekliAciklama;
+   var servisTipiId = tblServis.ServisTipiId;
+   var servisTipiAciklama = stm.TGetByID(servisTipiId).ServisTipiAciklama;
+   var personelId = tblServis.PersonelId;
+   var personelAdi = pm.TGetByID(personelId).PersonelAdi+" "+ pm.TGetByID(personelId).PersonelAdi2+" "+ pm.TGetByID(personelId).PersonelSoyadi;
+   var sonDurumId=tblServis.SonDurumID;
+   var sonDurumAciklama=sdm.TGetByID(sonDurumId).SonDurumAciklama;
+   var tSuresi = Convert.ToInt32(tblServis.TSuresi);
+   var tSuresiSaat = (tSuresi / 60).ToString();
+   var fTSuresi = Convert.ToInt32(tblServis.FTSuresi);
+   var tarihSaat = tblServis.TarihSaat.ToString("dd-MM-yyyy HH:mm");
+   var planlananTarih = tblServis.PlanlananTarih.ToString("dd-MM-yyy HH:mm");
+   var sonDurumTarihi = tblServis.SonDurumTarihi.ToString("dd-MM-yyy HH:mm");
+    TimeSpan kalan=tblServis.PlanlananTarih-tblServis.TarihSaat;
+   var tahminiSure=kalan.TotalMinutes.ToString();
+   var fTSuresiSaat = (fTSuresi / 60).ToString();
+   var kapandi=tblServis.Kapandi;
+   var musteriOnayi=tblServis.MusteriOnayi;
+   // tahminiSure=tblServis.TahminiSure;
+   var gercekSure=tblServis.GercekSure;
+   var servisNo=tblServis.ServisNo;
+}
+<style>
+  .select2-selection__rendered {
+    line-height: 31px !important;
+  }
+
+  .select2-container .select2-selection--single {
+    height: 31px !important;
+  }
+
+  @*.row{margin-bottom:20px;}.button.button-small{height:30px;line-height:30px;padding:0px10px;}tdinput[type=text],tdselect{width:100%;height:30px;margin:0;padding:2px8px;}th:last-child{text-align:right;}td:last-child{text-align:right;}td:last-child.button{width:30px;height:30px;text-align:center;padding:0px;margin-bottom:0px;margin-right:5px;background-color:#FFF;}td:last-child.button.fa{line-height:30px;width:30px;}*@
+</style>
+<div id="updateDiv" class="card">
+  <div class="card-header bg-gray">
+    <div class="row justify-content-between">
+      <div class="col-md-3">
+        <div class="row">
+          <h3><i class="bi bi-globe"></i> Servis Formu</h3>
+        </div>
+      </div>
+       <div class="form-check">
+          <input id="inputKapandi"class="form-check-input" type="checkbox" onclick="return false;"checked="@tblServis.Kapandi" >
+          <label class="form-check-label">Kapandı</label>
+        </div>                       
+       <div class="form-check">
+          <input id="inputMusteriOnayi"class="form-check-input" type="checkbox" onclick="return false;"checked="@tblServis.MusteriOnayi">
+          <label class="form-check-label">Onaylandı</label>
+        </div>
+       <div class="col-md-2">
+         <div class="row justify-content-end">
+          <div class="col-4">
+            <h4>
+              <button type="submit" form="frmServis" class=" align-right btn btn-info btn-lg float-right" value="1" name="bitir" disabled ><i
+                  class="bi bi-database-add"></i></button>
+            </h4>
+          </div>
+          <div class="col-4">
+            <a asp-action="KaydetmedenCik" asp-controller="Servis" class=" btn btn-lg btn-danger"><i
+                class="bi bi-x-lg"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  class="bg-light">
+    <form >
+      <div class="row">
+        <div class="col-5 ">
+          <div class="card p-1">
+            <div class="row">
+              <div class="col-4">
+                <div class="row mb-1 ">
+                  <label for="inputFirma" class=" col-sm-4 col-form-label col-form-label-sm">Firma</label>
+                  <div class="col-7 ">
+                    <input id="inputFirma" type="text" class="form-control form-control-sm text-capitalize"
+                      value="@firmaAdi" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row ">
+                  <label for="inputCariNo" class="col-sm-4 col-form-label col-form-label-sm">Cari No</label>
+                  <div class="col-7">
+                    <input id="inputCariNo" type="text" value="@cariNo" class="form-control form-control-sm text-capitalize" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class=" row ">
+                  <label for="inputServisNo" class="col-sm-5   col-form-label col-form-label-sm">Servis No</label>
+                  <div class="col-7">
+                    <input id="inputServisNo" type="text" class="form-control form-control-sm text-capitalize"
+                      value="@servisNo" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="divider">
+            <div class="row mb-1">
+              <label for="inputCari" class="col-sm-2 col-form-label col-form-label-sm">Cari</label>
+              <div class="col-10">
+                 <input type="text" class="form-control form-control-sm text-capitalize" value="@cariAdi" readonly>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class=" row ">
+                  <label for="inputDepartman" class="col-sm-4 col-form-label col-form-label-sm">Departman</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm text-capitalize" value="@servisDepartmanAdi" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputModul" class="col-sm-4 col-form-label col-form-label-sm">Modül</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm text-capitalize" value="@modulAdi" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputYetkili" class="col-sm-4 col-form-label col-form-label-sm">Dpt. Yetkili</label>
+                  <div class="col-sm-8">
+                    <input id="inputYetkili" type="text" value="@departmanYetkilisi"
+                      class="form-control form-control-sm text-capitalize" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputKonu" class="col-sm-4 col-form-label col-form-label-sm">Konu</label>
+                  <div class="col-sm-8">
+                    <input id="inputKonu" type="text" value="@konu" class="form-control form-control-sm text-capitalize"readonly
+                     >
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputOncelik" class="col-sm-4 col-form-label col-form-label-sm">Öncelik</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm text-capitalize" value="@oncelikAciklama" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputServisSekli" class="col-sm-4 col-form-label col-form-label-sm">Servis Şekli</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm text-capitalize" value="@servisSekliAciklama" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputServisTipi" class="col-sm-4 col-form-label col-form-label-sm">Servis Tipi</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm text-capitalize" value="@servisTipiAciklama" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputSorumlu" class="col-sm-4 col-form-label col-form-label-sm">Sorumlu</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control form-control-sm text-capitalize" value="@personelAdi" readonly>
+                  </div>
+                </div>
+
+                <div class="row mb-1 ">
+                  <label for="inputTSuresi" class="col-sm-4 col-form-label col-form-label-sm">T. Süresi</label>
+                  <div class="col-sm-8">
+                    @if (tSuresi!=0)
+                    {
+                    <input id="inputTSuresi" type="number" value="@tSuresi" class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatT()"   placeholder="(Dakika)" readonly>
+                    }
+                    else
+                    {
+                      <input id="inputTSuresi" type="number"  class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatT()"  placeholder="(Dakika)" readonly>
+                    }
+                  </div>
+                </div>
+                <div class="row mb-1 ">
+                  <label for="inputFTSuresi" class="col-sm-4 col-form-label col-form-label-sm">F.T. Süresi</label>
+                  <div class="col-sm-8">
+                    @if (fTSuresi!=0)
+                    {
+                       <input id="inputFTSuresi" type="number" value="@fTSuresi" class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatFT()"  placeholder="(Dakika)" readonly>
+                    }
+                    else
+                    {
+                       <input id="inputFTSuresi" type="number" class="form-control form-control-sm text-capitalize"
+                      onkeyup="DakikaSaatFT()"  placeholder="(Dakika)" readonly>
+                    }
+                   
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="row mb-1 ">
+                  <label for="inputTarihSaat" class="col-sm-4 col-form-label col-form-label-sm">Tarih Saat</label>
+                  <div class="col-sm-8">
+                    <input id="inputTarihSaat" value="@tarihSaat" class="form-control form-control-sm text-capitalize" onchange="TahminiSureGetir()" readonly
+                     >
+                  </div>
+                </div>
+
+                <div class="row mb-1">
+                  <label for="inputPalanlananTarih" class="col-sm-4 col-form-label col-form-label-sm">Plan.
+                    Tarih</label>
+                  <div class="col-sm-8">
+                    <input id="inputPalanlananTarih" value="@planlananTarih" class="form-control form-control-sm text-capitalize" onchange="TahminiSureGetir()" readonly
+                       >
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputTahminiSure" class="col-sm-4 col-form-label col-form-label-sm">Tah. Süre</label>
+                  <div class="col-sm-8">
+                       <input id="inputTahiminiSure" type="number" value="@tahminiSure" class="form-control form-control-sm text-capitalize"
+                     placeholder="(Saat)" readonly> 
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputGercekSure" class="col-sm-4 col-form-label col-form-label-sm">Gerçek Süre</label>
+                  <div class="col-sm-8">
+                      <input id="inputGercekSure" type="number" value="@gercekSure" class="form-control form-control-sm text-capitalize" readonly
+                     placeholder="(Dakika)">
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputGirilenSure" class="col-sm-4 col-form-label col-form-label-sm">Girilen Süre</label>
+                  <div class="col-sm-8">
+                    <input id="inputGirilenSure" type="number" value="@ViewBag.girilenSure" class="form-control form-control-sm text-capitalize"
+                       placeholder="(Dakika)" readonly>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputSonDurumTarihi" class="col-sm-4 col-form-label col-form-label-sm">Son Dur.Tar.</label>
+                  <div class="col-sm-8">
+                    <input id="inputSonDurumTarihi" value="@sonDurumTarihi" class="form-control form-control-sm text-capitalize" readonly
+                     >
+                  </div>
+                </div>
+                <div class="row mb-1">
+
+                  <div class="col-sm-8">
+                    <hr>
+                  </div>
+                </div>
+                <div class="row mb-1">
+
+                  <div class="col-sm-8">
+                    <br>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputTSuresiSaat"  class="col-sm-4 col-form-label col-form-label-sm">Saat</label>
+                  <div class="col-sm-8">
+                    <input id="inputTSuresiSaat" type="number" value="@tSuresiSaat" class="form-control form-control-sm text-capitalize"
+                      readonly>
+                  </div>
+                </div>
+                <div class="row mb-1">
+                  <label for="inputFTSuresiSaat" class="col-sm-4 col-form-label col-form-label-sm">Saat</label>
+                  <div class="col-sm-8">
+                      <input id="inputFTSuresiSaat" type="number" value="@fTSuresiSaat" class="form-control form-control-sm text-capitalize"
+                      readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr class="divider">
+            <div class="row mb-1">
+              <label for="inputSonDurum" class="col-sm-2 col-form-label col-form-label-sm">Durum</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control form-control-sm text-capitalize" value="@sonDurumAciklama" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-7">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Kalemler</h3>
+              <div class="card-tools">
+                <div class="input-group input-group-sm">
+                  <button  disabled type="submit" class="btn btn-sm btn-primary" form="frmServis"><i
+                      class="fa fa-plus"></i></button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body table-responsive p-0" style="height: 477px;">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12">
+                    <table id="tbl" class="table table-head-fixed text-nowrap"
+                      style='font-size:75%'>
+                      <thead>
+                        <tr>
+                          <th>Başlama Zamanı</th>
+                          <th>Genel Açıklama</th>
+                          <th>İşlem Yapan</th>
+                          <th>İşlem Yeri</th>
+                          <th>Durum</th>
+                          <th>Bitiş Zamanı</th>
+                          <th>Süre</th>
+                          @* <th>Açıklama</th> *@
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @if (Enumerable.Count(ViewBag.kalemList) != 0)
+                        {
+                          @foreach (var item in ViewBag.kalemList)
+                          {
+                            string renk = "";
+                            switch (sdm.TGetByID(item.SonDurumId).SonDurumAciklama)
+                            {
+                              case "KUYRUKTA":
+                                renk = "bg-indigo";
+                                break;
+                              case "BEKLEMEDE":
+                                renk = "bg-yellow";
+                                break;
+                              case "PLANA ALINDI":
+                                renk = "bg-lightblue";
+                                break;
+                              case "DEVAM EDİYOR":
+                                renk = "bg-teal";
+                                break;
+                              case "TAMAMLANDI":
+                                renk = "bg-lime";
+                                break;
+                              case "MÜŞTERİ ONAYI":
+                                renk = "bg-orange";
+                                break;
+                              case "MÜŞTERİDEN BİLGİ BEKLENİYOR":
+                                renk = "bg-pink";
+                                break;
+                              case "IAS BİLGİ BEKLENİYOR":
+                                renk = "bg-gray";
+                                break;
+                              default:
+                                renk = "bg-white";
+                                break;
+                            }
+                            <tr id="kalemRow" class="@renk" ondblclick="doubleClickGr(@item.KalemId)"
+                              onclick="clickSummernoteG(@item.KalemId)">
+                              <td>@item.BaslamaZamani</td>
+                              <td>@item.GenelAciklama</td>
+                              <td>@pm.TGetByID(item.PersonelId).PersonelAdi @pm.TGetByID(item.PersonelId).PersonelAdi2
+                                @pm.TGetByID(item.PersonelId).PersonelSoyadi</td>
+                              <td>@iym.TGetByID(item.IslemYeriId).IslemYeriAdi</td>
+                              <td>@sdm.TGetByID(item.SonDurumId).SonDurumAciklama</td>
+                              <td>@item.BitisZamani</td>
+                              <td>@item.Sure</td>
+                              @* <td>@item.Aciklama</td> *@
+                            </tr>
+                          }
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-2">
+    <div class="card card-default">
+      <div class="card-header">
+        <h3 class="card-title">Dokümanlar</h3>
+      </div>
+      <div class="card-body">
+        <div id="actions" class="row">
+          <div class="col-md-2">
+            <div class="btn-group ">
+              <span class="btn btn-success col fileinput-button">
+                <i class="fas fa-plus"></i>
+              </span>
+              <button type="submit" class="btn btn-primary col start">
+                <i class="fas fa-upload"></i>
+              </button>
+              <button type="reset" class="btn btn-warning col cancel">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 d-flex align-items-center">
+            <div class="fileupload-process w-0">
+              <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0"
+                aria-valuemax="100" aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table table-striped files" id="previews">
+          <div id="template" class="row mt-2">
+            <div class="col-auto">
+              <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+            </div>
+            <div class="col d-flex align-items-center">
+              <p class="mb-0">
+                <span class="lead" data-dz-name></span>
+                (<span data-dz-size></span>)
+              </p>
+              <strong class="error text-danger" data-dz-errormessage></strong>
+            </div>
+            <div class="col-4 d-flex align-items-center">
+              <div class="progress progress-striped active w-0" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                aria-valuenow="0">
+                <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+              </div>
+            </div>
+            <div class="col-auto d-flex align-items-center">
+              <div class="btn-group">
+                <button class="btn btn-sm btn-primary start">
+                  <i class="fas fa-upload"></i>
+                  <span>Start</span>
+                </button>
+                <button data-dz-remove class="btn btn-sm btn-warning cancel">
+                  <i class="fas fa-times-circle"></i>
+                  <span>Cancel</span>
+                </button>
+                <button data-dz-remove class="btn btn-sm btn-danger delete">
+                  <i class="fas fa-trash"></i>
+                  <span>Delete</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-10">
+    <textarea id="summernote1" name="kalemAciklamaAlt" readonly>  </textarea>
+  </div>
+</div>
+<div class="modal fade" id="modalKalemGor" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="form">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Kalem Düzenle</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="frmTempKalemDuzenle" asp-action="TempKalemDuzenleG" asp-controller="Servis" asp-route-servisId="@ViewBag.servisId" method="post">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Başlama Zamanı</label>
+                <input id="edtKalemBaslangicZamani" type="datetime-local" name="kalemBaslangicTarih" onchange="KalanSureGetirEdt()" readonly
+                  class="form-control form-control-sm">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Bitiş Zamanı</label>
+                <input id="edtKalemBitisTarihi" type="datetime-local" name="kalemBitisTarih" onchange="KalanSureGetirEdt()" readonly
+                  class="form-control form-control-sm">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">İşlem Yapan</label>
+                 <input id="edtKalemIslemYapan" class="form-control form-control-sm" readonly>
+                @* <select id="edtKalemIslemYapan" class="form-control select2bs4" name="kalemIslemYapanId" required>
+                  <option selected disabled value="">İşlem Yapan Seçin</option>
+                  @{
+                    if (ViewBag.personelId != null)
+                    {
+                      <option selected value="@ViewBag.personelId">@ViewBag.personelAdi @ViewBag.personelAdi2
+                        @ViewBag.personelSoyadi</option>
+                      foreach (var item in ViewBag.personelList)
+                      {
+                        <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                        </option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">Sorumlu Seçin</option>
+                      @foreach (var item in ViewBag.personelList)
+                      {
+                        <option value="@item.PersonelId">@item.PersonelAdi @item.PersonelAdi2 @item.PersonelSoyadi
+                        </option>
+                      }
+                    }
+                  }
+                </select> *@
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">İşlem Yeri</label>
+                <input id="edtKalemIslemYeri"  class="form-control form-control-sm" readonly>
+                @* <select id="edtKalemIslemYeri" class="form-control select2bs4" name="kalemIslemYeriId" required>
+                  @{
+                    if (ViewBag.islemYeriId != null)
+                    {
+                      <option selected value="@ViewBag.islemYeriId">@ViewBag.islemYeriAdi</option>
+                      foreach (var item in ViewBag.islemYeriList)
+                      {
+                        <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">İşlem Yeri Seçin</option>
+                      @foreach (var item in ViewBag.islemYeriList)
+                      {
+                        <option value="@item.IslemYeriId">@item.IslemYeriAdi</option>
+                      }
+                    }
+                  }
+                </select> *@
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Durum</label>
+                <input id="edtKalemSonDurum"  class="form-control form-control-sm" readonly>
+                @* <select id="edtKalemSonDurum" class="form-control select2bs4" name="kalemSonDurumId" required>
+                  <option selected disabled value="">Durum Seçin</option>
+                  @{
+                    if (ViewBag.sonDurumId != null)
+                    {
+                      <option selected value="@ViewBag.sonDurumId">@ViewBag.sonDurumAciklama</option>
+                      foreach (var item in ViewBag.sonDurumList)
+                      {
+                        <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                      }
+                    }
+                    else
+                    {
+                      <option selected disabled value="">Durum Seçin</option>
+                      @foreach (var item in ViewBag.sonDurumList)
+                      {
+                        <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                      }
+                    }
+                  }
+                </select> *@
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label class="col-form-label">Süre</label>
+                <input id="edtKalemSure" type="text" name="kalemSure" class="form-control form-control-sm" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <label class="col-form-label">Genel Açıklama</label>
+                <input id="edtKalemGenelAciklama" type="text" name="kalemGenelAciklama" readonly
+                  class="form-control form-control-sm">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            @* <div class="col-12">
+              <div class="form-group">
+                <label class="col-form-label">Açıklama</label>
+                <textarea name="kalemAciklamaGor" id="summernoteGor" cols="30" rows="20"></textarea>
+                @* <input class="form-control form-control-lg" id="edtKalemAciklama" name="kalemAciklama" required> 
+              </div>
+            </div> *@
+          </div>
+          <input type="hidden" id="inputKalemId" name="id">
+          <input type="hidden" id="inputMevcutKalem" name="mevcutKalem">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+        <button name="btnKalemSil" id="btnTempKalemSil" form="frmTempKalemDuzenle" asp-action="TempKalemSil"
+          asp-controller="Servis" type="submit" class="btn btn-danger"disabled >Sil</button>
+        <button id="btnTempKalemDuzenle" form="frmTempKalemDuzenle" type="submit" disabled
+          class="btn btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>

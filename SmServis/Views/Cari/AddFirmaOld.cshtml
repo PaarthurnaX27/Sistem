@@ -1,0 +1,56 @@
+﻿
+
+@model EntityLayer.Concrete.Cari
+
+@*@model EntityLayer.Concrete.Firma*@ 
+
+
+
+@*@model Tuple<Firma,List<Firma>>*@
+@*@model EntityLayer.Concrete.IndexViewModel*@
+<div class="row mb-1">
+
+
+
+    @*<form class="p-3" onsubmit="return false">*@
+    <div class="mb-3 px-3 py-2">
+        <form asp-action="AddFirma" asp-controller="Firma" method="post">
+            <div class="form-group">
+                @*<input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.FirmaNo">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.Unvan">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.VergiDairesi">
+                <input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.VergiNo">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.FirmaDil">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.Ulke">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.Sehir">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.Ilce">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.CariDurum">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.ParaBirimi">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.Sektor">
+                <input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.eFaturaMukellefi">
+                <input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="m.eIrsaliyeMukellefi">*@
+
+                <input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="FirmaNo">
+                @*<input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="Unvan">*@
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="VergiDairesi">
+                @*<input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="VergiNo">*@
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="CariDil">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="Ulke">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="Sehir">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="Ilce">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="CariDurum">
+                <input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="ParaBirimi">
+                @*<input type="text" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="AnaSektor">*@
+                <input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="eFaturaMukellefi">
+                <input type="number" class="form-control " id="vergiNo" placeholder="Vergi Numarası" asp-for="eIrsaliyeMukellefi">
+
+                <button type="submit" class="btn btn-info">Kaydet</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+
+

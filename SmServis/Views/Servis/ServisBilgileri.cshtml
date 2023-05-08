@@ -1,0 +1,1022 @@
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@using Microsoft.AspNetCore.Http;
+@using System.Numerics;
+@{
+    var firmaAdi = Context.Session.GetString("firma").ToString();
+    CariManager cm = new CariManager(new EfCariDal());
+    ServisDepartmanManager sdptm = new ServisDepartmanManager(new EfServisDepartmanDal());
+    ModulManager mm = new ModulManager(new EfModulDal());
+    ServisTipiManager stm = new ServisTipiManager(new EfServisTipiDal());
+    ServisSekliManager ssm = new ServisSekliManager(new EfServisSekliDal());
+    PersonelManager km = new PersonelManager(new EfPersonelDal());
+    SonDurumManager sdm = new SonDurumManager(new EfSonDurumDal());
+    OncelikManager om = new OncelikManager(new EfOncelikDal());
+    PersonelManager pm = new PersonelManager(new EfPersonelDal());
+    ServisKalemManager skm = new ServisKalemManager(new EfServisKalemDal());
+    ServisBilgiManager sbm = new ServisBilgiManager(new EfServisBilgiDal());
+    if (ViewBag.beklemede==null)
+    {
+        ViewBag.beklemede = true;
+    }
+    if (ViewBag.planaAlindi == null)
+    {
+        ViewBag.planaAlindi = true;
+    }
+    if (ViewBag.devamEdiyor == null)
+    {
+        ViewBag.devamEdiyor = true;
+    }
+    if (ViewBag.tamamlandi == null)
+    {
+        ViewBag.tamamlandi = true;
+    }
+    if (ViewBag.kuyrukta == null)
+    {
+        ViewBag.kuyrukta = true;
+    }
+    if (ViewBag.musOnayi == null)
+    {
+        ViewBag.musOnayi = true;
+    }
+    if (ViewBag.musBilgi == null)
+    {
+        ViewBag.musBilgi = true;
+    }
+    if (ViewBag.iasBilgi == null)
+    {
+        ViewBag.iasBilgi = true;
+    }
+    if (ViewBag.kapandi == null)
+    {
+        ViewBag.kapandi = false;
+    }
+    if (ViewBag.tumu == null)
+    {
+        ViewBag.tumu = true;
+    }
+
+
+}
+<style>
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 31px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3><i class="bi bi-globe"></i> Servis Bilgileri</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <a asp-action="Index" asp-controller="Home" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-gray-light">
+        <form id="fltAreaServis" asp-action="ServisBilgileri" asp-controller="Servis" asp-route-chckBekle="1" asp-route-chckPlan="3" asp-route-chckDevam="4" asp-route-chckTamam="5" asp-route-chckKuyruk="2" asp-route-chckMusOnay="6" asp-route-chckMusBilgi="7" asp-route-chckIasBilgi="8" method="post">
+           
+            <div class="row mb-1">
+                <div class="col-md-2">
+                    <label class=" col-form-label col-form-label-sm">Firma</label>
+                    <label class="form-control form-control-sm">@firmaAdi</label>
+                </div>
+                <div class="col-md-3">
+                    <label class="col-form-label col-form-label-sm">Müşteri</label>
+                    <select id="inputCari" class="form-control select2bs4 form-control-sm" style="width: 100%;" name="cariId">
+                        @{
+                            if (ViewBag.cariId == "" || ViewBag.cariId == null)
+                            {
+                                <option selected disabled value="">Cari Seçin</option>
+                                @foreach (var item in ViewBag.cariList)
+                                {
+                                    <option value="@item.CariId">@item.CariAdi</option>
+                                }
+
+                            }
+                            else
+                            {
+                                <option selected value="@ViewBag.cariId">@ViewBag.cariAdi</option>
+                                foreach (var item in ViewBag.cariList)
+                                {
+                                    <option value="@item.CariId">@item.CariAdi</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label col-form-label-sm">Dpt. Yetkilisi</label>
+                    <input type="text" value="@ViewBag.departmanYetkili" name="departmanYetkili" class="form-control form-control-sm text-capitalize"
+                           placeholder="Departman Yetkilisi">
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label col-form-label-sm">Modül</label>
+                    <select id="inputModul" class="form-control select2bs4 form-control-sm" style="width: 100%;" name="modulId">
+                        @{
+                            if (ViewBag.modulId == "" || ViewBag.modulId == null)
+                            {
+                                <option selected disabled value="">Modul Seçin</option>
+                                @foreach (var item in ViewBag.modulList)
+                                {
+                                    <option value="@item.ModulId">@item.ModulAdi</option>
+                                }
+
+                            }
+                            else
+                            {
+                                <option selected value="@ViewBag.modulId">@ViewBag.modulAdi</option>
+                                foreach (var item in ViewBag.modulList)
+                                {
+                                    <option value="@item.ModulId">@item.ModulAdi</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label col-form-label-sm">Departman</label>
+                    <select id="inputDepartman" class="form-control select2bs4 form-control-sm" style="width: 100%;" name="departmanId">
+                        @{
+                            if (ViewBag.departmanId == "" || ViewBag.departmanId == null)
+                            {
+                                <option selected disabled value="">Departman Seçin</option>
+                                @foreach (var item in ViewBag.servisDepartmanList)
+                                {
+                                    <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                }
+
+                            }
+                            else
+                            {
+                                <option selected value="@ViewBag.departmanId">@ViewBag.departmanAdi</option>
+                                foreach (var item in ViewBag.cariList)
+                                {
+                                    <option value="@item.ServisDepartmanId">@item.ServisDepartmanAdi</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-2">
+                    <label class="col-form-label col-form-label-sm">Son Durum</label>
+                    <select id="inputSonDurum" class="form-control select2bs4 form-control-sm" style="width: 100%;" name="sonDurumId">
+                        @{
+                            if (ViewBag.sonDurumId == "" || ViewBag.sonDurumId == null)
+                            {
+                                <option selected disabled value="">Son Durum Seçin</option>
+                                @foreach (var item in ViewBag.sonDurumList)
+                                {
+                                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                }
+
+                            }
+                            else
+                            {
+                                <option selected value="@ViewBag.sonDurumId">@ViewBag.sonDurumAciklama</option>
+                                foreach (var item in ViewBag.sonDurumList)
+                                {
+                                    <option value="@item.SonDurumId">@item.SonDurumAciklama</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label>Tarih Aralığı</label>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="far fa-calendar-alt"></i>
+                                </span>
+                            </div>
+                            @if (ViewBag.tarihAraligi == null)
+                            {
+                                <input type="text" class="form-control form-control-sm float-right" name="tarihAraligi" value="01/01/1975 - @DateTime.Now.Date"
+                                       id="reservation">
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control form-control-sm float-right" name="tarihAraligi" value="@ViewBag.tarihAraligi"
+                                       id="reservation">
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label col-form-label-sm">Servis Tipi</label>
+                    <select id="inputServisTipi" class="form-control select2bs4 form-control-sm" style="width: 100%;" name="servisTipiId">
+                        @{
+                            if (ViewBag.servisTipiId == "" || ViewBag.servisTipiId == null)
+                            {
+                                <option selected disabled value="">Servis Tipi Seçin</option>
+                                @foreach (var item in ViewBag.servisTipiList)
+                                {
+                                    <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                }
+
+                            }
+                            else
+                            {
+                                <option selected value="@ViewBag.servisTipiId">@ViewBag.servisTipiAciklama</option>
+                                foreach (var item in ViewBag.servisTipiList)
+                                {
+                                    <option value="@item.ServisTipiId">@item.ServisTipiAciklama</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label col-form-label-sm">Servis Şekli</label>
+                    <select id="inputServisSekli" class="form-control select2bs4 form-control-sm" style="width: 100%;" name="servisSekliId">
+                        @{
+                            if (ViewBag.servisSekliId == "" || ViewBag.servisSekliId == null)
+                            {
+                                <option selected disabled value="">Servis Şekli Seçin</option>
+                                @foreach (var item in ViewBag.servisSekliList)
+                                {
+                                    <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                }
+
+                            }
+                            else
+                            {
+                                <option selected value="@ViewBag.servisSekliId">@ViewBag.servisSekliAciklama</option>
+                                foreach (var item in ViewBag.servisSekliList)
+                                {
+                                    <option value="@item.ServisSekliId">@item.ServisSekliAciklama</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2 ml-2">
+                    <div class="row mt-1">
+                        <div class="form-check">
+                            <input id="chckKapandiServis" class="form-check-input" type="checkbox" name="kapandi" checked="@ViewBag.kapandi" value="true" onclick="KapandiServis()">
+                            <label class="form-check-label">Kapandı</label>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="form-check">
+                            <input id="chckTumuServis" class="form-check-input" type="checkbox" name="tumu" checked="@ViewBag.tumu" value="true" onclick="TumuServis()">
+                            <label class="form-check-label">Tümü</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-yellow col-12 text-center"ondblclick="DurumFilter(1)" ><input  class="form-check-input" type="checkbox" checked="@ViewBag.beklemede" value="true"  name="bBekle"/> Beklemede</label>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-lightblue col-12 text-center" ondblclick="DurumFilter(3)"><input class="form-check-input" type="checkbox" checked="@ViewBag.planaAlindi" value="true"  name="bPlan"/>Plana Alındı</label>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-teal col-12 text-center"ondblclick="DurumFilter(4)" ><input class="form-check-input" type="checkbox" checked="@ViewBag.devamEdiyor" value="true"  name="bDevam"/>Devam Ediyor</label>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-lime col-12 text-center"ondblclick="DurumFilter(5)" ><input class="form-check-input" type="checkbox" checked="@ViewBag.tamamlandi" value="true"  name="bTamam"/>Tamamlandı</label>
+                </div>
+            </div>
+            <div class="row justify-content-around">
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-indigo col-12 text-center"ondblclick="DurumFilter(2)" ><input class="form-check-input" type="checkbox" checked="@ViewBag.kuyrukta" value="true"  name="bKuyruk"/>Kuyrukta</label>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-orange col-12 text-center"ondblclick="DurumFilter(6)" ><input class="form-check-input" type="checkbox" checked="@ViewBag.musOnayi"  value="true" name="bMusOnay"/>Müşteri Onayı</label>
+                </div>
+                 <div class="col-md-3">
+                   <label class="form-contorl form-control-sm bg-pink col-12 text-center"ondblclick="DurumFilter(7)" ><input class="form-check-input" type="checkbox" checked="@ViewBag.musBilgi" value="true"  name="bMusBilgi"/>Müşteriden Bilgi Bekleniyor</label>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-contorl form-control-sm bg-gray col-12 text-center"ondblclick="DurumFilter(8)" ><input class="form-check-input" type="checkbox" checked="@ViewBag.iasBilgi"  value="true" name="bIasBilgi"/>IAS' tan Bilgi Bekleniyor</label>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="card bg-gray-light">
+    <div class="card-header">
+        <div class="col-md-12 mb-1 d-flex justify-content-between">
+            <button type="submit" form="fltAreaServis" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Ara
+                <i class="bi bi-binoculars"></i>
+            </button>
+            <a onclick="icerikGor('ServisGor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Gör
+                <i class="bi bi-eye"></i>
+            </a>
+            <a onclick="guncelle('ServisGuncelle')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Değiştir
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </a>
+            <a asp-controller="Servis" asp-action="ServisFormu" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Ekle
+                <i class="bi bi-clipboard-plus"></i>
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tblServis" class="table table-hover table-borderless table-responsive  text-xsmall  table-md">
+            <thead>
+                <tr style="white-space:nowrap">
+                    <th class="text-center">Seç</th>
+                    <th class="text-center">Tamamlanma Durumu</th>
+                    <th class="text-center">Servis No</th>
+                    <th class="text-center">Firma Adı</th>
+                    <th class="text-center">Departman</th>
+                    <th class="text-center">Konu</th>
+                    <th class="text-center">Sorumlu Kişi</th>
+                    <th class="text-center">Yetkili</th>
+                    <th class="text-center">Modül</th>
+                    <th class="text-center">Servis Tipi</th>
+                    <th class="text-center">Servis Şekli</th>   
+                    <th class="text-center">Belge Zamanı</th>
+                    <th class="text-center">Son Durum</th>
+                    <th class="text-center">Ay</th>
+                    <th class="text-center">Yıl</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.servisList)
+                    {
+                        var tblKalem = skm.TGetList().Where(x => x.ServisId == item.ServisId);
+                        int kalemSayisi = tblKalem.Count();
+                        if (kalemSayisi == 0)
+                        {
+                            kalemSayisi = 1;
+                        }
+                        var tamamalananKalem = skm.TGetList().Where(x => x.ServisId == item.ServisId && x.SonDurumId == 5);
+                        var tumKalem = skm.TGetList().Where(x => x.ServisId == item.ServisId).OrderBy(x => x.KalemId);
+                        int toplamSure = 1;
+                        int tamamlananSure = 0;
+                        foreach (var kalem in tumKalem)
+                        {
+                            toplamSure += Convert.ToInt32(kalem.Sure);
+                        }
+                        foreach (var kalem in tamamalananKalem)
+                        {
+                            tamamlananSure += Convert.ToInt32(kalem.Sure);
+                        }
+
+                        var oran = tamamlananSure * 100 / toplamSure;
+                        var oran1 = Convert.ToInt32(item.TahminiSure)*100 / toplamSure;
+                        //var oran = tamamalananKalem * 100 / kalemSayisi;
+                        string renk = "";
+                        switch (sdm.TGetByID(item.SonDurumID).SonDurumAciklama)
+                        {
+                            case "KUYRUKTA":
+                                renk = "bg-indigo";
+                                break;
+                            case "BEKLEMEDE":
+                                renk = "bg-yellow";
+                                break;
+                            case "PLANA ALINDI":
+                                renk = "bg-lightblue";
+                                break;
+                            case "DEVAM EDİYOR":
+                                renk = "bg-teal";
+                                break;
+                            case "TAMAMLANDI":
+                                renk = "bg-lime";
+                                break;
+                            case "MÜŞTERİ ONAYI":
+                                renk = "bg-orange";
+                                break;
+                            case "MÜŞTERİDEN BİLGİ BEKLENİYOR":
+                                renk = "bg-pink";
+                                break;
+                            case "IAS BİLGİ BEKLENİYOR":
+                                renk = "bg-gray";
+                                break;
+                            default:
+                                renk = "bg-white";
+                                break;
+                        }
+                        var sirket = Context.Session.GetString("firma");
+                    <tr id="tblServisRow1" aria-expanded="false" style="white-space:nowrap" class="@renk" ondblclick="ServisBilgileriDbl(@item.ServisId)">
+                        <td><input name="radio" type="radio" value="@item.ServisId" /></td>
+                        <td class="project_progress">
+                            <div class="progress progress-sm">
+                                <div class="progress-bar bg-green" role="progressbar" aria-valuenow="@oran" aria-valuemin="0" aria-valuemax="100" style="width: @oran%">
+                                </div>
+                            </div>
+                            <small>
+                                @oran% Tamamlandı
+                            </small>
+                        </td>
+                        @* <td>@sirket</td> *@
+                        @* <td> <canvas id="pieChart" ></canvas></td> *@
+                        <td>@item.ServisNo</td>
+                        <td>@cm.TGetByID(item.CariId).CariAdi</td>
+                        <td>@sdptm.TGetByID(item.ServisDepartmanId).ServisDepartmanAdi </td>
+                        <td>@item.Konu </td>
+                        <td>@pm.TGetByID(item.PersonelId).PersonelAdi @pm.TGetByID(item.PersonelId).PersonelAdi2 @pm.TGetByID(item.PersonelId).PersonelSoyadi</td>
+                        <td>@item.DepartmanYetkilisi</td>
+                        <td>@mm.TGetByID(item.ModulId).ModulAdi</td>
+                        <td>@stm.TGetByID(item.ServisTipiId).ServisTipiAciklama</td>
+                        <td>@ssm.TGetByID(1).ServisSekliAciklama</td>
+                        <td>@item.TarihSaat</td>
+                        <td>@sdm.TGetByID(item.SonDurumID).SonDurumAciklama</td>
+                        <td>@item.Ay</td>
+                        <td>@item.Yil</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+
+
+
+
+
+
+
+        <section class="content">
+
+          <!-- Default box -->
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Projects</h3>
+
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-striped projects">
+                  <thead>
+                      <tr>
+                          <th style="width: 1%">
+                              #
+                          </th>
+                          <th style="width: 20%">
+                              Project Name
+                          </th>
+                          <th style="width: 30%">
+                              Team Members
+                          </th>
+                          <th>
+                              Project Progress
+                          </th>
+                          <th style="width: 8%" class="text-center">
+                              Status
+                          </th>
+                          <th style="width: 20%">
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar2.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar3.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="57" aria-valuemin="0" aria-valuemax="100" style="width: 57%">
+                                  </div>
+                              </div>
+                              <small>
+                                  57% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar2.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100" style="width: 47%">
+                                  </div>
+                              </div>
+                              <small>
+                                  47% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar2.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar3.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%">
+                                  </div>
+                              </div>
+                              <small>
+                                  77% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar2.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar3.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+                                  </div>
+                              </div>
+                              <small>
+                                  60% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar5.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="width: 12%">
+                                  </div>
+                              </div>
+                              <small>
+                                  12% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar2.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar3.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td >
+                               <canvas id="pieChart"  ></canvas>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar5.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" style="width: 87%">
+                                  </div>
+                              </div>
+                              <small>
+                                  87% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar3.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%">
+                                  </div>
+                              </div>
+                              <small>
+                                  77% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>
+                              #
+                          </td>
+                          <td>
+                              <a>
+                                  AdminLTE v3
+                              </a>
+                              <br/>
+                              <small>
+                                  Created 01.01.2019
+                              </small>
+                          </td>
+                          <td>
+                              <ul class="list-inline">
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar3.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar4.png">
+                                  </li>
+                                  <li class="list-inline-item">
+                                      <img alt="Avatar" class="table-avatar" src="~/AdminLTE/dist/img/avatar5.png">
+                                  </li>
+                              </ul>
+                          </td>
+                          <td class="project_progress">
+                              <div class="progress progress-sm">
+                                  <div class="progress-bar bg-green" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" style="width: 77%">
+                                  </div>
+                              </div>
+                              <small>
+                                  77% Complete
+                              </small>
+                          </td>
+                          <td class="project-state">
+                              <span class="badge badge-success">Success</span>
+                          </td>
+                          <td class="project-actions text-right">
+                              <a class="btn btn-primary btn-sm" href="#">
+                                  <i class="fas fa-folder">
+                                  </i>
+                                  View
+                              </a>
+                              <a class="btn btn-info btn-sm" href="#">
+                                  <i class="fas fa-pencil-alt">
+                                  </i>
+                                  Edit
+                              </a>
+                              <a class="btn btn-danger btn-sm" href="#">
+                                  <i class="fas fa-trash">
+                                  </i>
+                                  Delete
+                              </a>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+
+        </section>
+
+    </div> *@

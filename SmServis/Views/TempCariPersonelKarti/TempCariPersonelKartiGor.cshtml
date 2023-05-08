@@ -1,0 +1,147 @@
+@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+
+    #region Manager
+    ;
+    TempCariPersonelManager pm = new TempCariPersonelManager(new EfTempCariPersonelDal());
+    TempCariManager tcm = new TempCariManager(new EfTempCariDal());
+    CariManager cm = new CariManager(new EfCariDal());
+    IlceManager ilcem = new IlceManager(new EfIlceDal());
+    SehirManager sm = new SehirManager(new EfSehirDal());
+    UlkeManager um = new UlkeManager(new EfUlkeDal());
+    CariDurumManager cdm = new CariDurumManager(new EfCariDurumDal());
+    ParaBirimiManager pbm = new ParaBirimiManager(new EfParaBirimiDal());
+    AnaSektorManager asm = new AnaSektorManager(new EfAnaSektorDal());
+    BagliSektorManager bsm = new BagliSektorManager(new EfBagliSektorDal());
+    CariTipiManager ctm = new CariTipiManager(new EfCariTipiDal());
+    DepartmanManager dptm = new DepartmanManager(new EfDepartmanDal());
+    PozisyonManager pzm = new PozisyonManager(new EfPozisyonDal());
+    CariPersonelManager apm = new CariPersonelManager(new EfCariPersonelDal());
+    UnvanManager unvm = new UnvanManager(new EfUnvanDal());
+    PozisyonManager pznm = new PozisyonManager(new EfPozisyonDal());
+    CinsiyetManager cnsm = new CinsiyetManager(new EfCinsiyetDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    Ana_BagliSektorManager a_bm = new Ana_BagliSektorManager(new EfAna_BagliSektorDal());
+    #endregion
+
+    var tblCariPersonel = pm.TGetByID(ViewBag.id);
+    var sonDegistiren = km.TGetByID(tblCariPersonel.SonDegistiren);
+    var olusturan = km.TGetByID(tblCariPersonel.Olusturan);
+
+}
+@{
+    var error = TempData["error"];
+    // int id=(int)HttpContext.Session.GetInt32("CariId");
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Güncelleme İşlemi Başarısız Oldu'
+                })
+            };</script>
+    }
+}
+<div class="card p-3">
+    <div class="card-header">
+        <div class="row justify-content-between">
+            <div class="col">
+                <h4>Cari Personel Kartı</h4>
+            </div>
+            <div class="col-md-1">
+                  <a asp-action="AddCari" asp-controller="Cari" class="bi bi-x-circle-fill btn btn-lg btn-danger"></a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <div class="row mb-1">
+                <div class="col-md-3 mb-1">
+                    <label>Personel Kodu</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.CariPersonelKodu</label>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label>Personel Adı</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.CariPersonelAdi
+                        @tblCariPersonel.CariPersonelAdi2</label>
+                </div>
+
+                <div class="col-md-3 mb-1">
+                    <label>Personel Soyadı</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.CariPersonelSoyadi</label>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label>Cinsiyet</label>
+                    <label
+                        class="form-control text-capitalize">@cnsm.TGetByID(tblCariPersonel.CinsiyetId).CinsiyetAciklama</label>
+                </div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 mb-1">
+                    <label>Telefon</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.Telefon</label>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label>Adres</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.Adres1</label>
+                </div>
+                <div class="col-md-3 mb-1">
+                    <label>Adres 2</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.Adres2</label>
+                </div>
+                <div class="col-md-3 mb1">
+                    <label>Mail</label>
+                    <label class="form-control text-capitalize">@tblCariPersonel.Mail</label>
+                </div>
+            </div>
+        </div>
+        <hr class="divider" />
+        <div class="row mb-1">
+            <div class="col-md-3 mb-1">
+                <label>Unvan</label>
+                <label
+                    class="form-control text-capitalize">@unvm.TGetByID(tblCariPersonel.UnvanId).UnvanAciklama</label>
+            </div>
+            <div class="col-md-3 mb-1">
+                <label>Departman</label>
+                <label
+                    class="form-control text-capitalize">@dptm.TGetByID(tblCariPersonel.DepartmanId).DepartmanAdi</label>
+            </div>
+            <div class="col-md-3 mb-1">
+                <label>Pozisyon</label>
+                <label
+                    class="form-control text-capitalize">@pznm.TGetByID(tblCariPersonel.PozisyonId).PozisyonAdi</label>
+            </div>
+                <div class="col-md-3">
+                    <label>İşe Giriş Tarihi</label>
+                    <label class="form-control">@tblCariPersonel.IseGirisTarihi.ToString("dd/MM/yyyy")</label>
+                </div>
+          
+        </div>
+        <div class="row mt-3 mb-1">
+            <div class="col-md-3 mr-4">
+                <input class="form-check-input bg-blue" type="checkbox" checked="@tblCariPersonel.SerivsMailGonder"  onclick="return false;" >
+                <label class="form-check-label">Servis Mail Gönderilecek Mi?</label>
+            </div>
+            <div class="col-md-3">
+                <input class="form-check-input bg-blue" type="checkbox" checked="@tblCariPersonel.ServisFaturaGonder"  onclick="return false;">
+                <label class="form-check-label">Servis Faturası Gönderilecek Mi?</label>
+            </div>
+
+        </div>
+        <div class="row mt-3 justify-content-end">
+            <button class="btn btn-primary not-allowed col-md-3" disabled>Ekle</button>
+        </div>
+    </div>
+</div>
+</div>
+
+
+

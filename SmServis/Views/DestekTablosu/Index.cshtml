@@ -1,0 +1,290 @@
+﻿@{
+   
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Destek Tablosu</h3>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover">
+                    <tbody>
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                Temel Destek Tabloları
+                            </td>
+                        </tr>
+                        <tr class="expandable-body">
+                            <td>
+                                <div class="p-0">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtUlke" asp-controller="DtUlke">
+                                                        <div class="row">Ülke</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DTSehir" asp-controller="DtSehir">
+                                                        <div class="row">Şehir</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtIlce" asp-controller="DtIlce">
+                                                        <div class="row">İlçe</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtCinsiyet" asp-controller="DtCinsiyet">
+                                                        <div class="row">Cinsiyet</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtUnvan" asp-controller="DtUnvan">
+                                                        <div class="row">Unvan</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                Birimler
+                            </td>
+                        </tr>
+                        <tr class="expandable-body">
+                            <td>
+                                <div class="p-0">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtParaBirimi" asp-controller="DtParaBirimi">
+                                                        <div class="row">Para Birimleri</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                Proje
+                            </td>
+                        </tr>
+                        <tr class="expandable-body">
+                            <td>
+                                <div class="p-0">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtPersonelTipi" asp-controller="DtPersonelTipi">
+                                                        <div class="row">Personel Tipi</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtFaturalamaPeriyodu" asp-controller="DtFaturalamaPeriyodu">
+                                                        <div class="row">Faturalama Periyodu</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtProgram" asp-controller="DtProgram">
+                                                        <div class="row">Program</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                Sektör
+                            </td>
+                        </tr>
+                        <tr class="expandable-body">
+                            <td>
+                                <div class="p-0">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtAnaSektor" asp-controller="DtAnaSektor">
+                                                        <div class="row">Ana Sektör</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtBagliSektor" asp-controller="DtBagliSektor">
+                                                        <div class="row">Bağlı Sektör</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                Cari
+                            </td>
+                        </tr>
+                        <tr class="expandable-body">
+                            <td>
+                                <div class="p-0">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtCalismaDurumu" asp-controller="DtCalismaDurumu">
+                                                        <div class="row">Çalışma Durumu</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtCariDurum" asp-controller="DtCariDurum">
+                                                        <div class="row">Cari Durum</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtCariTipi" asp-controller="DtCariTipi">
+                                                        <div class="row">Cari Tipi</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtDepartman" asp-controller="DtDepartman">
+                                                        <div class="row">Departman</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtPozisyon" asp-controller="DtPozisyon">
+                                                        <div class="row">Pozisyon</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                                Servis
+                            </td>
+                        </tr>
+                        <tr class="expandable-body">
+                            <td>
+                                <div class="p-0">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtModul" asp-controller="DtModul">
+                                                        <div class="row">Modül</div>
+
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtServisDepartman" asp-controller="DtServisDepartman">
+                                                        <div class="row">Servis Departmanı</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtSonDurum" asp-controller="DtSonDurum">
+                                                        <div class="row">Son Durum</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtServisTipi" asp-controller="DtServisTipi">
+                                                        <div class="row">Servis Tipi</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtServisSekli" asp-controller="DtServisSekli">
+                                                        <div class="row">Servis Şekli</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtIslemYeri" asp-controller="DtIslemYeri">
+                                                        <div class="row">İşlem Yeri</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a asp-action="DtOncelik" asp-controller="DtOncelik">
+                                                        <div class="row">Öncelik</div>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>494</td>
+                        </tr>
+                        <tr>
+                            <td>832</td>
+                        </tr>
+                        <tr>
+                            <td>982</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

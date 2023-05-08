@@ -1,0 +1,76 @@
+@model EntityLayer.Concrete.Modul
+@{
+    ModulManager mm=new ModulManager(new EfModulDal());
+    KullaniciManager km=new KullaniciManager(new EfKullaniciDal());
+    ServisDepartmanManager sdm=new ServisDepartmanManager(new EfServisDepartmanDal());
+    int modulId=ViewBag.id;
+    var tblModul=mm.TGetByID(modulId);
+    //var tbServisDepartman=sdm.TGetByID(tblModul.ServisDepartmanId);
+    var olusturan=km.TGetByID(tblModul.Olusturan);
+    var sonDegistiren=km.TGetByID(tblModul.SonDegistiren);
+}
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>Modül Gör</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmModulEkle"
+                                class=" align-right btn btn-primary btn-lg float-right not-allowed" disabled><i class="bi bi-database-add "></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtModul" asp-controller="DtModul" class=" btn btn-lg btn-danger "><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-light">
+        <form id="frmModulEkle" asp-controller="DtModul" asp-action="ModulEkle" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Modül</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblModul.ModulAdi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Modül Kısaltma</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblModul.ModulKisaltma</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Servis Departmanı</label>
+                            <label class="form-control form-control-sm text-capitalize">@sdm.TGetByID(ViewBag.servisDepartmanId).ServisDepartmanAdi</label>
+                        </div>
+                    </div>
+                    <hr class=" divider">
+                    <div class="row mb-2">
+                          <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturan</label>
+                            <label class="form-control form-control-sm text-capitalize">@olusturan.KullaniciAdi @olusturan.KullaniciAdi2 @olusturan.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Oluşturulma Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblModul.OlusturulmaTarih</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştiren</label>
+                            <label class="form-control form-control-sm text-capitalize">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciAdi2 @sonDegistiren.KullaniciSoyadi</label>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label-sm">Son Değiştirilme Tarihi</label>
+                            <label class="form-control form-control-sm text-capitalize">@tblModul.SonDegistirmeTarih</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
