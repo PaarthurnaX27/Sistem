@@ -27,33 +27,54 @@
     }
 }
 <div id="divContent" class="card  bg-light">
-    <form asp-controller="DtCinsiyet" asp-action="CinsiyetGuncelle" asp-route-cinsiyetId="@cinsiyetId" asp-route-olusturan="@cinsiyet.Olusturan" asp-route-olusturulmaTarihi="@cinsiyet.OlusturulmaTarih" method="post">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>İlçe Güncelle</h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <h4>
+                            <button type="submit" form="frmCinsiyetGuncelle" class=" align-right btn btn-info btn-lg float-right"><i class="bi bi-database-fill-add"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <h4>
+                            <button type="button" class=" align-right btn btn-warning btn-lg float-right" data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
+                        </h4>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtCinsiyet" asp-controller="DtCinsiyet" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="frmCinsiyetGuncelle" asp-controller="DtCinsiyet" asp-action="CinsiyetGuncelle" asp-route-cinsiyetId="@cinsiyetId" asp-route-olusturan="@cinsiyet.Olusturan" asp-route-olusturulmaTarihi="@cinsiyet.OlusturulmaTarih" method="post">
         <div class="form-group ">
             <div class="card-body p-3">
                 <div class="row mb-2">
                     <div class="col-md-3">
-                        <label>Cinsiyet</label>
-                        <input type="Text" class="form-control text-capitalize" value="@cinsiyet.CinsiyetAciklama" placeholder="Cari Tipi" name="CinsiyetAciklama" asp-for="@Model.CinsiyetAciklama">
+                        <label class="col-form-label-sm">Cinsiyet</label>
+                        <input type="Text" class="form-control form-control-sm text-capitalize" value="@cinsiyet.CinsiyetAciklama" placeholder="Cari Tipi" name="CinsiyetAciklama" asp-for="@Model.CinsiyetAciklama">
                     </div>
 
                     <div class="col-md-3">
-                        <label>Oluşturan</label>
-                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                        <label class="col-form-label-sm">Oluşturan</label>
+                        <label class="form-control form-control-sm ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
                     </div>
                     <div class="col-md-3">
-                        <label>Oluşturulma Tarihi</label>
-                        <label class="form-control">@cinsiyet.OlusturulmaTarih.Date.ToShortDateString()</label>
+                        <label class="col-form-label-sm">Oluşturulma Tarihi</label>
+                        <label class="form-control form-control-sm">@cinsiyet.OlusturulmaTarih.Date.ToShortDateString()</label>
                     </div>
                     <div class="col-md-3">
-                        <label>Son Değiştirme Tarihi</label>
-                        <label class="form-control">@cinsiyet.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                        <label class="col-form-label-sm">Son Değiştirme Tarihi</label>
+                        <label class="form-control form-control-sm">@cinsiyet.SonDegistirmeTarih.Date.ToShortDateString()</label>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex justify-content-end">
-
-                <button type="button" class="btn btn-danger m-3 col-2" data-toggle="modal" data-target="#modalSil">Sil</button>
-                <button type="submit" class=" align-right btn btn-primary m-3 col-2 float-right"> Güncelle</button>
             </div>
         </div>
     </form>

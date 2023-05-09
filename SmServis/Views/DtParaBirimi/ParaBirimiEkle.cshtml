@@ -4,41 +4,62 @@
     if (error != null)
     {
         <script type="text/javascript">window.onload = function () {
-    var Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000
-    });
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
 
-        Toast.fire({
-            icon: 'error',
-            title: 'Ekleme İşlemi Başarısız Oldu'
-        })
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Ekleme İşlemi Başarısız Oldu'
+                })
 
             };</script>
     }
 }
-<form asp-controller="DtParaBirimi" asp-action="ParaBirimiEkle"  method="post">
-    <div class="form-group ">
-        <div class="card-body p-3">
-            <div class="row mb-2">
-                <div class="col-md-3">
-                    <label>Para Birimi</label>
-                    <input type="Text" class="form-control text-capitalize" placeholder="Para Birimi"asp-for="@Model.ParaBirimiAdi" required/>
+<div class="card">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>Para Birimi Ekle</h3>
                 </div>
-                <div class="col-md-3">
-                    <label>Kısaltma</label>
-                    <input type="text" class="form-control text-uppercase" asp-for="@Model.ParaBirimiKisaltma" placeholder="Kısaltma" required/>
-                </div>
-                <div class="col-md-3">
-                    <label>Simge</label>
-                    <input class="form-control" placeholder="Simge" type="text"  asp-for="@Model.ParaBirimiSimge" required/>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <button type="submit" form="frmParaBirimiEkle" class="btn btn-info btn-lg"><i class="bi bi-database-add"></i></button>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtParaBirimi" asp-controller="DtParaBirimi" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="clearfix">
-            <button type="submit" class=" align-right btn btn-primary m-3 col-2 float-right"> Ekle</button>
-        </div>
     </div>
-</form>
+    <div class="card-body bg-light">
+
+        <form id="frmParaBirimiEkle" asp-controller="DtParaBirimi" asp-action="ParaBirimiEkle" method="post">
+            <div class="form-group ">
+                <div class="card-body p-3">
+                    <div class="row mb-2">
+                        <div class="col-md-3">
+                            <label class="col-form-label col-form-label-sm">Para Birimi</label>
+                            <input type="Text" class="form-control form-control-sm text-capitalize" placeholder="Para Birimi" asp-for="@Model.ParaBirimiAdi" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label col-form-label-sm">Kısaltma</label>
+                            <input type="text" class="form-control form-control-sm text-uppercase" asp-for="@Model.ParaBirimiKisaltma" placeholder="Kısaltma" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="col-form-label col-form-label-sm">Simge</label>
+                            <input class="form-control form-control-sm" placeholder="Simge" type="text" asp-for="@Model.ParaBirimiSimge" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
