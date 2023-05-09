@@ -9,24 +9,44 @@
 
 
 <div class="card">
-    <div class="m-2 mb-3 ">
-        <div class="col ">
+    <div class="mb-3">
+        <div class="card-header bg-gray rounded-1 mb-1">
+            <div class="row justify-content-between">
+                <div class="col-sm-6 col-md-3">
+                    <div class="row">
+                        <h3 class="p-2"> Personel Kartı</h3>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="row justify-content-around float-right mx-1">
+                        <div class="col-sm-6 col-md-4">
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col my-1">
             <form id="fltAreaPersonel" asp-controller="PersonelKarti" asp-action="PersonelKarti" asp-route-id=""
                 method="post">
                 <div class="row  ">
                     <div class="col-md-3 mb-1">
+                        <label for="inputPersonelAdi" class="col-form-label col-form-label-sm">Personel Adı</label>
                         <input type="text" class="form-control" id="inputPersonelAdi" name="personelAdi"
                             value="@ViewBag.personelAdi" placeholder="Personel Adı">
                     </div>
                     <div class="col-md-3 mb-1">
+                        <label for="inputPersonelSoyadi" class="col-form-label col-form-label-sm">Personel Soyadı</label>
                         <input type="text" class="form-control" id="inputPersonelSoyadi" name="personelSoyadi"
                             value="@ViewBag.personelSoyadi" placeholder="Personel Soyadı">
                     </div>
                     <div class="col-md-3 mb-1">
+                        <label for="inputTelefon" class="col-form-label col-form-label-sm">Telefon</label>
                         <input type="text" class="form-control" id="inputTelefon" name="telefon"
                             value="@ViewBag.telefon" placeholder="Telefon">
                     </div>
                     <div class="col-md-3 mb-1">
+                        <label for="sCinsiyetFilter" class="col-form-label col-form-label-sm">Cinsiyet</label>
                         <select id="sCinsiyetFilter" class="form-control select2bs4" style="width: 100%;"
                             name="cinsiyet">
                             @if (ViewBag.cinsiyetId == null || ViewBag.cinsiyetId == "")
@@ -53,20 +73,20 @@
                             checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
                         @if (ViewBag.lblSilindi == null)
                         {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                            <label id="lblChck" class="form-check-label" for="chckSilindi">
                                 Mevcut
                             </label>
                         }
                         else
                         {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                            <label id="lblChck" class="form-check-label" for="chckSilindi">
                                 @ViewBag.lblSilindi
                             </label>
                         }
                     </div>
                 </div>
                 <hr class="divider">
-                <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
+                <button onclick="filterSifirla()" type="button" class="btn btn-primary mx-2">Sıfırla</button>
 
             </form>
         </div>
@@ -76,20 +96,20 @@
 <div class="card">
     <div class="card-header">
         <div class="col-md-12 mb-1 d-flex justify-content-between">
-            <button type="submit" form="fltAreaPersonel" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            <button type="submit" form="fltAreaPersonel" class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1">
                 Ara
                 <i class="bi bi-binoculars"></i>
             </button>
-            <a onclick="icerikGor('Personel')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            <a onclick="icerikGor('Personel')" class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1">
                 Gör
                 <i class="bi bi-eye"></i>
             </a>
-            <a onclick="guncelle('Personel')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            <a onclick="guncelle('Personel')" class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1">
                 Değiştir
                 <i class="bi bi-arrow-counterclockwise"></i>
             </a>
             <a asp-controller="PersonelKarti" asp-action="PersonelKartiEkle"
-                class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                class="btn btn-outline-primary rounded-1 col-md-3 my-1">
                 Ekle
                 <i class="bi bi-clipboard-plus"></i>
             </a>
