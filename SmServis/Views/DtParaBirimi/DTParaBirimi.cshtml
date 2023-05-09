@@ -5,53 +5,74 @@
     var km = new KullaniciManager(new EfKullaniciDal());
 
 }
+<div class="card bg-light">
 
-<div class="card">
-    <div class="m-2 mb-3 ">
-        <div class="col ">
-            <form id="fltAreaParaBirimi" asp-controller="DtParaBirimi" asp-action="DtParaBirimi"  asp-route-id="" method="post">
-                <div class="row  ">
-                    <div class="col-md-4 mb-1">
-                        <input type="text" class="form-control" id="inputParaBirimiAdi" name="paraBirimiAdi" value="@ViewBag.paraBirimiAdi" placeholder="Para Birimi">
-                    </div>
-                    <div class="col-md-4 mb-1">
-                        <input type="text" class="form-control" id="inputParaBirimiKisaltma" name="paraBirimiKisaltma" value="@ViewBag.paraBirimiKisaltma" placeholder="Kısaltma">
-
-                    </div>
-                    <div class="col-md-4 mb-1">
-                        <input type="text" class="form-control" id="inputParaBirimiSimge" name="paraBirimiSimge" value="@ViewBag.paraBirimiSimge" placeholder="Simge">
+    <div class="card">
+        <div class="card-header bg-gray">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <h3>Para Birimi Destek Tablosu</h3>
+                </div>
+                <div class="col-md-2">
+                    <div class="row justify-content-end">
+                        <div class="col-4">
+                            <a asp-action="Index" asp-controller="DestekTablosu" class=" btn btn-lg btn-danger ">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-                
-                <hr class="divider">
-                <div class="row ">
-                    <div class="form-check col-4">
-                        <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
-                        @if (ViewBag.lblSilindi == null)
-                        {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-                                Mevcut
-                            </label>
-                        }
-                        else
-                        {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-                                @ViewBag.lblSilindi
-                            </label>
-                        }
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <div class="m-2 mb-3 ">
+                <div class="col ">
+                    <form id="fltAreaParaBirimi" asp-controller="DtParaBirimi" asp-action="DtParaBirimi" asp-route-id="" method="post">
+                        <div class="row  ">
+                            <div class="col-md-4 mb-1">
+                                <label class="col-form-label col-form-label-sm">Para Birimi</label>
+                                <input type="text" class="form-control form-control-sm" id="inputParaBirimiAdi" name="paraBirimiAdi" value="@ViewBag.paraBirimiAdi" placeholder="Para Birimi">
+                            </div>
+                            <div class="col-md-4 mb-1">
+                                <label class="col-form-label col-form-label-sm">Kısaltma</label>
+                                <input type="text" class="form-control form-control-sm" id="inputParaBirimiKisaltma" name="paraBirimiKisaltma" value="@ViewBag.paraBirimiKisaltma" placeholder="Kısaltma">
 
-                    </div>
-              
+                            </div>
+                            <div class="col-md-4 mb-1">
+                                <label class="col-form-label col-form-label-sm">Simge</label>
+                                <input type="text" class="form-control form-control-sm" id="inputParaBirimiSimge" name="paraBirimiSimge" value="@ViewBag.paraBirimiSimge" placeholder="Simge">
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+                        <div class="row ">
+                            <div class="form-check col-4">
+                                <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
+                                @if (ViewBag.lblSilindi == null)
+                                {
+                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                        Mevcut
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                        @ViewBag.lblSilindi
+                                    </label>
+                                }
+
+                            </div>
+
+                        </div>
+                        <hr class="divider">
+                        <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
+
+                    </form>
                 </div>
-                <hr class="divider">
-                <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
-
-            </form>
+            </div>
         </div>
     </div>
-
-</div>
-<div class="card">
+<div class="card bg-light">
     <div class="card-header">
         <div class="col-md-12 mb-1 d-flex justify-content-between">
             <button type="submit" form="fltAreaParaBirimi" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
@@ -86,16 +107,16 @@
             </thead>
             <tbody>
                 @foreach (var item in ViewBag.paraBirimiList)
-                    {
+                {
 
-                        var olusturan = km.TGetByID(item.Olusturan);
-                        var sonDegistiren = km.TGetByID(item.SonDegistiren);
+                    var olusturan = km.TGetByID(item.Olusturan);
+                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
                     <tr>
                         <td><input name="radio" type="radio" value="@item.ParaBirimiId" /></td>
                         <td class="text-capitalize">@item.ParaBirimiAdi</td>
                         <td>@item.ParaBirimiSimge </td>
                         <td class="text-uppercase">@item.ParaBirimiKisaltma </td>
-                        
+
                         <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
                         <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
                     </tr>
@@ -103,6 +124,7 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
 
 

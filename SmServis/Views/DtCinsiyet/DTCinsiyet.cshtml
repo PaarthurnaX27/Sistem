@@ -7,43 +7,64 @@
 }
 
 
-<div class="card">
-    <div class="m-2 mb-3 ">
-        <div class="col ">
-            <form id="fltAreaCinsiyet" asp-controller="DtCinsiyet" asp-action="DtCinsiyet" asp-route-id="" method="post">
-                <div class="row  ">
-                    <div class="col-md-4 mb-1">
-                        <input type="text" class="form-control" id="inputCinsiyetAciklama" name="cinsiyetAciklama" value="@ViewBag.cinsiyetAciklama" placeholder="Cinsiyet">
+<div class="card bg-light">
+    <div class="card">
+        <div class="card-header bg-gray">
+            <div class="row justify-content-between">
+                <div class="col-md-3">
+                    <h3>Cinsiyet Destek Tablosu</h3>
+                </div>
+                <div class="col-md-2">
+                    <div class="row justify-content-end">
+                        <div class="col-4">
+                            <a asp-action="Index" asp-controller="DestekTablosu" class=" btn btn-lg btn-danger ">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <div class="m-2 mb-3 ">
+                <div class="col ">
+                    <form id="fltAreaCinsiyet" asp-controller="DtCinsiyet" asp-action="DtCinsiyet" asp-route-id="" method="post">
+                        <div class="row  ">
+                            <div class="col-md-4 mb-1">
+                                <label class="col-form-label col-form-label-sm">Cinsiyet</label>
+                                <input type="text" class="form-control form-control-sm" id="inputCinsiyetAciklama" name="cinsiyetAciklama" value="@ViewBag.cinsiyetAciklama" placeholder="Cinsiyet">
+                            </div>
+                        </div>
 
-                <hr class="divider">
-                <div class="row ">
-                    <div class="form-check col-4">
-                        <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
-                        @if (ViewBag.lblSilindi == null)
-                        {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-                                Mevcut
-                            </label>
-                        }
-                        else
-                        {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-                                @ViewBag.lblSilindi
-                            </label>
-                        }
+                        <hr class="divider">
+                        <div class="row ">
+                            <div class="form-check col-4">
+                                <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
+                                @if (ViewBag.lblSilindi == null)
+                                {
+                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                        Mevcut
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                        @ViewBag.lblSilindi
+                                    </label>
+                                }
 
-                    </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
+
+                    </form>
                 </div>
-                <hr class="divider">
-                <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
-
-            </form>
+            </div>
         </div>
     </div>
+   
 
-</div>
 <div class="card">
     <div class="card-header">
         <div class="col-md-12 mb-1 d-flex justify-content-between">
@@ -90,6 +111,7 @@
             </tbody>
         </table>
     </div>
+</div>
 </div>
 
 

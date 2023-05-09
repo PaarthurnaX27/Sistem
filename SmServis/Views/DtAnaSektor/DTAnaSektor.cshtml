@@ -6,91 +6,112 @@
 
 }
 
-
-<div class="card">
-    <div class="m-2 mb-3 ">
-        <div class="col ">
-            <form id="fltAreaAnaSektor" asp-controller="DtAnaSektor" asp-action="DtAnaSektor" asp-route-id="" method="post">
-                <div class="row  ">
-                    <div class="col-md-4 mb-1">
-                        <input type="text" class="form-control" id="inputAnaSektorAdi" name="anaSektorAdi" value="@ViewBag.anaSektorAdi" placeholder="Ana Sektör">
+<div class="card bg-light">
+    <div class="card">
+        <div class="card-header bg-gray">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <h3>Ama Sektör Destek Tablosu</h3>
+                </div>
+                <div class="col-md-2">
+                    <div class="row justify-content-end">
+                        <div class="col-4">
+                            <a asp-action="Index" asp-controller="DestekTablosu" class=" btn btn-lg btn-danger ">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <div class="m-2 mb-3 ">
+                <div class="col ">
+                    <form id="fltAreaAnaSektor" asp-controller="DtAnaSektor" asp-action="DtAnaSektor" asp-route-id="" method="post">
+                        <div class="row  ">
+                            <div class="col-md-4 mb-1">
+                                <label class="col-form-label col-form-label-sm">Ana Sektör Adı</label>
+                                <input type="text" class="form-control form-control-sm" id="inputAnaSektorAdi" name="anaSektorAdi" value="@ViewBag.anaSektorAdi" placeholder="Ana Sektör">
+                            </div>
+                        </div>
 
-                <hr class="divider">
-                <div class="row ">
-                    <div class="form-check col-4">
-                        <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
-                        @if (ViewBag.lblSilindi == null)
-                        {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-                                Mevcut
-                            </label>
-                        }
-                        else
-                        {
-                            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-                                @ViewBag.lblSilindi
-                            </label>
-                        }
+                        <hr class="divider">
+                        <div class="row ">
+                            <div class="form-check col-4">
+                                <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
+                                @if (ViewBag.lblSilindi == null)
+                                {
+                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                        Mevcut
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                        @ViewBag.lblSilindi
+                                    </label>
+                                }
 
-                    </div>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
+
+                    </form>
                 </div>
-                <hr class="divider">
-                <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
-
-            </form>
+            </div>
         </div>
     </div>
-
-</div>
-<div class="card">
-    <div class="card-header">
-        <div class="col-md-12 mb-1 d-flex justify-content-between">
-            <button type="submit" form="fltAreaAnaSektor" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
-                Ara
-                <i class="bi bi-binoculars"></i>
-            </button>
-            <a onclick="icerikGor('AnaSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
-                Gör
-                <i class="bi bi-eye"></i>
-            </a>
-            <a onclick="guncelle('AnaSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
-                Değiştir
-                <i class="bi bi-arrow-counterclockwise"></i>
-            </a>
-            <a asp-controller="DtAnaSektor" asp-action="AnaSektorEkle" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
-                Ekle
-                <i class="bi bi-clipboard-plus"></i>
-            </a>
+    <div class="card">
+        <div class="card-header">
+            <div class="col-md-12 mb-1 d-flex justify-content-between">
+                <button type="submit" form="fltAreaAnaSektor" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                    Ara
+                    <i class="bi bi-binoculars"></i>
+                </button>
+                <a onclick="icerikGor('AnaSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                    Gör
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a onclick="guncelle('AnaSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                    Değiştir
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </a>
+                <a asp-controller="DtAnaSektor" asp-action="AnaSektorEkle" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                    Ekle
+                    <i class="bi bi-clipboard-plus"></i>
+                </a>
+            </div>
         </div>
-    </div>
-    <div class="card-body">
-        <table id="tblDestek" class="table table-borderless table-hover  ">
-            <thead>
-                <tr>
-                    <th>Seç</th>
-                    <th>AnaSektor</th>
-                    <th>Son Değiştiren</th>
-                    <th>Oluşturan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.anaSektorList)
-                {
-                    var olusturan = km.TGetByID(item.Olusturan);
-                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
+        <div class="card-body">
+            <table id="tblDestek" class="table table-borderless table-hover  ">
+                <thead>
                     <tr>
-                        <td><input name="radio" type="radio" value="@item.AnaSektorId" /></td>
-                        <td class="text-capitalize">@item.AnaSektorAdi</td>
-                        <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
-                        <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
+                        <th>Seç</th>
+                        <th>AnaSektor</th>
+                        <th>Son Değiştiren</th>
+                        <th>Oluşturan</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.anaSektorList)
+                    {
+                        var olusturan = km.TGetByID(item.Olusturan);
+                        var sonDegistiren = km.TGetByID(item.SonDegistiren);
+                        <tr>
+                            <td><input name="radio" type="radio" value="@item.AnaSektorId" /></td>
+                            <td class="text-capitalize">@item.AnaSektorAdi</td>
+                            <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
+                            <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+
 
 
 <div class="modal fade" id="modal">

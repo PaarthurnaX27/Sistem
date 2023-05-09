@@ -1,0 +1,80 @@
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    PozisyonManager pznm = new PozisyonManager(new EfPozisyonDal());
+    DepartmanManager dptm = new DepartmanManager(new EfDepartmanDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    int pozisyonId = ViewBag.id;
+    var tblPozisyon = pznm.TGetByID(pozisyonId);
+    var departmanAdi = dptm.TGetByID(tblPozisyon.DepartmanId);
+    var sonDegistiren = km.TGetByID(tblPozisyon.SonDegistiren);
+    var olusturan = km.TGetByID(tblPozisyon.Olusturan);
+
+}
+<div id="divContent" class="card  bg-light">
+    <div class="card-header bg-gray rounded-1 mb-1">
+            <div class="row justify-content-between">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="row">
+                            <h3 class="p-2">Pozisyon Gör</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="row justify-content-around float-right mx-1">
+                            <div class="col-sm-6 col-md-4">
+                                <a asp-action="DtPozisyon" asp-controller="DtPozisyon" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <form method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Pozisyon</label>
+                        <label class="form-control ">@tblPozisyon.PozisyonAdi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Departman</label>
+                        <label class="form-control">@departmanAdi.DepartmanAdi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Durum</label>
+                        @{
+                            if (tblPozisyon.Silindi == false)
+                            {
+                                <label class="form-control ">Mevcut</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Silindi</label>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Oluşturan</label>
+                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Oluşturulma Tarihi</label>
+                        <label class="form-control">@tblPozisyon.OlusturulmaTarih.Date.ToShortDateString()</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştiren</label>
+                        <label class="form-control ">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştirilme Tarihi</label>
+                        <label class="form-control">@tblPozisyon.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
