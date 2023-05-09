@@ -35,8 +35,8 @@
             </div>
         </div>
         <div class="card-body bg-light">
-            <div class="m-2 mb-3 ">
-                <div class="col ">
+            <div class="m-2">
+                <div class="col">
                     <form id="fltAreaBagliSektor" asp-controller="DtBagliSektor" asp-action="DTBagliSektor" asp-route-id="" method="post">
                         <div class="row mb-3">
                             <div class="col-md-4 mb-1">
@@ -68,13 +68,13 @@
                                 <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
                                 @if (ViewBag.lblSilindi == null)
                                 {
-                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                    <label id="lblChck" class="form-check-label" for="chckSilindi">
                                         Mevcut
                                     </label>
                                 }
                                 else
                                 {
-                                    <label id="lblChck" class="form-check-label" for="checkboxMusteri">
+                                    <label id="lblChck" class="form-check-label" for="chckSilindi">
                                         @ViewBag.lblSilindi
                                     </label>
                                 }
@@ -94,15 +94,15 @@
     <div class="card bg-light">
         <div class="card-header">
             <div class="col-md-12 mb-1 d-flex justify-content-between">
-                <button type="submit" form="fltAreaBagliSektor" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                <button type="submit" form="fltAreaBagliSektor" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
                     Ara
                     <i class="bi bi-binoculars"></i>
                 </button>
-                <a onclick="icerikGor('BagliSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                <a onclick="icerikGor('BagliSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
                     Gör
                     <i class="bi bi-eye"></i>
                 </a>
-                <a onclick="guncelle('BagliSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                <a onclick="guncelle('BagliSektor')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
                     Değiştir
                     <i class="bi bi-arrow-counterclockwise"></i>
                 </a>
