@@ -27,44 +27,63 @@
     }
 }
 <div id="divContent" class="card  bg-light">
-    <form asp-controller="DtParaBirimi" asp-action="ParaBirimiGuncelle" asp-route-paraBirimiId="@paraBirimiId" asp-route-olusturan="@paraBirimi.Olusturan" asp-route-olusturulmaTarihi="@paraBirimi.OlusturulmaTarih" method="post">
+    <div class="card-header bg-gray">
+        <div class="row justify-content-between">
+            <div class="col-md-3">
+                <div class="row">
+                    <h3>
+                        Para Birimi Güncelle
+                    </h3>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="row justify-content-end">
+                    <div class="col-4">
+                        <button form="frmParaBirimiEkle" type="submit" class=" align-right btn btn-info btn-lg"> <i class="bi bi-database-fill-add"></i></button>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
+                    </div>
+                    <div class="col-4">
+                        <a asp-action="DtParaBirimi" asp-controller="DtParaBirimi" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="frmParaBirimiEkle" asp-controller="DtParaBirimi" asp-action="ParaBirimiGuncelle" asp-route-paraBirimiId="@paraBirimiId" asp-route-olusturan="@paraBirimi.Olusturan" asp-route-olusturulmaTarihi="@paraBirimi.OlusturulmaTarih" method="post">
         <div class="form-group ">
             <div class="card-body p-3">
                 <div class="row mb-2">
                     <div class="col-md-3">
-                        <label>Para Birimi</label>
-                        <input type="Text" class="form-control text-capitalize" value="@paraBirimi.ParaBirimiAdi" placeholder="Para Birimi" name="ParaBirimiAdi" asp-for="@Model.ParaBirimiAdi">
+                        <label class="col-form-label col-form-label-sm">Para Birimi</label>
+                        <input type="Text" class="form-control form-control-sm text-capitalize" value="@paraBirimi.ParaBirimiAdi" placeholder="Para Birimi" name="ParaBirimiAdi" asp-for="@Model.ParaBirimiAdi">
                     </div>
                     <div class="col-md-3">
-                        <label>Kısaltma</label>
-                        <input type="text" class="form-control text-uppercase" value="@paraBirimi.ParaBirimiKisaltma" asp-for="@Model.ParaBirimiKisaltma">
+                        <label class="col-form-label col-form-label-sm">Kısaltma</label>
+                        <input type="text" class="form-control form-control-sm text-uppercase" value="@paraBirimi.ParaBirimiKisaltma" asp-for="@Model.ParaBirimiKisaltma">
                     </div>
                     <div class="col-md-3">
-                        <label>Simge</label>
-                        <input class="form-control" type="text" value="@paraBirimi.ParaBirimiSimge" name="ParaBirimiSimge" asp-for="@Model.ParaBirimiSimge" />
+                        <label class="col-form-label col-form-label-sm">Simge</label>
+                        <input class="form-control form-control-sm" type="text" value="@paraBirimi.ParaBirimiSimge" name="ParaBirimiSimge" asp-for="@Model.ParaBirimiSimge" />
                     </div>
                     <div class="col-md-3">
-                        <label>Oluşturan</label>
-                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                        <label class="col-form-label col-form-label-sm">Oluşturan</label>
+                        <label class="form-control form-control-sm ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
                     </div>
                 </div>
                 <div class="row mb-2">
-                   
-                   
+
+
                     <div class="col-md-3">
-                        <label>Oluşturulma Tarihi</label>
-                        <label class="form-control">@paraBirimi.OlusturulmaTarih.Date.ToShortDateString()</label>
+                        <label class="col-form-label col-form-label-sm">Oluşturulma Tarihi</label>
+                        <label class="form-control form-control-sm">@paraBirimi.OlusturulmaTarih.Date.ToShortDateString()</label>
                     </div>
                     <div class="col-md-3">
-                        <label>Son Değiştirme Tarihi</label>
-                        <label class="form-control">@paraBirimi.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                        <label class="col-form-label col-form-label-sm">Son Değiştirme Tarihi</label>
+                        <label class="form-control form-control-sm">@paraBirimi.SonDegistirmeTarih.Date.ToShortDateString()</label>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex justify-content-end">
-
-                <button type="button" class="btn btn-danger m-3 col-2" data-toggle="modal" data-target="#modalSil">Sil</button>
-                <button type="submit" class=" align-right btn btn-primary m-3 col-2 float-right"> Güncelle</button>
             </div>
         </div>
     </form>
