@@ -27,6 +27,23 @@
     }
 }
 <div id="divContent" class="card  bg-light">
+    <div class="card-header bg-gray rounded-1 mb-1 align-items-center justify-content-center">
+            <div class="row justify-content-between">
+                <div class="col-sm-6 col-md-3">
+                    <div class="row">
+                        <h3 class="p-2">Departman Güncelle</h3>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="row justify-content-around float-right m-1">
+                        <div class="col-sm-6 col-md-4">
+                            <a asp-action="DtDepartman" asp-controller="DtDepartman" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     <form asp-controller="DtDepartman" asp-action="DepartmanGuncelle" asp-route-departmanId="@departmanId" asp-route-olusturan="@departman.Olusturan" asp-route-olusturulmaTarihi="@departman.OlusturulmaTarih" method="post">
         <div class="form-group ">
             <div class="card-body p-3">
