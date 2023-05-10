@@ -13,7 +13,7 @@
             <div class="row justify-content-between">
                 <div class="col-sm-6 col-md-3">
                     <div class="row">
-                        <h3 class="p-2"> Çalışma Durumu</h3>
+                        <h3 class="p-2">Çalışma Durumu</h3>
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-3">
@@ -26,10 +26,11 @@
             </div>
         </div>
 
-        <div class="col m-3">
+        <div class="col m-2">
             <form id="fltAreaCalismaDurumu" asp-controller="DtCalismaDurumu" asp-action="DtCalismaDurumu" asp-route-id="" method="post">
                 <div class="row ">
                     <div class="col-md-4 mb-1">
+                        <label class="col-form-label col-form-label-sm">Çalışma Durumu</label>
                         <input type="text" class="form-control" id="inputCalismaDurumuAciklama" name="calismaDurumuAciklama" value="@ViewBag.calismaDurumuAciklama" placeholder="Çalşma Durum Açıklama">
                     </div>
                 </div>
@@ -108,7 +109,6 @@
         </table>
     </div>
 </div>
-
 
 <div class="modal fade" id="modal">
     <div class="modal-dialog">

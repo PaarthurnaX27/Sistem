@@ -33,9 +33,11 @@
             <form id="fltAreaPozisyon" asp-controller="DtPozisyon" asp-action="DTPozisyon" asp-route-id="" method="post">
                 <div class="row mb-3">
                     <div class="col-md-4 mb-1">
+                        <label class="col-form-label col-form-label-sm">Pozisyon Adı</label>
                         <input type="text" class="form-control" name="pozisyonAdi" value="@ViewBag.pozisyonAdi" placeholder="Pozisyon Adı">
                     </div>
                     <div class="col-md-4 mb-1 ">
+                        <label class="col-form-label col-form-label-sm">Departman Seçin</label>
                         <select id="sDepartmanFilter1" class="form-control select2bs4" style="width: 100%;" name="departmanId">
                             @if (ViewBag.departmanId == null || ViewBag.departmanId == "")
                             {
