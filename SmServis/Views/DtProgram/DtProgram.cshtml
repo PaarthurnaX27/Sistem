@@ -3,135 +3,189 @@
 @{
     var km = new KullaniciManager(new EfKullaniciDal());
 }
-<div class="card bg-light">
-<div class="card">
-    <div class="card-header bg-gray">
-        <div class="row justify-content-between">
-            <div class="col-md-3">
-                <div class="row">
-                    <h3>Program Destek Tablosu</h3>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="row justify-content-end">
-                    @* <div class="col-4">
-                    <h4>
-                    <button type="submit" form="frmProgramEkle"
-                    class=" align-right btn btn-primary btn-lg float-right not-allowed" disabled><i class="bi
-                    bi-database-add "></i></button>
-                    </h4>
-                    </div> *@
-                    <div class="col-4">
-                        <a asp-action="Index" asp-controller="DestekTablosu" class=" btn btn-lg btn-danger "><i class="bi bi-x-lg"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Program Destek Tablosu</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right mr-3">
+          @*
+          <li class="col-sm-4">
+            <button
+              type="submit"
+              form="formCariGuncelle"
+              class="btn btn-info btn-lg"
+            ></button>
+          </li>
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="Index"
+              asp-controller="DestekTablosu"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="card-body bg-light">
-        <div class="col m-2">
-                <form id="fltAreaProgram" asp-controller="DtProgram" asp-action="DtProgram" asp-route-id="" method="post">
-                    <div class="row">
-                        <div class="col-md-4 mb-1">
-                            <label class="col-form-label col-form-label-sm">Program</label>
-                            <input type="text" class="form-control form-control-sm" id="inputprogramAdi" name="programAdi"
-                                value="@ViewBag.programAdi" placeholder="Program">
-                        </div>
-                    </div>
-                    <hr class="divider">
-                    <div class="row ">
-                        <div class="form-check col-4">
-                            <input name="silindi" id="chckSilindi" type="checkbox" value="true"
-                                checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
-                            @if (ViewBag.lblSilindi == null)
-                            {
-                                <label id="lblChck" class="form-check-label" for="chckSilindi">
-                                    Mevcut
-                                </label>
-                            }
-                            else
-                            {
-                                <label id="lblChck" class="form-check-label" for="chckSilindi">
-                                    @ViewBag.lblSilindi
-                                </label>
-                            }
-                        </div>
-                    </div>
-                    <hr class="divider">
-                    <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
-                </form>
-        </div>
+      <div class="col m-2">
+        <form
+          id="fltAreaProgram"
+          asp-controller="DtProgram"
+          asp-action="DtProgram"
+          asp-route-id=""
+          method="post"
+        >
+          <div class="row">
+            <div class="col-md-4 mb-1">
+              <label class="col-form-label col-form-label-sm">Program</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                id="inputprogramAdi"
+                name="programAdi"
+                value="@ViewBag.programAdi"
+                placeholder="Program"
+              />
+            </div>
+          </div>
+          <hr class="divider" />
+          <div class="row">
+            <div class="form-check col-4">
+              <input
+                name="silindi"
+                id="chckSilindi"
+                type="checkbox"
+                value="true"
+                checked="@ViewBag.chckSilindi"
+                onclick="filter_isDeleted()"
+              />
+              @if (ViewBag.lblSilindi == null) {
+              <label id="lblChck" class="form-check-label" for="chckSilindi">
+                Mevcut
+              </label>
+              } else {
+              <label id="lblChck" class="form-check-label" for="chckSilindi">
+                @ViewBag.lblSilindi
+              </label>
+              }
+            </div>
+          </div>
+          <hr class="divider" />
+          <button
+            onclick="filterSifirla()"
+            type="button"
+            class="btn btn-primary"
+          >
+            Sıfırla
+          </button>
+        </form>
+      </div>
     </div>
-</div>
-<div class="card bg-light">
+  </div>
+  <div class="card bg-light">
     <div class="card-header">
-        <div class="col-md-12 mb-1 d-flex justify-content-between">
-            <button type="submit" form="fltAreaProgram" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
-                Ara
-                <i class="bi bi-binoculars"></i>
-            </button>
-            <a onclick="icerikGor('Program')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
-                Gör
-                <i class="bi bi-eye"></i>
-            </a>
-            <a onclick="guncelle('Program')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
-                Değiştir
-                <i class="bi bi-arrow-counterclockwise"></i>
-            </a>
-            <a asp-controller="DtProgram" asp-action="ProgramEkle" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
-                Ekle
-                <i class="bi bi-clipboard-plus"></i>
-            </a>
-        </div>
+      <div class="col-md-12 mb-1 d-flex justify-content-between">
+        <button
+          type="submit"
+          form="fltAreaProgram"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+        >
+          Ara
+          <i class="bi bi-binoculars"></i>
+        </button>
+        <a
+          onclick="icerikGor('Program')"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+        >
+          Gör
+          <i class="bi bi-eye"></i>
+        </a>
+        <a
+          onclick="guncelle('Program')"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+        >
+          Değiştir
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </a>
+        <a
+          asp-controller="DtProgram"
+          asp-action="ProgramEkle"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
+        >
+          Ekle
+          <i class="bi bi-clipboard-plus"></i>
+        </a>
+      </div>
     </div>
     <div class="card-body">
-        <table id="tblDestek" class="table table-borderless table-hover  ">
-            <thead>
-                <tr>
-                    <th>Seç</th>
-                    <th>Program</th>
-                    <th>Son Değiştiren</th>
-                    <th>Oluşturan</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.programList)
-                {
-
-                    var olusturan = km.TGetByID(item.Olusturan);
-                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
-                    <tr>
-                        <td><input name="radio" type="radio" value="@item.ProgramId" /></td>
-                        <td class="text-capitalize">@item.ProgramAdi</td>
-                        <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
-                        <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+      <table id="tblDestek" class="table table-borderless table-hover">
+        <thead>
+          <tr>
+            <th>Seç</th>
+            <th>Program</th>
+            <th>Son Değiştiren</th>
+            <th>Oluşturan</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach (var item in ViewBag.programList) { var olusturan =
+          km.TGetByID(item.Olusturan); var sonDegistiren =
+          km.TGetByID(item.SonDegistiren);
+          <tr>
+            <td><input name="radio" type="radio" value="@item.ProgramId" /></td>
+            <td class="text-capitalize">@item.ProgramAdi</td>
+            <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
+            <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
+          </tr>
+          }
+        </tbody>
+      </table>
     </div>
-</div>
+  </div>
 </div>
 
 <div class="modal fade" id="modal">
-    <div class="modal-dialog">
-        <div class="modal-content bg-danger">
-            <div class="modal-header">
-                <h4 class="modal-title">UYARI</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Lütfen Seçim Yapınız&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-start">
-                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Kapat</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
+  <div class="modal-dialog">
+    <div class="modal-content bg-danger">
+      <div class="modal-header">
+        <h4 class="modal-title">UYARI</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Lütfen Seçim Yapınız&hellip;</p>
+      </div>
+      <div class="modal-footer justify-content-start">
+        <button
+          type="button"
+          class="btn btn-outline-light"
+          data-dismiss="modal"
+        >
+          Kapat
+        </button>
+      </div>
     </div>
-    <!-- /.modal-dialog -->
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
 </div>
-
-

@@ -26,76 +26,127 @@
             };</script>
     }
 }
-<div id="divContent" class="card  bg-light">
-    <div class="card-header bg-gray rounded-1 mb-1 align-items-center justify-content-center">
-            <div class="row justify-content-between">
-                <div class="col-sm-6 col-md-3">
-                    <div class="row">
-                        <h3 class="p-1">Cari Durumu Güncelle</h3>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="row justify-content-end">
-                        <div class="col-4">
-                            <button form="frmCariDurumGuncelle" type="submit" class=" align-right btn btn-info btn-lg"> <i class="bi bi-database-fill-add"></i></button>
-                        </div>
-                        <div class="col-4">
-                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
-                        </div>
-                        <div class="col-4">
-                            <a asp-action="DtCariDurum" asp-controller="DtCariDurum" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
+<div id="divContent" class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Cari Durumu Güncelle</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right">
+          <li class="col-sm-4 mr-3">
+            <button
+              type="submit"
+              form="frmCariDurumGuncelle"
+              class="btn btn-info btn-lg"
+            >
+              <i class="bi bi-database-add"></i>
+            </button>
+          </li>
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            >
+              <i class="bi bi-trash3-fill"></i>
+            </button>
+          </li>
+          <li class="col-sm-4">
+            <a
+              asp-action="DtCariDurum"
+              asp-controller="DtCariDurum"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <form
+        id="frmCariDurumGuncelle"
+        asp-controller="DtCariDurum"
+        asp-action="CariDurumGuncelle"
+        asp-route-cariDurumId="@cariDurumId"
+        asp-route-olusturan="@cariDurum.Olusturan"
+        asp-route-olusturulmaTarihi="@cariDurum.OlusturulmaTarih"
+        method="post"
+      >
+        <div class="form-group">
+          <div class="card-body p-3">
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <label>Cari Durum</label>
+                <input
+                  type="Text"
+                  class="form-control text-capitalize"
+                  value="@cariDurum.CariDurumAciklama"
+                  placeholder="Cari Durum"
+                  name="CariDurumAciklama"
+                  asp-for="@Model.CariDurumAciklama"
+                />
+              </div>
+
+              <div class="col-md-3">
+                <label>Oluşturan</label>
+                <label class="form-control"
+                  >@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label
+                >
+              </div>
+              <div class="col-md-3">
+                <label>Oluşturulma Tarihi</label>
+                <label class="form-control"
+                  >@cariDurum.OlusturulmaTarih.Date.ToShortDateString()</label
+                >
+              </div>
+              <div class="col-md-3">
+                <label>Son Değiştirme Tarihi</label>
+                <label class="form-control"
+                  >@cariDurum.SonDegistirmeTarih.Date.ToShortDateString()</label
+                >
+              </div>
             </div>
+          </div>
         </div>
-
-    <form id="frmCariDurumGuncelle" asp-controller="DtCariDurum" asp-action="CariDurumGuncelle" asp-route-cariDurumId="@cariDurumId" asp-route-olusturan="@cariDurum.Olusturan" asp-route-olusturulmaTarihi="@cariDurum.OlusturulmaTarih" method="post">
-        <div class="form-group ">
-            <div class="card-body p-3">
-                <div class="row mb-2">
-                    <div class="col-md-3">
-                        <label>Cari Durum</label>
-                        <input type="Text" class="form-control text-capitalize" value="@cariDurum.CariDurumAciklama" placeholder="Cari Durum" name="CariDurumAciklama" asp-for="@Model.CariDurumAciklama">
-                    </div>
-
-                    <div class="col-md-3">
-                        <label>Oluşturan</label>
-                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Oluşturulma Tarihi</label>
-                        <label class="form-control">@cariDurum.OlusturulmaTarih.Date.ToShortDateString()</label>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Son Değiştirme Tarihi</label>
-                        <label class="form-control">@cariDurum.SonDegistirmeTarih.Date.ToShortDateString()</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<div class="modal fade" id="modalSil">
-    <div class="modal-dialog">
-        <div class="modal-content bg-danger">
-            <div class="modal-header">
-                <h4 class="modal-title">Cari Durum Silinecek</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Silmek istediğinizden emin misiniz?&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-light" data-dismiss="modal">İptal</button>
-                <a href="/DtCariDurum/DeleteCariDurum/@cariDurumId" class="btn btn-outline-light">Sil</a>
-            </div>
-        </div>
-
+      </form>
     </div>
 
+    <div class="modal fade" id="modalSil">
+      <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+          <div class="modal-header">
+            <h4 class="modal-title">Cari Durum Silinecek</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Silmek istediğinizden emin misiniz?&hellip;</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              data-dismiss="modal"
+            >
+              İptal
+            </button>
+            <a
+              href="/DtCariDurum/DeleteCariDurum/@cariDurumId"
+              class="btn btn-outline-light"
+              >Sil</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-

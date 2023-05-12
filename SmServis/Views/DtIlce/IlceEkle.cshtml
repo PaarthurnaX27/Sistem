@@ -28,52 +28,99 @@
         height: 31px !important;
     }
 </style>
-<div class="card">
-    <div class="card-header bg-gray">
-        <div class="row justify-content-between">
-            <div class="col-md-3">
-                <div class="row">
-                    <h3>İlçe Ekle</h3>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="row justify-content-end">
-                    <div class="col-4">
-                        <button type="submit" form="frmIlceEkle" class="btn btn-info btn-lg"><i class="bi bi-database-add"></i></button>
-                    </div>
-                    <div class="col-4">
-                        <a asp-action="DtIlce" asp-controller="DtIlce" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">İlçe Ekle</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right">
+          <li class="col-sm-4 mr-3">
+            <button
+              type="submit"
+              form="frmIlceEkle"
+              class="btn btn-info btn-lg"
+            >
+              <i class="bi bi-database-add"></i>
+            </button>
+          </li>
+          @*
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="DtIlce"
+              asp-controller="DtIlce"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="card-body bg-light">
-        <form id="frmIlceEkle" asp-controller="DtIlce" asp-action="IlceEkle" method="post">
-            <div class="form-group ">
-                <div class="card-body p-3">
-                    <div class="row mb-2">
-                        <div class="col-md-3">
-                            <label class ="col-form-label col-form-label-sm">Ilce</label>
-                            <input type="Text" class="form-control form-control-sm " placeholder="Ilce" name="IlceAdi" asp-for="@Model.IlceAdi" required />
-                        </div>
-                        <div class="col-md-3">
-                            <label class ="col-form-label col-form-label-sm">Sehir</label>
-                            <select id="sehir2" asp-for="@Model.SehirId" class="form-control select2bs4" style="width: 100%;" required>
-                                <option selected disabled>Sehir Seçin</option>
-                                @foreach (var sehirList in ViewBag.sehirList)
-                                {
-                                    <option value="@sehirList.SehirId">@sehirList.SehirAdi</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label class ="col-form-label col-form-label-sm">Posta Kodu</label>
-                            <input type="Text" class="form-control form-control-sm " placeholder="Posta Kodu" name="PostaKodu" asp-for="@Model.PostaKodu" />
-                        </div>
-                    </div>
-                </div>
+      <form
+        id="frmIlceEkle"
+        asp-controller="DtIlce"
+        asp-action="IlceEkle"
+        method="post"
+      >
+        <div class="form-group">
+          <div class="card-body p-3">
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm">Ilce</label>
+                <input
+                  type="Text"
+                  class="form-control form-control-sm"
+                  placeholder="Ilce"
+                  name="IlceAdi"
+                  asp-for="@Model.IlceAdi"
+                  required
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm">Sehir</label>
+                <select
+                  id="sehir2"
+                  asp-for="@Model.SehirId"
+                  class="form-control select2bs4"
+                  style="width: 100%"
+                  required
+                >
+                  <option selected disabled>Sehir Seçin</option>
+                  @foreach (var sehirList in ViewBag.sehirList) {
+                  <option value="@sehirList.SehirId">
+                    @sehirList.SehirAdi
+                  </option>
+                  }
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm"
+                  >Posta Kodu</label
+                >
+                <input
+                  type="Text"
+                  class="form-control form-control-sm"
+                  placeholder="Posta Kodu"
+                  name="PostaKodu"
+                  asp-for="@Model.PostaKodu"
+                />
+              </div>
             </div>
-        </form>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

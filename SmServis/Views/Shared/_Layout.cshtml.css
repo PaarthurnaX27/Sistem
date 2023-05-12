@@ -17,7 +17,8 @@ a {
   border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
@@ -26,6 +27,7 @@ a {
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
   border-bottom: 1px solid #e5e5e5;
 }
@@ -47,3 +49,49 @@ button.accept-policy {
   line-height: 60px;
 }
 
+/* DT Sayfalarının CSS Başlangıcı*/
+
+/* .nav-general {
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: -.1rem;
+}
+
+.nav-brand {
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.list-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 525px) {
+  .nav-brand {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .nav-general {
+    width: 80%;
+  }
+
+  .nav-brand {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .list-items {
+    width: 80%;
+  }
+} */
+
+/* DT Sayfalarının CSS Bitişi*/

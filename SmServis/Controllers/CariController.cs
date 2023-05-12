@@ -441,6 +441,7 @@ namespace SmServis.Controllers
         public IActionResult IcerikGor(int id)
         {
             Vb();
+            HttpContext.Session.SetInt32("CariId",id);
             var cari = cm.TGetByID(id);
             ViewBag.id = id;
             ViewBag.projeList = prjm.TGetList().Where(x => x.CariId == id && x.Silindi == false);

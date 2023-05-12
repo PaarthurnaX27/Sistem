@@ -28,49 +28,91 @@
         height: 31px !important;
     }
 </style>
-<div class="card">
-    <div class="card-header bg-gray">
-        <div class="row justify-content-between">
-            <div class="col-md-3">
-                <div class="row">
-                    <h3>Bağlı Sektör Ekle</h3>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="row justify-content-end">
-                    <div class="col-4">
-                        <button type="submit" form="frmBagliSektorEkle" class="btn btn-info btn-lg"><i class="bi bi-database-add"></i></button>
-                    </div>
-                    <div class="col-4">
-                        <a asp-action="DtBagliSektor" asp-controller="DtBagliSektor" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Bağlı Sektör Ekle</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right">
+          <li class="col-sm-4 mr-3">
+            <button
+              type="submit"
+              form="frmBagliSektorEkle"
+              class="btn btn-info btn-lg"
+            >
+              <i class="bi bi-database-add"></i>
+            </button>
+          </li>
+          @*
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="DtBagliSektor"
+              asp-controller="DtBagliSektor"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="card-body bg-light">
-        <form id="frmBagliSektorEkle" asp-controller="DtBagliSektor" asp-action="BagliSektorEkle" method="post">
-            <div class="form-group ">
-                <div class="card-body p-3">
-                    <div class="row mb-2">
-                        <div class="col-md-3">
-                            <label class="col-form-label col-form-label-sm">BagliSektor</label>
-                            <input type="Text" class="form-control form-control-sm " placeholder="BagliSektor" name="BagliSektorAdi" asp-for="@Model.BagliSektorAdi" required />
-                        </div>
-                        <div class="col-md-3">
-                            <label class="col-form-label col-form-label-sm">AnaSektor</label>
-                            <select id="anaSektor2" asp-for="@Model.AnaSektorId" class="form-control select2bs4" style="width: 100%;" required>
-                                <option selected disabled>AnaSektor Seçin</option>
-                                @foreach (var anaSektorList in ViewBag.anaSektorList)
-                                {
-                                    <option value="@anaSektorList.AnaSektorId">@anaSektorList.AnaSektorAdi</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                </div>
+      <form
+        id="frmBagliSektorEkle"
+        asp-controller="DtBagliSektor"
+        asp-action="BagliSektorEkle"
+        method="post"
+      >
+        <div class="form-group">
+          <div class="card-body p-3">
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm"
+                  >BagliSektor</label
+                >
+                <input
+                  type="Text"
+                  class="form-control form-control-sm"
+                  placeholder="BagliSektor"
+                  name="BagliSektorAdi"
+                  asp-for="@Model.BagliSektorAdi"
+                  required
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label col-form-label-sm"
+                  >AnaSektor</label
+                >
+                <select
+                  id="anaSektor2"
+                  asp-for="@Model.AnaSektorId"
+                  class="form-control select2bs4"
+                  style="width: 100%"
+                  required
+                >
+                  <option selected disabled>AnaSektor Seçin</option>
+                  @foreach (var anaSektorList in ViewBag.anaSektorList) {
+                  <option value="@anaSektorList.AnaSektorId">
+                    @anaSektorList.AnaSektorAdi
+                  </option>
+                  }
+                </select>
+              </div>
             </div>
-        </form>
+          </div>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
-

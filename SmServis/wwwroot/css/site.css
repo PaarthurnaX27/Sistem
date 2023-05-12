@@ -8,7 +8,11 @@
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #480ead;
 }
 
@@ -20,3 +24,54 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.not-allowed {
+  cursor: not-allowed !important;
+}
+
+/* DT Sayfalarının CSS Başlangıcı*/
+
+.nav-general {
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: -.1rem;
+}
+
+.nav-brand {
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.list-items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+@media screen and (max-width: 525px) {
+  .nav-brand {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .nav-general {
+    width: 80%;
+  }
+
+  .nav-brand {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .list-items {
+    width: 80%;
+  }
+}
+
+/* DT Sayfalarının CSS Bitişi*/

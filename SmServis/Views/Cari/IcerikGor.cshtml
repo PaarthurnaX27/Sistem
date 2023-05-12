@@ -63,264 +63,544 @@
         height: 31px !important;
     }
 </style>
-<div class="card bg-light">
-    <div class="card">
-        <div class="card-header bg-gray">
-            <div class="row justify-content-between">
-                <div class="col-md-4">
-                    <h3>Cari</h3>
-                </div>
-                <div class="col-md-2">
-                    <div class="row justify-content-end">
-                        <div class="col-4">
-                            <button type="submit" form="formCariGuncelle" asp-action="TumunuKaydet" asp-controller="TempCariPersonelKarti" class="lign-right btn btn-primary btn-lg float-right" disabled><i class="bi bi-database-fill-add"></i></button>
-                        </div>
-                        <div class="col-4">
-                            <a asp-action="Index" asp-controller="Cari" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Cari Gör</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right">
+          <li class="col-sm-4 mr-3">
+            <button
+              type="submit"
+              form="formCariGuncelle"
+              class="btn btn-info btn-lg not-allowed"
+              asp-action="TumunuKaydet"
+              asp-controller="TempCariPersonelKarti"
+              disabled
+            >
+              <i class="bi bi-database-add"></i>
+            </button>
+          </li>
+          @*
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="Index"
+              asp-controller="Cari"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-    <form id="formCariGuncelle" class="m-2" asp-action="GTempCariPersonelKarti" asp-controller="TempCariPersonelKarti" method="get">
+    <div class="card-body bg-light">
+      <form
+        id="formCariGuncelle"
+        class="m-2"
+        asp-action="GTempCariPersonelKarti"
+        asp-controller="TempCariPersonelKarti"
+        method="get"
+      >
         <div class="row mb-2">
-            <div class=" col-md-4">
-                <label class="col-form-label-sm">Cari Tipi</label>
-                <input type="Text" class="form-control form-control-sm " value="@cariTipi.CariTipiAciklama"  readonly>
-                <input type="hidden" value="@cariTipi.CariTipiId" asp-for="@Model.CariTipiId" readonly>
-                <input type="hidden" value="@ViewBag.id" asp-for="@Model.CariId" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="col-form-label-sm">Vergi No</label>
-                <input type="number" class="form-control form-control-sm" id="vergiNo" placeholder="Vergi Numarası" value="@cari.VergiNo" asp-for="@Model.VergiNo" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="col-form-label-sm" for="addHesapKodu">Cari Kodu</label>
-                <input type="number" class="form-control form-control-sm" id="hesapKodu" asp-for="@Model.HesapKodu" value="@cari.HesapKodu" readonly>
-            </div>
+          <div class="col-md-4">
+            <label class="col-form-label-sm">Cari Tipi</label>
+            <input
+              type="Text"
+              class="form-control form-control-sm"
+              value="@cariTipi.CariTipiAciklama"
+              readonly
+            />
+            <input
+              type="hidden"
+              value="@cariTipi.CariTipiId"
+              asp-for="@Model.CariTipiId"
+              readonly
+            />
+            <input
+              type="hidden"
+              value="@ViewBag.id"
+              asp-for="@Model.CariId"
+              readonly
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="col-form-label-sm">Vergi No</label>
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              id="vergiNo"
+              placeholder="Vergi Numarası"
+              value="@cari.VergiNo"
+              asp-for="@Model.VergiNo"
+              readonly
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="col-form-label-sm" for="addHesapKodu"
+              >Cari Kodu</label
+            >
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              id="hesapKodu"
+              asp-for="@Model.HesapKodu"
+              value="@cari.HesapKodu"
+              readonly
+            />
+          </div>
         </div>
         <div class="row">
-            <div class="col-md-4">
-                <label class="col-form-label-sm">Cari No</label>
-                <input type="number" class="form-control form-control-sm" placeholder="Firma No" value="@cari.FirmaNo" asp-for="@Model.FirmaNo"  readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="col-form-label-sm">Cari Adı</label>
-                <input type="text" class="form-control form-control-sm" value="@cari.CariAdi" asp-for="@Model.CariAdi" placeholder="FirmaAdi" readonly>
-            </div>
-            <div class="col-md-4">
-                <label class="col-form-label-sm">Şube</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Şube" readonly>
-            </div>
-
+          <div class="col-md-4">
+            <label class="col-form-label-sm">Cari No</label>
+            <input
+              type="number"
+              class="form-control form-control-sm"
+              placeholder="Firma No"
+              value="@cari.FirmaNo"
+              asp-for="@Model.FirmaNo"
+              readonly
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="col-form-label-sm">Cari Adı</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              value="@cari.CariAdi"
+              asp-for="@Model.CariAdi"
+              placeholder="FirmaAdi"
+              readonly
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="col-form-label-sm">Şube</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Şube"
+              readonly
+            />
+          </div>
         </div>
         <hr class="divider" />
-        <div class="  mt-3" id="isOk">
-            <div class="card ">
-                <div class="form-group ">
-                    <div class="card-body p-3">
-                        <div class="row mb-2">
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Cari Dili</label>
-                                <input type="text" class="form-control form-control-sm"
-                                       placeholder="Cari dili" value="@cari.CariDil" asp-for="@Model.CariDil"  readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Vergi Dairesi</label>
-                                <input type="Text" class="form-control form-control-sm " id="vergiDairesi" value="@cari.VergiDairesi" asp-for="@Model.VergiDairesi"  readonly
-                                       placeholder="Vergi Dairesi">
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Ükle</label>
-                                <input type="Text" class="form-control form-control-sm " value="@ulke.UlkeAdi"  readonly>
-                                <input type="hidden" value="@ulke.UlkeId" asp-for="@Model.UlkeId" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Şehir</label>
-                                <input type="Text" class="form-control form-control-sm " value="@sehir.SehirAdi"  readonly>
-                                <input type="hidden" class="form-control form-control-sm " value="@sehir.SehirId" asp-for="@Model.SehirId" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Telefon</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm " id="telefon" placeholder="Telefon" value="+ @um.TGetByID(cari.UlkeId).TelefonKodu @cari.Telefon1" readonly>
-                                    <input type="hidden" value="@cari.Telefon1" asp-for="@Model.Telefon1" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Telefon</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control form-control-sm " value="0 @sm.TGetByID(cari.SehirId).TelefonKodu @cari.Telefon2" readonly
-                                           placeholder="Telefon2">
-                                    <input type="hidden" value="@cari.Telefon2" asp-for="@Model.Telefon2" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">İlçe</label>
-                                <input type="Text" class="form-control form-control-sm " value="@ilce.IlceAdi" readonly>
-                                <input type="hidden" value="@ilce.IlceId" asp-for="@Model.IlceId" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Cari Durum</label>
-                                <input type="Text" class="form-control form-control-sm " value="@cariDurum.CariDurumAciklama" readonly>
-                                <input type="hidden" value="@cariDurum.CariDurumId" asp-for="@Model.CariDurumId" readonly>
-
-                            </div>
-
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Mail</label>
-                                <input class="form-control form-control-sm" placeholder="Mail Adresi" type="text" value="@cari.MailAdresi1" asp-for="@Model.MailAdresi1" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Mail</label>
-                                <input class="form-control form-control-sm" placeholder="Mail Adresi 2" type="text" value="@cari.MailAdresi2" asp-for="@Model.MailAdresi2" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Sektör</label>
-                                <input type="Text" class="form-control form-control-sm " value="@anaSektor.AnaSektorAdi" readonly>
-                                <input type="hidden" value="@anaSektor.AnaSektorId" asp-for="@Model.AnaSektorId" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Bağlı Sektör</label>
-                                <input type="Text" class="form-control form-control-sm " id="vergiDairesi" value="@bagliSektor.BagliSektorAdi" readonly>
-                                <input type="hidden" value="@bagliSektor.BagliSektorId" asp-for="@Model.BagliSektorId" readonly>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-md-6">
-                                <label class="col-form-label-sm">Adres</label>
-                                <input class="form-control form-control-sm" placeholder="Adres" type="text" value="@cari.Adres" asp-for="@Model.Adres" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Web Sitesi</label>
-                                <input type="text" class="form-control form-control-sm " id="webSitesi" asp-for="@Model.WebSitesi" value="@cari.WebSitesi" placeholder="Web Sitesi" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="col-form-label-sm">Para Birimi</label>
-                                <input type="Text" class="form-control form-control-sm " id="vergiDairesi" value="@paraBirimi.ParaBirimiAdi @paraBirimi.ParaBirimiSimge" readonly>
-                                <input type="hidden" value="@paraBirimi.ParaBirimiId" asp-for="@Model.ParaBirimiId" readonly>
-                            </div>
-                        </div>
-                        <div class=" row mb-2">
-                            <div class="col-md-3 mr-4">
-                                <input class=" mr-3" type="checkbox" checked="@cari.eIrsaliyeMukellefi" onclick="return false;" >
-                                <label class="form-check-label mr-3">e-İrsaliye Mükellefi</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input class="form-check-input" type="checkbox" checked="@cari.eFaturaMukellefi" onclick="return false;" >
-                                <label class="form-check-label">e-Fatura Mükellefi</label>
-                            </div>
-                        </div>
+        <div class="mt-3" id="isOk">
+          <div class="card">
+            <div class="form-group">
+              <div class="card-body p-3">
+                <div class="row mb-2">
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Cari Dili</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      placeholder="Cari dili"
+                      value="@cari.CariDil"
+                      asp-for="@Model.CariDil"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Vergi Dairesi</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      id="vergiDairesi"
+                      value="@cari.VergiDairesi"
+                      asp-for="@Model.VergiDairesi"
+                      readonly
+                      placeholder="Vergi Dairesi"
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Ükle</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      value="@ulke.UlkeAdi"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      value="@ulke.UlkeId"
+                      asp-for="@Model.UlkeId"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Şehir</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      value="@sehir.SehirAdi"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      class="form-control form-control-sm"
+                      value="@sehir.SehirId"
+                      asp-for="@Model.SehirId"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Telefon</label>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        id="telefon"
+                        placeholder="Telefon"
+                        value="+ @um.TGetByID(cari.UlkeId).TelefonKodu @cari.Telefon1"
+                        readonly
+                      />
+                      <input
+                        type="hidden"
+                        value="@cari.Telefon1"
+                        asp-for="@Model.Telefon1"
+                        readonly
+                      />
                     </div>
-
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Telefon</label>
+                    <div class="input-group">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        value="0 @sm.TGetByID(cari.SehirId).TelefonKodu @cari.Telefon2"
+                        readonly
+                        placeholder="Telefon2"
+                      />
+                      <input
+                        type="hidden"
+                        value="@cari.Telefon2"
+                        asp-for="@Model.Telefon2"
+                        readonly
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">İlçe</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      value="@ilce.IlceAdi"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      value="@ilce.IlceId"
+                      asp-for="@Model.IlceId"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Cari Durum</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      value="@cariDurum.CariDurumAciklama"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      value="@cariDurum.CariDurumId"
+                      asp-for="@Model.CariDurumId"
+                      readonly
+                    />
+                  </div>
                 </div>
+                <div class="row mb-2">
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Mail</label>
+                    <input
+                      class="form-control form-control-sm"
+                      placeholder="Mail Adresi"
+                      type="text"
+                      value="@cari.MailAdresi1"
+                      asp-for="@Model.MailAdresi1"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Mail</label>
+                    <input
+                      class="form-control form-control-sm"
+                      placeholder="Mail Adresi 2"
+                      type="text"
+                      value="@cari.MailAdresi2"
+                      asp-for="@Model.MailAdresi2"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Sektör</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      value="@anaSektor.AnaSektorAdi"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      value="@anaSektor.AnaSektorId"
+                      asp-for="@Model.AnaSektorId"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Bağlı Sektör</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      id="vergiDairesi"
+                      value="@bagliSektor.BagliSektorAdi"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      value="@bagliSektor.BagliSektorId"
+                      asp-for="@Model.BagliSektorId"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-6">
+                    <label class="col-form-label-sm">Adres</label>
+                    <input
+                      class="form-control form-control-sm"
+                      placeholder="Adres"
+                      type="text"
+                      value="@cari.Adres"
+                      asp-for="@Model.Adres"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Web Sitesi</label>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="webSitesi"
+                      asp-for="@Model.WebSitesi"
+                      value="@cari.WebSitesi"
+                      placeholder="Web Sitesi"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="col-form-label-sm">Para Birimi</label>
+                    <input
+                      type="Text"
+                      class="form-control form-control-sm"
+                      id="vergiDairesi"
+                      value="@paraBirimi.ParaBirimiAdi @paraBirimi.ParaBirimiSimge"
+                      readonly
+                    />
+                    <input
+                      type="hidden"
+                      value="@paraBirimi.ParaBirimiId"
+                      asp-for="@Model.ParaBirimiId"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <div class="col-md-3 mr-4">
+                    <input
+                      class="mr-3"
+                      type="checkbox"
+                      checked="@cari.eIrsaliyeMukellefi"
+                      onclick="return false;"
+                    />
+                    <label class="form-check-label mr-3"
+                      >e-İrsaliye Mükellefi</label
+                    >
+                  </div>
+                  <div class="col-md-3">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      checked="@cari.eFaturaMukellefi"
+                      onclick="return false;"
+                    />
+                    <label class="form-check-label">e-Fatura Mükellefi</label>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
-    </form>
+      </form>
 
-    <h4 class="mt-5 "></h4>
-    <nav>
+      <h4 class="mt-5"></h4>
+      <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <a
+            class="nav-link active btn btn-white"
+            data-toggle="tab"
+            data-target="#ilgiliKisilerTab"
+            role="tab"
+          >
+            <i class="bi bi-card-list"></i>
+            İlgili Kişiler
+          </a>
 
-            <a class="nav-link active btn btn-white" data-toggle="tab" data-target="#ilgiliKisilerTab" role="tab">
-                <i class="bi bi-card-list"></i>
-                İlgili Kişiler
-            </a>
+          <a
+            class="nav-link btn btn-white"
+            data-toggle="tab"
+            data-target="#muhasebeTab"
+            role="tab"
+          >
+            <i class="bi bi-card-list"></i> Muhasebe
+          </a>
 
+          <a
+            class="nav-link btn btn-white"
+            data-toggle="tab"
+            data-target="#projeTab"
+            role="tab"
+          >
+            <i class="bi bi-card-list"></i>
+            Proje
+          </a>
 
-            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#muhasebeTab" role="tab">
-                <i class="bi bi-card-list"></i> Muhasebe
-            </a>
+          <a
+            class="nav-link btn btn-white"
+            data-toggle="tab"
+            data-target="#eklenenlerTab"
+            role="tab"
+          >
+            <i class="bi bi-card-list"></i> Eklenenler
+          </a>
 
+          <a
+            class="nav-link btn btn-white"
+            data-toggle="tab"
+            data-target="#danismanBilgileriTab"
+            role="tab"
+          >
+            <i class="bi bi-card-list"></i> Danışman Bilgileri
+          </a>
 
-            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#projeTab" role="tab">
-                <i class="bi bi-card-list"></i>
-                Proje
-            </a>
-
-
-            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#eklenenlerTab" role="tab">
-                <i class="bi bi-card-list"></i> Eklenenler
-            </a>
-
-
-            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#danismanBilgileriTab" role="tab">
-                <i class="bi bi-card-list"></i> Danışman Bilgileri
-            </a>
-
-
-            <a class="nav-link btn btn-white" data-toggle="tab" data-target="#faturaTab" role="tab">
-                <i class="bi bi-card-list"></i> Fatura
-            </a>
-
-
+          <a
+            class="nav-link btn btn-white"
+            data-toggle="tab"
+            data-target="#faturaTab"
+            role="tab"
+          >
+            <i class="bi bi-card-list"></i> Fatura
+          </a>
         </div>
-    </nav>
+      </nav>
 
-    <div class=" container-fluid bg-white p-4 ">
+      <div class="container-fluid bg-white p-4">
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane  fade show active" id="ilgiliKisilerTab" role="tabpanel">
-                <h4>İlgili Kişiler</h4>
-                <div class="col-12">
-                    <partial name="~/Views/TempCariPersonelKarti/GTempCariPersonelKarti.cshtml" />
-                </div>
+          <div
+            class="tab-pane fade show active"
+            id="ilgiliKisilerTab"
+            role="tabpanel"
+          >
+            <h4>İlgili Kişiler</h4>
+            <div class="col-12">
+              <partial
+                name="~/Views/TempCariPersonelKarti/GTempCariPersonelKarti.cshtml"
+              />
             </div>
-            <div class="tab-pane fade" id="muhasebeTab" role="tabpanel" data-toggle="tab">
-                Sonradan Analizi Yapılacak
-            </div>
-            <div class="tab-pane fade" id="projeTab" role="tabpanel" data-toggle="tab">
-                <h4>Proje</h4>
-                <table id="tblServis" class="table table-head-fixed text-nowrap table-hover table-striped"
-                       style='font-size:75%'>
-                    <thead>
-                        <tr class="text-center">
-                            <th class="text-left">Seç</th>
-                            <th>Proje No</th>
-                            <th>Program</th>
-                            <th class="text-center">Proje Tarih Aralığı</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Enumerable.Count(ViewBag.projeList) != 0)
-                        {
-                            foreach (var item in ViewBag.projeList)
-                            {
-                                <tr class="text-center" ondblclick="ProjeGuncelle()">
-                                    <td class="text-left"><input name="radio" type="radio" value="@item.ProjeId" /></td>
-                                    <td>@item.ProjeNo</td>
-                                    @*<td>@cm.TGetByID(item.CariId).CariAdi</td>*@
-                                    <td>@prgm.TGetByID(item.ProgramId).ProgramAdi</td>
-                                    <td>@item.ProjeBaslangicTarihi.ToShortDateString() - @item.ProjeBitisTarihi.ToShortDateString() </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane fade" id="eklenenlerTab" role="tabpanel" data-toggle="tab">
-                Cariye özel eklenmesi gereken dosyalar, resimler, dökümanlar
-                vb eklenebilecek. Proje bazlı eklenmesi gereken bir durumda
-                proje modülünden ilgili projeye eklenecek.
-            </div>
-            <div class="tab-pane fade" id="danismanBilgileriTab" role="tabpanel" data-toggle="tab">
-                Müşterinin projesine tanımlanmış danışmanları proje bazlı
-                görebileceğimiz sekme.
-            </div>
-            <div class="tab-pane fade" id="faturaTab" role="tabpanel" data-toggle="tab">
-                Fatura Mailleri
-            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="muhasebeTab"
+            role="tabpanel"
+            data-toggle="tab"
+          >
+            Sonradan Analizi Yapılacak
+          </div>
+          <div
+            class="tab-pane fade"
+            id="projeTab"
+            role="tabpanel"
+            data-toggle="tab"
+          >
+            <h4>Proje</h4>
+            <table
+              id="tblServis"
+              class="table table-head-fixed text-nowrap table-hover table-striped"
+              style="font-size: 75%"
+            >
+              <thead>
+                <tr class="text-center">
+                  <th class="text-left">Seç</th>
+                  <th>Proje No</th>
+                  <th>Program</th>
+                  <th class="text-center">Proje Tarih Aralığı</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if (Enumerable.Count(ViewBag.projeList) != 0) { foreach (var
+                item in ViewBag.projeList) {
+                <tr class="text-center" ondblclick="ProjeGuncelle()">
+                  <td class="text-left">
+                    <input name="radio" type="radio" value="@item.ProjeId" />
+                  </td>
+                  <td>@item.ProjeNo</td>
+                  @*
+                  <td>@cm.TGetByID(item.CariId).CariAdi</td>
+                  *@
+                  <td>@prgm.TGetByID(item.ProgramId).ProgramAdi</td>
+                  <td>
+                    @item.ProjeBaslangicTarihi.ToShortDateString() -
+                    @item.ProjeBitisTarihi.ToShortDateString()
+                  </td>
+                </tr>
+                } }
+              </tbody>
+            </table>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="eklenenlerTab"
+            role="tabpanel"
+            data-toggle="tab"
+          >
+            Cariye özel eklenmesi gereken dosyalar, resimler, dökümanlar vb
+            eklenebilecek. Proje bazlı eklenmesi gereken bir durumda proje
+            modülünden ilgili projeye eklenecek.
+          </div>
+          <div
+            class="tab-pane fade"
+            id="danismanBilgileriTab"
+            role="tabpanel"
+            data-toggle="tab"
+          >
+            Müşterinin projesine tanımlanmış danışmanları proje bazlı
+            görebileceğimiz sekme.
+          </div>
+          <div
+            class="tab-pane fade"
+            id="faturaTab"
+            role="tabpanel"
+            data-toggle="tab"
+          >
+            Fatura Mailleri
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-
-
-
-
-
-
-

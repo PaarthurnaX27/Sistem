@@ -36,102 +36,176 @@
         height: 31px !important;
     }
 </style>
-<div id="divContent" class="card  bg-light">
-    <div class="card-header bg-gray">
-        <div class="row justify-content-between">
-            <div class="col-md-3">
-                <div class="row">
-                    <h3>
-                        Şehir Güncelle
-                    </h3>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="row justify-content-end">
-                    <div class="col-4">
-                        <button form="frmSehirGuncelle" type="submit" class=" align-right btn btn-info btn-lg"> <i class="bi bi-database-fill-add"></i></button>
-                    </div>
-                    <div class="col-4">
-                        <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#modalSil"><i class="bi bi-trash3-fill" style="color: white;"></i></button>
-                    </div>
-                    <div class="col-4">
-                        <a asp-action="DtSehir" asp-controller="DtSehir" class=" btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <form id="frmSehirGuncelle" asp-controller="DtSehir" asp-action="SehirGuncelle" asp-route-sehirId="@sehirId" asp-route-olusturan="@sehir.Olusturan" asp-route-olusturulmaTarihi="@sehir.OlusturulmaTarih" method="post">
-        <div class="form-group ">
-            <div class="card-body p-3">
-                <div class="row mb-2">
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Şehir Adı</label>
-                        <input type="Text" class="form-control form-control-sm text-uppercase" value="@sehir.SehirAdi" placeholder="Şehir Adı" name="SehirAdi" asp-for="@Model.SehirAdi">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Plaka Kodu</label>
-                        <input type="number" class="form-control form-control-sm " value="@sehir.PlakaKodu" name="PlakaKodu" asp-for="@Model.PlakaKodu"
-                               placeholder="Plaka Kodu">
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Telefon Kodu</label>
-                        <input class="form-control form-control-sm" placeholder="Telefon Kodu" type="number" value="@sehir.TelefonKodu" name="TelefonKodu" asp-for="@Model.TelefonKodu" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Ülke</label>
-                        <select id="ulke2" asp-for="@Model.UlkeId" class="form-control select2bs4" style="width: 100%;">
-                            <option selected value="@ulke.UlkeId">@ulke.UlkeAdi</option>
-                            @foreach (var ulkeList in ViewBag.ulkeList)
-                            {
-                                <option value="@ulkeList.UlkeId">@ulkeList.UlkeAdi</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="row mb-2">
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Posta Kodu</label>
-                        <input class="form-control form-control-sm" placeholder="Posta Kodu" type="number" value="@sehir.PostaKodu" name="PostaKodu" asp-for="@Model.PostaKodu" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Oluşturan</label>
-                        <label class="form-control form-control-sm ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Oluşturulma Tarihi</label>
-                        <label class="form-control form-control-sm">@sehir.OlusturulmaTarih.Date.ToShortDateString()</label>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="col-form-label-sm">Son Değiştirme Tarihi</label>
-                        <label class="form-control form-control-sm">@sehir.SonDegistirmeTarih.Date.ToShortDateString()</label>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </form>
-</div>
 
-<div class="modal fade" id="modalSil">
-    <div class="modal-dialog">
+<div id="divContent" class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Şehir Güncelle</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right">
+          <li class="col-sm-4 mr-3">
+            <button
+              type="submit"
+              form="frmSehirGuncelle"
+              class="btn btn-info btn-lg"
+            >
+              <i class="bi bi-database-add"></i>
+            </button>
+          </li>
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            >
+              <i class="bi bi-trash3-fill"></i>
+            </button>
+          </li>
+          <li class="col-sm-4">
+            <a
+              asp-action="DtSehir"
+              asp-controller="DtSehir"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <form
+        id="frmSehirGuncelle"
+        asp-controller="DtSehir"
+        asp-action="SehirGuncelle"
+        asp-route-sehirId="@sehirId"
+        asp-route-olusturan="@sehir.Olusturan"
+        asp-route-olusturulmaTarihi="@sehir.OlusturulmaTarih"
+        method="post"
+      >
+        <div class="form-group">
+          <div class="card-body p-3">
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Şehir Adı</label>
+                <input
+                  type="Text"
+                  class="form-control form-control-sm text-uppercase"
+                  value="@sehir.SehirAdi"
+                  placeholder="Şehir Adı"
+                  name="SehirAdi"
+                  asp-for="@Model.SehirAdi"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Plaka Kodu</label>
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  value="@sehir.PlakaKodu"
+                  name="PlakaKodu"
+                  asp-for="@Model.PlakaKodu"
+                  placeholder="Plaka Kodu"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Telefon Kodu</label>
+                <input
+                  class="form-control form-control-sm"
+                  placeholder="Telefon Kodu"
+                  type="number"
+                  value="@sehir.TelefonKodu"
+                  name="TelefonKodu"
+                  asp-for="@Model.TelefonKodu"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Ülke</label>
+                <select
+                  id="ulke2"
+                  asp-for="@Model.UlkeId"
+                  class="form-control select2bs4"
+                  style="width: 100%"
+                >
+                  <option selected value="@ulke.UlkeId">@ulke.UlkeAdi</option>
+                  @foreach (var ulkeList in ViewBag.ulkeList) {
+                  <option value="@ulkeList.UlkeId">@ulkeList.UlkeAdi</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Posta Kodu</label>
+                <input
+                  class="form-control form-control-sm"
+                  placeholder="Posta Kodu"
+                  type="number"
+                  value="@sehir.PostaKodu"
+                  name="PostaKodu"
+                  asp-for="@Model.PostaKodu"
+                />
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Oluşturan</label>
+                <label class="form-control form-control-sm"
+                  >@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label
+                >
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Oluşturulma Tarihi</label>
+                <label class="form-control form-control-sm"
+                  >@sehir.OlusturulmaTarih.Date.ToShortDateString()</label
+                >
+              </div>
+              <div class="col-md-3">
+                <label class="col-form-label-sm">Son Değiştirme Tarihi</label>
+                <label class="form-control form-control-sm"
+                  >@sehir.SonDegistirmeTarih.Date.ToShortDateString()</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal fade" id="modalSil">
+      <div class="modal-dialog">
         <div class="modal-content bg-danger">
-            <div class="modal-header">
-                <h4 class="modal-title">Şehir Silinecek</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Silmek istediğinizden emin misiniz?&hellip;</p>
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-outline-light" data-dismiss="modal">İptal</button>
-                <a href="/DtSehir/DeleteSehir/@sehirId" class="btn btn-outline-light">Sil</a>
-            </div>
+          <div class="modal-header">
+            <h4 class="modal-title">Şehir Silinecek</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Silmek istediğinizden emin misiniz?&hellip;</p>
+          </div>
+          <div class="modal-footer justify-content-between">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              data-dismiss="modal"
+            >
+              İptal
+            </button>
+            <a
+              href="/DtSehir/DeleteSehir/@sehirId"
+              class="btn btn-outline-light"
+              >Sil</a
+            >
+          </div>
         </div>
-
+      </div>
     </div>
-
+  </div>
 </div>
-
