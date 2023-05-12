@@ -376,6 +376,7 @@
             </div>
           </div>
 
+<<<<<<< HEAD
           <!-- Sidebar Menu -->
           <nav class="mt-2">
             <ul
@@ -604,6 +605,277 @@
             </ul>
           </nav>
           <!-- /.sidebar-menu -->
+=======
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="~/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle elevation-2"
+                             alt="User Image">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">@kullanici.KullaniciAdi @kullanici.KullaniciSoyadi</a>
+                    </div>
+                </div>
+
+
+                <!-- SidebarSearch Form -->
+                <div class="form-inline">
+                    <div class="input-group" data-widget="sidebar-search">
+                        <input class="form-control form-control-sidebar" type="search" placeholder="Search"
+                               aria-label="Search">
+                        <div class="input-group-append">
+                            <button class="btn btn-sidebar">
+                                <i class="fas fa-search fa-fw"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+    with font-awesome or any other icon font library -->
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-card-text"></i>
+                                <p>
+                                    &nbsp; Cari Kart
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="Index" asp-controller="Cari" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cari Kart</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="IlgiliKisiler" asp-controller="IlgiliKisiler" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>İlgili Kişi Ekle</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-action="CariPersonelKarti" asp-controller="CariPersonelKarti"
+                                       class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cari Personel Kartı</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-person-vcard"></i>
+                                <p>
+                                    &nbsp; Personel Kartı
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="PersonelKarti" asp-controller="PersonelKarti" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Personel Kartı</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-diagram-3"></i>
+                                <p>
+                                    &nbsp; Proje Modülü
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="Proje" asp-controller="Proje" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Proje</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-postcard"></i>
+                                <p>
+                                    &nbsp; Malzeme Kartı
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="" asp-controller="" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-wallet2"></i>
+                                <p>
+                                    &nbsp; Hedef-Bütçe Modülü
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="" asp-controller="" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="bi bi-file-ruled"></i>
+                                <p>
+                                    &nbsp; Servis Modülü
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-action="ServisBilgileri" asp-controller="Servis" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Servis Bilgileri</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/data.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="pages/tables/jsgrid.html" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nav Link</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Index" asp-controller="DestekTablosu" class="nav-link">
+                                <i class="bi bi-newspaper"></i>
+                                <p>
+                                    &nbsp; Destek Tablosu
+
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Numarator" asp-controller="Numarator" class="nav-link">
+                                <i class="bi bi-file-binary"></i>
+                                <p>
+                                    &nbsp; Numaratör
+
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="CıkısYap" asp-controller="Home" class="nav-link">
+                                <i class="bi bi-x-circle"></i>
+                                <p>
+                                    &nbsp; Çıkış Yap
+
+                                </p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                @* <div class="container-fluid">
+                    <div class="row mb-2">
+                    <div class="col-sm-6">
+                    <h1 class="m-0"></h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard v1</li>
+                    </ol>
+                    </div><!-- /.col -->
+                    </div><!-- /.row -->
+                    </div><!-- /.container-fluid --> *@
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+
+                    @RenderBody()
+                </div>
+            </section>
+            <!-- /.content -->
+>>>>>>> 646de4cb605ba26c585571790c93cfdc4b710ebc
         </div>
         <!-- /.sidebar -->
       </aside>

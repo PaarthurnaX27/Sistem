@@ -3,6 +3,7 @@ using System;
 using DataAccessLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(SmServisContext))]
-    partial class SmServisContextModelSnapshot : ModelSnapshot
+    [Migration("20230510065520_mig_102")]
+    partial class mig102
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -758,25 +761,16 @@ namespace DataAccessLayer.Migrations
                     b.Property<int>("ArttirmaAraligi")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Ay")
+                        .HasColumnType("text");
+
                     b.Property<int>("BaslangicSayisi")
                         .HasColumnType("integer");
 
                     b.Property<string>("DoldurmaKarakteri")
                         .HasColumnType("text");
 
-                    b.Property<string>("Karakter1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Karakter2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Karakter3")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Karakter4")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Karakter5")
+                    b.Property<string>("Gun")
                         .HasColumnType("text");
 
                     b.Property<int?>("Numara")
@@ -795,54 +789,24 @@ namespace DataAccessLayer.Migrations
                     b.Property<string>("Parametre2")
                         .HasColumnType("text");
 
+                    b.Property<int>("ParcaTipi")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ParcaUzunlugu")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Sira1")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Sira2")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Sira3")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Sira4")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Sira5")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Sira6")
                         .HasColumnType("integer");
 
                     b.Property<string>("SonEk")
                         .HasColumnType("text");
 
+                    b.Property<string>("YenilemeParcalari")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Yil")
+                        .HasColumnType("text");
+
                     b.HasKey("NumaratorId");
 
                     b.ToTable("Numarators");
-                });
-
-            modelBuilder.Entity("EntityLayer.Concrete.NumaratorDeger", b =>
-                {
-                    b.Property<int>("NumaratorDegerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NumaratorDegerId"));
-
-                    b.Property<int>("NumaratorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SimdikiDeger")
-                        .HasColumnType("integer");
-
-                    b.HasKey("NumaratorDegerId");
-
-                    b.HasIndex("NumaratorId");
-
-                    b.ToTable("NumaratorDegers");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Oncelik", b =>
@@ -2542,17 +2506,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Modul");
-                });
-
-            modelBuilder.Entity("EntityLayer.Concrete.NumaratorDeger", b =>
-                {
-                    b.HasOne("EntityLayer.Concrete.Numarator", "Numarator")
-                        .WithMany()
-                        .HasForeignKey("NumaratorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Numarator");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Personel", b =>

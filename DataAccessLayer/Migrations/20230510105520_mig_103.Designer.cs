@@ -3,6 +3,7 @@ using System;
 using DataAccessLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(SmServisContext))]
-    partial class SmServisContextModelSnapshot : ModelSnapshot
+    [Migration("20230510105520_mig_103")]
+    partial class mig103
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -822,27 +825,6 @@ namespace DataAccessLayer.Migrations
                     b.HasKey("NumaratorId");
 
                     b.ToTable("Numarators");
-                });
-
-            modelBuilder.Entity("EntityLayer.Concrete.NumaratorDeger", b =>
-                {
-                    b.Property<int>("NumaratorDegerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("NumaratorDegerId"));
-
-                    b.Property<int>("NumaratorId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SimdikiDeger")
-                        .HasColumnType("integer");
-
-                    b.HasKey("NumaratorDegerId");
-
-                    b.HasIndex("NumaratorId");
-
-                    b.ToTable("NumaratorDegers");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Oncelik", b =>
@@ -2542,17 +2524,6 @@ namespace DataAccessLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Modul");
-                });
-
-            modelBuilder.Entity("EntityLayer.Concrete.NumaratorDeger", b =>
-                {
-                    b.HasOne("EntityLayer.Concrete.Numarator", "Numarator")
-                        .WithMany()
-                        .HasForeignKey("NumaratorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Numarator");
                 });
 
             modelBuilder.Entity("EntityLayer.Concrete.Personel", b =>

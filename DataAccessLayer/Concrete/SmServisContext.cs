@@ -58,6 +58,8 @@ namespace DataAccessLayer.Concrete
 		public DbSet<TempCariProgram> TempCariPrograms { get; set; }
 		public DbSet<TempFaturaMail> TempFaturaMails { get; set; }
 		public DbSet<FaturaMail> FaturaMails { get; set; }
+		public DbSet<Numarator> Numarators { get; set; }
+		public DbSet<NumaratorDeger> NumaratorDegers { get; set; }
 	}
 }
 

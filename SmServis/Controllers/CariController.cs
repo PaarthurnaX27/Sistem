@@ -443,6 +443,7 @@ namespace SmServis.Controllers
             Vb();
             HttpContext.Session.SetInt32("CariId",id);
             var cari = cm.TGetByID(id);
+            HttpContext.Session.SetInt32("CariId", id);
             ViewBag.id = id;
             ViewBag.projeList = prjm.TGetList().Where(x => x.CariId == id && x.Silindi == false);
             ViewBag.tempPersonelList = tcpm.TGetList().Where(x => x.CariPersonelId == 0);

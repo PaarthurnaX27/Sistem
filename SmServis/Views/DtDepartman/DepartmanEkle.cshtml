@@ -1,3 +1,62 @@
+<<<<<<< HEAD
+﻿@model EntityLayer.Concrete.Departman
+@{
+    var error = TempData["error"];
+    if (error != null)
+    {
+        <script type="text/javascript">window.onload = function () {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Ekleme İşlemi Başarısız Oldu'
+                })
+
+            };</script>
+    }
+}
+
+<div class="card">
+    <div class="card-header bg-gray rounded-1">
+            <div class="row justify-content-between">
+                <div class="col-sm-6 col-md-3" >
+                    <div class="row">
+                        <h3 class="p-2">Departman Ekle</h3>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                        <div class="row justify-content-around float-right mx-1">
+                            <div class="col-sm-6 col-md-4">
+                                <h4>
+                                    <button type="submit" class="btn btn-info btn-lg" form="frmDepartmanEkle"><i class="bi bi-database-add"></i></button>
+                                </h4>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <a class="btn btn-lg btn-danger" asp-controller="DtDepartman" asp-action="DtDepartman" form="addCariForm"><i class="bi bi-x-lg"></i></a>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    <form id="frmDepartmanEkle" asp-controller="DtDepartman" asp-action="DepartmanEkle" method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Departman</label>
+                        <input type="Text" class="form-control text-capitalize" placeholder="Departman" asp-for="@Model.DepartmanAdi" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+=======
 ﻿@model EntityLayer.Concrete.Departman
 @{
     var error = TempData["error"];
@@ -81,7 +140,25 @@
             </div>
           </div>
         </div>
+<<<<<<< HEAD
       </form>
     </div>
   </div>
 </div>
+=======
+
+    <form id="frmDepartmanEkle" asp-controller="DtDepartman" asp-action="DepartmanEkle" method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Departman</label>
+                        <input type="Text" class="form-control text-capitalize" placeholder="Departman" asp-for="@Model.DepartmanAdi" required />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+>>>>>>> frontend
+</div>
+>>>>>>> 646de4cb605ba26c585571790c93cfdc4b710ebc
