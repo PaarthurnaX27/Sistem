@@ -25,7 +25,7 @@ namespace BusinessLayer.Concrete
 
         public Pozisyon TGetByID(int id)
         {
-            return _pozisyonDal.Get(x => x.DepartmanId == id);
+            return _pozisyonDal.Get(x => x.PozisyonId == id);
         }
 
         public List<Pozisyon> TGetList()

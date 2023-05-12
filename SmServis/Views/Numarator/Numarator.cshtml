@@ -1,0 +1,229 @@
+﻿<style>
+    .select2-selection__rendered {
+        line-height: 31px !important;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 31px !important;
+    }
+</style>
+<form asp-action="Numarator" asp-controller="Numarator" method="post">
+    <div class="row bg-secondary justify-content-around">
+        <div class="col-md-1">
+            <label class="col-form-label col-form-label-sm">Ön Ek</label>
+            <input class="form-control form-control-sm" name="onEk" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="col-12 col-form-label col-form-label-sm  text-center">Sıra</label>
+                <select class="form-control select2bs4" style="width: 100%;" name="sira1">
+                    <option selected disabled>Tip Seç</option>
+                    <option value="1">Gün</option>
+                    <option value="2">Ay</option>
+                    <option value="3">Yıl</option>
+                    <option value="4">Otomatik</option>
+                    <option value="5">Parametre1</option>
+                    <option value="6">Parametre2</option>
+                </select>
+            </div>
+        </div>
+        <div style="width:30px">
+            <label class=" col-12 text-center ">-</label>
+            <input class="form-control form-control-sm" maxlength="1" name="karakter1" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm text-center col-12">Sıra</label>
+                <select class="form-control select2bs4" style="width: 100%;" name="sira2">
+                    <option selected disabled>Tip Seç</option>
+                    <option value="1">Gün</option>
+                    <option value="2">Ay</option>
+                    <option value="3">Yıl</option>
+                    <option value="4">Otomatik</option>
+                    <option value="5">Parametre1</option>
+                    <option value="6">Parametre2</option>
+                </select>
+            </div>
+        </div>
+        <div style="width:30px">
+            <label class="col-12 text-center">-</label>
+            <input class="form-control form-control-sm" maxlength="1" name="karakter2" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
+                <select class="form-control select2bs4" style="width: 100%;" name="sira3">
+                    <option selected disabled>Tip Seç</option>
+                    <option value="1">Gün</option>
+                    <option value="2">Ay</option>
+                    <option value="3">Yıl</option>
+                    <option value="4">Otomatik</option>
+                    <option value="5">Parametre1</option>
+                    <option value="6">Parametre2</option>
+                </select>
+            </div>
+        </div>
+        <div style="width:30px">
+            <label class=" col-12 text-center ">-</label>
+            <input class="form-control form-control-sm" maxlength="1" name="karakter3" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
+                <select class="form-control select2bs4" style="width: 100%;" name="sira4">
+                    <option selected disabled>Tip Seç</option>
+                    <option value="1">Gün</option>
+                    <option value="2">Ay</option>
+                    <option value="3">Yıl</option>
+                    <option value="4">Otomatik</option>
+                    <option value="5">Parametre1</option>
+                    <option value="6">Parametre2</option>
+                </select>
+            </div>
+        </div>
+        <div style="width:30px">
+            <label class=" col-12 text-center ">-</label>
+            <input class="form-control form-control-sm" maxlength="1" name="karakter4" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
+                <select class="form-control select2bs4" style="width: 100%;" name="sira5">
+                    <option selected disabled>Tip Seç</option>
+                    <option value="1">Gün</option>
+                    <option value="2">Ay</option>
+                    <option value="3">Yıl</option>
+                    <option value="4">Otomatik</option>
+                    <option value="5">Parametre1</option>
+                    <option value="6">Parametre2</option>
+                </select>
+            </div>
+        </div>
+        <div style="width:30px">
+            <label class=" col-12 text-center ">-</label>
+            <input class="form-control form-control-sm" maxlength="1" name="karakter5" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
+                <select class="form-control select2bs4" style="width: 100%;" name="sira6">
+                    <option selected disabled>Tip Seç</option>
+                    <option value="1">Gün</option>
+                    <option value="2">Ay</option>
+                    <option value="3">Yıl</option>
+                    <option value="4">Otomatik</option>
+                    <option value="5">Parametre1</option>
+                    <option value="6">Parametre2</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <label class="col-form-label col-form-label-sm col-12 text-right">Son Ek</label>
+            <input class="form-control form-control-sm" name="sonEk" />
+        </div>
+    </div>
+    <div class="row justify-content-around">
+        <div class="col-md-2">
+            <label class="col-form-label col-form-label-sm">Numarator Açıklama</label>
+            <input class="form-control form-control-sm" value="@ViewBag.numarator" name="numaratorAciklama" required />
+        </div>
+        <div class="col-md-2">
+            <label class="col-form-label col-form-label-sm">Parça Uzunluğu</label>
+            <input type="number" class="form-control form-control-sm" name="parcaUzunlugu" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="col-form-label col-form-label-sm">Başlangıç Sayısı</label>
+            <input type="number" class="form-control form-control-sm" value="0" name="baslangicSayisi" />
+        </div>
+        <div class="col-md-2">
+            <label class="col-form-label col-form-label-sm">Arttırma Aralığı</label>
+            <input type="number" class="form-control form-control-sm" name="arttirmaAraligi" />
+        </div>
+
+        <div class="col-md-2">
+            <label class="col-form-label col-form-label-sm">Doldurma Karakteri</label>
+            <input class="form-control form-control-sm" name="doldurmaKarakteri" />
+        </div>
+    </div>
+
+    @*<div class="col-md-3">
+        <label class="col-form-label col-form-label-sm">Parça Tipi</label>
+        <select id="parcaTipi" class="form-control select2bs4" name="parcaTipi" style="width: 100%;" required>
+            <option selected disabled>Parça Tipi Seçin</option>
+            <option value="1">Gün</option>
+            <option value="2">Ay</option>
+            <option value="3">Yıl</option>
+            <option value="4">Otomatik</option>
+            <option value="5">Parametre1</option>
+            <option value="6">Parametre2</option>
+        </select>
+    </div>*@
+
+
+    <button type="submit" class="btn btn-primary">a</button>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Parça Tipi</th>
+            <th>Parça Uzunluğu</th>
+            <th>Ön Ek</th>
+            <th>Başlangıç Sayısı</th>
+            <th>Arttırma Aralığı</th>
+            <th>Yenileme Parçaları</th>
+            <th>Doldurma Karakteri</th>
+            <th>Son Ek</th>
+        </tr>
+    </thead>
+    @*<tbody>
+        @if (Enumerable.Count(ViewBag.numaratorList) != 0)
+        {
+            @foreach (var item in ViewBag.numaratorList)
+                {
+                    string parcaTipi = "";
+                    switch (item.ParcaTipi)
+                    {
+                        case 1:
+                            parcaTipi = "gün";
+                            break;
+                        case 2:
+                            parcaTipi = "ay";
+                            break;
+                        case 3:
+                            parcaTipi = "yıl";
+                            break;
+                        case 4:
+                            parcaTipi = "otomatik";
+                            break;
+                        default:
+                            break;
+                    }
+                <tr>
+                    <td>@parcaTipi</td>
+                    <td>@item.ParcaUzunlugu</td>
+                    <td>@item.OnEk</td>
+                    <td>@item.BaslangicSayisi</td>
+                    <td>@item.ArttirmaAraligi</td>
+                    <td>@item.YenilemeParcalari</td>
+                    <td>@item.DoldurmaKarakteri</td>
+                    <td>@item.SonEk</td>
+                </tr>
+            }
+        }
+    </tbody>*@
+</table>
+<form asp-action="NumaraUret" asp-controller="Numarator" method="get">
+    <select class="form-control select2bs4" style="width: 100%;" name="numaratorId" required>
+        <option selected disabled value="">Numarator Seçin</option>
+        @if (Enumerable.Count(ViewBag.numaratorList) != 0)
+            {
+                foreach (var item in ViewBag.numaratorList)
+                {
+                    <option value="@item.NumaratorId">@item.NumaratorAciklama</option>
+                }
+            }
+        </select>
+<label>@ViewBag.no</label>
+<button type="submit" class="btn ">uret</button>
+</form>

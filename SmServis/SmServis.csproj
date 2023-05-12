@@ -47,6 +47,7 @@
     <None Remove="Views\DtFaturalamaPeriyodu\" />
     <None Remove="Views\Proje\" />
     <None Remove="Views\DtProgram\" />
+    <None Remove="Views\Numarator\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.0" />
@@ -106,6 +107,7 @@
     <Folder Include="Views\DtFaturalamaPeriyodu\" />
     <Folder Include="Views\Proje\" />
     <Folder Include="Views\DtProgram\" />
+    <Folder Include="Views\Numarator\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\AdminLTE\.babelrc.js" />
