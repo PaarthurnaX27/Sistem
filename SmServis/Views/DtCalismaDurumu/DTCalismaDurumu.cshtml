@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿@using BusinessLayer.Concrete;
 @using DataAccessLayer.EntityFramework;
 @{
@@ -132,3 +133,139 @@
 </div>
 
 
+=======
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    var cdm = new CalismaDurumuManager(new EfCalismaDurumuDal());
+    var km = new KullaniciManager(new EfKullaniciDal());
+
+}
+
+
+<div class="card">
+    <div class="mb-3">
+        <div class="card-header bg-gray rounded-1 mb-1">
+            <div class="row justify-content-between">
+                <div class="col-sm-6 col-md-3">
+                    <div class="row">
+                        <h3 class="p-2">Çalışma Durumu</h3>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                    <div class="row justify-content-around float-right mx-1">
+                        <div class="col-sm-6 col-md-4">
+                            <a asp-action="Index" asp-controller="DestekTablosu" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col m-2">
+            <form id="fltAreaCalismaDurumu" asp-controller="DtCalismaDurumu" asp-action="DtCalismaDurumu" asp-route-id="" method="post">
+                <div class="row ">
+                    <div class="col-md-4 mb-1">
+                        <label class="col-form-label col-form-label-sm">Çalışma Durumu</label>
+                        <input type="text" class="form-control" id="inputCalismaDurumuAciklama" name="calismaDurumuAciklama" value="@ViewBag.calismaDurumuAciklama" placeholder="Çalşma Durum Açıklama">
+                    </div>
+                </div>
+
+                <hr class="divider">
+                <div class="row ">
+                    <div class="form-check col-4">
+                        <input name="silindi" id="chckSilindi" type="checkbox" value="true" checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
+                        @if (ViewBag.lblSilindi == null)
+                        {
+                            <label id="lblChck" class="form-check-label " for="chckSilindi">
+                                Mevcut
+                            </label>
+                        }
+                        else
+                        {
+                            <label id="lblChck" class="form-check-label" for="chckSilindi">
+                                @ViewBag.lblSilindi
+                            </label>
+                        }
+
+                    </div>
+                </div>
+                <hr class="divider">
+                <button onclick="filterSifirla()" type="button" class="btn btn-primary">Sıfırla</button>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+<div class="card">
+    <div class="card-header">
+        <div class="col-md-12 mb-1 d-flex justify-content-between">
+            <button type="submit" form="fltAreaCalismaDurumu" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
+                Ara
+                <i class="bi bi-binoculars"></i>
+            </button>
+            <a onclick="icerikGor('CalismaDurumu')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
+                Gör
+                <i class="bi bi-eye"></i>
+            </a>
+            <a onclick="guncelle('CalismaDurumu')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
+                Değiştir
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </a>
+            <a asp-controller="DtCalismaDurumu" asp-action="CalismaDurumuEkle" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+                Ekle
+                <i class="bi bi-clipboard-plus"></i>
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tblDestek" class="table table-borderless table-hover  ">
+            <thead>
+                <tr>
+                    <th>Seç</th>
+                    <th>Çalışma Durumu Açıklama</th>
+                    <th>Son Değiştiren</th>
+                    <th>Oluşturan</th>
+                </tr>
+            </thead>
+            <tbody>
+                 @foreach (var item in ViewBag.calismaDurumuList)
+                {
+                    var olusturan = km.TGetByID(item.Olusturan);
+                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
+                    <tr>
+                        <td><input name="radio" type="radio" value="@item.CalismaDurumuId" /></td>
+                        <td class="text-capitalize">@item.CalismaDurumuAciklama</td>
+                        <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
+                        <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
+                    </tr>
+                } 
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modal">
+    <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+            <div class="modal-header">
+                <h4 class="modal-title">UYARI</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Lütfen Seçim Yapınız&hellip;</p>
+            </div>
+            <div class="modal-footer justify-content-start">
+                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+>>>>>>> frontend

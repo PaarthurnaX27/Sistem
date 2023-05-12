@@ -22,7 +22,7 @@
                     </h4>
                     </div> *@
                     <div class="col-4">
-                        <a asp-action="Index" asp-controller="DestekTablosu" class=" btn btn-lg btn-danger "><i
+                        <a asp-action="Index" asp-controller="DestekTablosu" class=" btn btn-lg btn-danger my-2"><i
                                 class="bi bi-x-lg"></i></a>
                     </div>
                 </div>
@@ -30,10 +30,10 @@
         </div>
     </div>
     <div class="card-body bg-light">
-        <div class="m-2 mb-3 ">
-            <div class="col ">
+        <div class="m-3">
+            <div class="col">
                 <form id="fltAreaSonDurum" asp-controller="DtSonDurum" asp-action="DtSonDurum" asp-route-id="" method="post">
-                    <div class="row  ">
+                    <div class="row">
                         <div class="col-md-4 mb-1">
                             <label>Son Durum</label>
                             <input type="text" class="form-control" id="inputsonDurumAdi" name="sonDurumAdi"
@@ -69,15 +69,15 @@
 <div class="card bg-light">
     <div class="card-header">
         <div class="col-md-12 mb-1 d-flex justify-content-between">
-            <button type="submit" form="fltAreaSonDurum" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            <button type="submit" form="fltAreaSonDurum" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
                 Ara
                 <i class="bi bi-binoculars"></i>
             </button>
-            <a onclick="icerikGor('SonDurum')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            <a onclick="icerikGor('SonDurum')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
                 Gör
                 <i class="bi bi-eye"></i>
             </a>
-            <a onclick="guncelle('SonDurum')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1">
+            <a onclick="guncelle('SonDurum')" class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1">
                 Değiştir
                 <i class="bi bi-arrow-counterclockwise"></i>
             </a>

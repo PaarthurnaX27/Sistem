@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿@using BusinessLayer.Concrete;
 @using DataAccessLayer.EntityFramework;
 @{
@@ -72,3 +73,79 @@
         </div>
     </form>
 </div>
+=======
+﻿@using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    CariTipiManager ctm = new CariTipiManager(new EfCariTipiDal());
+    KullaniciManager km = new KullaniciManager(new EfKullaniciDal());
+    int cariTipiId = ViewBag.id;
+    var tblCariTipi = ctm.TGetByID(cariTipiId);
+    var sonDegistiren = km.TGetByID(tblCariTipi.SonDegistiren);
+    var olusturan = km.TGetByID(tblCariTipi.Olusturan);
+
+}
+<div id="divContent" class="card  bg-light">
+    <div class="card-header bg-gray rounded-1 mb-1">
+            <div class="row justify-content-between">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="row">
+                            <h3 class="p-2">Cari Tipi Gör</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="row justify-content-around float-right mx-1">
+                            <div class="col-sm-6 col-md-4">
+                                <a asp-action="DtCariTipi" asp-controller="DtCariTipi" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    <form method="post">
+        <div class="form-group ">
+            <div class="card-body p-3">
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Cari Tipi Açıklama</label>
+                        <label class="form-control text-capitalize">@tblCariTipi.CariTipiAciklama</label>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label>Durum</label>
+                        @{
+                            if (tblCariTipi.Silindi == false)
+                            {
+                                <label class="form-control ">Mevcut</label>
+                            }
+                            else
+                            {
+                                <label class="form-control ">Silindi</label>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3">
+                        <label>Oluşturan</label>
+                        <label class="form-control ">@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Oluşturulma Tarihi</label>
+                        <label class="form-control">@tblCariTipi.OlusturulmaTarih.Date.ToShortDateString()</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştiren</label>
+                        <label class="form-control ">@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Son Değiştirilme Tarihi</label>
+                        <label class="form-control">@tblCariTipi.SonDegistirmeTarih.Date.ToShortDateString()</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+>>>>>>> frontend
