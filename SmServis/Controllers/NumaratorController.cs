@@ -262,6 +262,21 @@ namespace SmServis.Controllers
             ViewBag.tempNumaratorParca = cm.TGetList().Where(x => x.CariId == 0);
             return RedirectToAction("Numarator", new { no = no });
         }
+        [HttpGet]
+        public IActionResult NumaratorEkle()
+        {
+        return View();
+        }
+        [HttpGet]
+        public IActionResult NumaratorGor()
+        {
+        return View();
+        }
+        [HttpGet]
+        public IActionResult NumaratorGuncelle()
+        {
+        return View();
+        }
     }
 }
 
