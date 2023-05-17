@@ -60,6 +60,7 @@ namespace DataAccessLayer.Concrete
 		public DbSet<FaturaMail> FaturaMails { get; set; }
 		public DbSet<Numarator> Numarators { get; set; }
 		public DbSet<NumaratorDeger> NumaratorDegers { get; set; }
-	}
+        public DbSet<Numarator_Tablo> Numarator_Tablos { get; set; }
+    }
 }
 
