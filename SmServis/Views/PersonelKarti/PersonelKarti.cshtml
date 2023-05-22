@@ -6,169 +6,272 @@
     var cm = new CinsiyetManager(new EfCinsiyetDal());
 
 }
-
-
-<div class="card">
-    <div class="mb-3">
-        <div class="card-header bg-gray rounded-1 mb-1">
-            <div class="row justify-content-between">
-                <div class="col-sm-6 col-md-3">
-                    <div class="row">
-                        <h3 class="p-2"> Personel Kartı</h3>
-                    </div>
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Personel Kartı</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right mr-3">
+          @*
+          <li class="col-sm-4">
+            <button
+              type="submit"
+              form="formCariGuncelle"
+              class="btn btn-info btn-lg"
+            ></button>
+          </li>
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="Index"
+              asp-controller="Home"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <div class="m-2">
+        <div class="col">
+          <div class="col my-1">
+            <form
+              id="fltAreaPersonel"
+              asp-controller="PersonelKarti"
+              asp-action="PersonelKarti"
+              asp-route-id=""
+              method="post"
+            >
+              <div class="row">
+                <div class="col-md-3 mb-1">
+                  <label
+                    for="inputPersonelAdi"
+                    class="col-form-label col-form-label-sm"
+                    >Personel Adı</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputPersonelAdi"
+                    name="personelAdi"
+                    value="@ViewBag.personelAdi"
+                    placeholder="Personel Adı"
+                  />
                 </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="row justify-content-around float-right mx-1">
-                        <div class="col-sm-6 col-md-4">
-                            <a asp-action="Index" asp-controller="Home" class="btn btn-lg btn-danger"><i class="bi bi-x-lg"></i></a>
-                        </div>
-                    </div>
+                <div class="col-md-3 mb-1">
+                  <label
+                    for="inputPersonelSoyadi"
+                    class="col-form-label col-form-label-sm"
+                    >Personel Soyadı</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputPersonelSoyadi"
+                    name="personelSoyadi"
+                    value="@ViewBag.personelSoyadi"
+                    placeholder="Personel Soyadı"
+                  />
                 </div>
-            </div>
-        </div>
-        <div class="col my-1">
-            <form id="fltAreaPersonel" asp-controller="PersonelKarti" asp-action="PersonelKarti" asp-route-id=""
-                method="post">
-                <div class="row  ">
-                    <div class="col-md-3 mb-1">
-                        <label for="inputPersonelAdi" class="col-form-label col-form-label-sm">Personel Adı</label>
-                        <input type="text" class="form-control" id="inputPersonelAdi" name="personelAdi"
-                            value="@ViewBag.personelAdi" placeholder="Personel Adı">
-                    </div>
-                    <div class="col-md-3 mb-1">
-                        <label for="inputPersonelSoyadi" class="col-form-label col-form-label-sm">Personel Soyadı</label>
-                        <input type="text" class="form-control" id="inputPersonelSoyadi" name="personelSoyadi"
-                            value="@ViewBag.personelSoyadi" placeholder="Personel Soyadı">
-                    </div>
-                    <div class="col-md-3 mb-1">
-                        <label for="inputTelefon" class="col-form-label col-form-label-sm">Telefon</label>
-                        <input type="text" class="form-control" id="inputTelefon" name="telefon"
-                            value="@ViewBag.telefon" placeholder="Telefon">
-                    </div>
-                    <div class="col-md-3 mb-1">
-                        <label for="sCinsiyetFilter" class="col-form-label col-form-label-sm">Cinsiyet</label>
-                        <select id="sCinsiyetFilter" class="form-control select2bs4" style="width: 100%;"
-                            name="cinsiyet">
-                            @if (ViewBag.cinsiyetId == null || ViewBag.cinsiyetId == "")
-                            {
-                                <option selected disabled>Cinsiyet Seçin</option>
-                            }
-                            else
-                            {
-                                <option selected value="@ViewBag.cinsiyetId">@cm.TGetByID(Int32.Parse(ViewBag.cinsiyetId)).CinsiyetAciklama</option>
-                            }
-
-                            @foreach (var cinsiyet in ViewBag.cinsiyetList)
-                            {
-                                <option value="@cinsiyet.CinsiyetId">@cinsiyet.CinsiyetAciklama</option>
-                            }
-                        </select>
-                    </div>
-
+                <div class="col-md-3 mb-1">
+                  <label
+                    for="inputTelefon"
+                    class="col-form-label col-form-label-sm"
+                    >Telefon</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputTelefon"
+                    name="telefon"
+                    value="@ViewBag.telefon"
+                    placeholder="Telefon"
+                  />
                 </div>
-                <hr class="divider">
-                <div class="row ">
-                    <div class="form-check col-4">
-                        <input name="silindi" id="chckSilindi" type="checkbox" value="true"
-                            checked="@ViewBag.chckSilindi" onclick="filter_isDeleted()" />
-                        @if (ViewBag.lblSilindi == null)
-                        {
-                            <label id="lblChck" class="form-check-label" for="chckSilindi">
-                                Mevcut
-                            </label>
-                        }
-                        else
-                        {
-                            <label id="lblChck" class="form-check-label" for="chckSilindi">
-                                @ViewBag.lblSilindi
-                            </label>
-                        }
-                    </div>
+                <div class="col-md-3 mb-1">
+                  <label
+                    for="sCinsiyetFilter"
+                    class="col-form-label col-form-label-sm"
+                    >Cinsiyet</label
+                  >
+                  <select
+                    id="sCinsiyetFilter"
+                    class="form-control select2bs4"
+                    style="width: 100%"
+                    name="cinsiyet"
+                  >
+                    @if (ViewBag.cinsiyetId == null || ViewBag.cinsiyetId == "")
+                    {
+                    <option selected disabled>Cinsiyet Seçin</option>
+                    } else {
+                    <option selected value="@ViewBag.cinsiyetId">
+                      @cm.TGetByID(Int32.Parse(ViewBag.cinsiyetId)).CinsiyetAciklama
+                    </option>
+                    } @foreach (var cinsiyet in ViewBag.cinsiyetList) {
+                    <option value="@cinsiyet.CinsiyetId">
+                      @cinsiyet.CinsiyetAciklama
+                    </option>
+                    }
+                  </select>
                 </div>
-                <hr class="divider">
-                <button onclick="filterSifirla()" type="button" class="btn btn-primary mx-2">Sıfırla</button>
-
+              </div>
+              <hr class="divider" />
+              <div class="row">
+                <div class="form-check col-4">
+                  <input
+                    name="silindi"
+                    id="chckSilindi"
+                    type="checkbox"
+                    value="true"
+                    checked="@ViewBag.chckSilindi"
+                    onclick="filter_isDeleted()"
+                  />
+                  @if (ViewBag.lblSilindi == null) {
+                  <label
+                    id="lblChck"
+                    class="form-check-label"
+                    for="chckSilindi"
+                  >
+                    Mevcut
+                  </label>
+                  } else {
+                  <label
+                    id="lblChck"
+                    class="form-check-label"
+                    for="chckSilindi"
+                  >
+                    @ViewBag.lblSilindi
+                  </label>
+                  }
+                </div>
+              </div>
+              <hr class="divider" />
+              <button
+                onclick="filterSifirla()"
+                type="button"
+                class="btn btn-primary mx-2"
+              >
+                Sıfırla
+              </button>
             </form>
+          </div>
         </div>
-    </div>
-
-</div>
-<div class="card">
-    <div class="card-header">
-        <div class="col-md-12 mb-1 d-flex justify-content-between">
-            <button type="submit" form="fltAreaPersonel" class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1">
-                Ara
-                <i class="bi bi-binoculars"></i>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="col-md-12 mb-1 d-flex justify-content-between">
+            <button
+              type="submit"
+              form="fltAreaPersonel"
+              class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1"
+            >
+              Ara
+              <i class="bi bi-binoculars"></i>
             </button>
-            <a onclick="icerikGor('Personel')" class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1">
-                Gör
-                <i class="bi bi-eye"></i>
+            <a
+              onclick="icerikGor('Personel')"
+              class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1"
+            >
+              Gör
+              <i class="bi bi-eye"></i>
             </a>
-            <a onclick="guncelle('Personel')" class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1">
-                Değiştir
-                <i class="bi bi-arrow-counterclockwise"></i>
+            <a
+              onclick="guncelle('Personel')"
+              class="btn btn-outline-primary rounded-1 col-md-3 my-1 mr-1"
+            >
+              Değiştir
+              <i class="bi bi-arrow-counterclockwise"></i>
             </a>
-            <a asp-controller="PersonelKarti" asp-action="PersonelKartiEkle"
-                class="btn btn-outline-primary rounded-1 col-md-3 my-1">
-                Ekle
-                <i class="bi bi-clipboard-plus"></i>
+            <a
+              asp-controller="PersonelKarti"
+              asp-action="PersonelKartiEkle"
+              class="btn btn-outline-primary rounded-1 col-md-3 my-1"
+            >
+              Ekle
+              <i class="bi bi-clipboard-plus"></i>
             </a>
+          </div>
         </div>
-    </div>
-    <div class="card-body">
-        <table id="tblDestek" class="table table-borderless table-hover  ">
+        <div class="card-body">
+          <table id="tblDestek" class="table table-borderless table-hover">
             <thead>
-                <tr>
-                    <th>Seç</th>
-                    <th>Personel Adı</th>
-                    <th>Personel Soyadı</th>
-                    <th>Cinsiyet</th>
-                    <th>Telefon</th>
-                    <th>Adres</th>
-                    <th>Adres 2</th>
-                </tr>
+              <tr>
+                <th>Seç</th>
+                <th>Personel Adı</th>
+                <th>Personel Soyadı</th>
+                <th>Cinsiyet</th>
+                <th>Telefon</th>
+                <th>Adres</th>
+                <th>Adres 2</th>
+              </tr>
             </thead>
             <tbody>
-                @foreach (var item in ViewBag.personelList)
-                {
-                    string cinsiyet = cm.TGetByID(item.CinsiyetId).CinsiyetAciklama;
-                    var olusturan = km.TGetByID(item.Olusturan);
-                    var sonDegistiren = km.TGetByID(item.SonDegistiren);
-                    <tr>
-                        <td><input name="radio" type="radio" value="@item.PersonelId" /></td>
-                        <td class="text-capitalize">@item.PersonelAdi @item.PersonelAdi2</td>
-                        <td class="text-capitalize"> @item.PersonelSoyadi</td>
-                        <td class="text-capitalize">@cinsiyet</td>
-                        <td class="text-capitalize"> @item.Telefon</td>
-                        <td class="text-capitalize"> @item.Adres1</td>
-                        <td class="text-capitalize"> @item.Adres2</td>
-                    </tr>
-                }
+              @foreach (var item in ViewBag.personelList) { string cinsiyet =
+              cm.TGetByID(item.CinsiyetId).CinsiyetAciklama; var olusturan =
+              km.TGetByID(item.Olusturan); var sonDegistiren =
+              km.TGetByID(item.SonDegistiren);
+              <tr>
+                <td>
+                  <input name="radio" type="radio" value="@item.PersonelId" />
+                </td>
+                <td class="text-capitalize">
+                  @item.PersonelAdi @item.PersonelAdi2
+                </td>
+                <td class="text-capitalize">@item.PersonelSoyadi</td>
+                <td class="text-capitalize">@cinsiyet</td>
+                <td class="text-capitalize">@item.Telefon</td>
+                <td class="text-capitalize">@item.Adres1</td>
+                <td class="text-capitalize">@item.Adres2</td>
+              </tr>
+              }
             </tbody>
-        </table>
-    </div>
-</div>
+          </table>
+        </div>
+      </div>
 
-
-<div class="modal fade" id="modal">
-    <div class="modal-dialog">
-        <div class="modal-content bg-danger">
+      <div class="modal fade" id="modal">
+        <div class="modal-dialog">
+          <div class="modal-content bg-danger">
             <div class="modal-header">
-                <h4 class="modal-title">UYARI</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+              <h4 class="modal-title">UYARI</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <div class="modal-body">
-                <p>Lütfen Seçim Yapınız&hellip;</p>
+              <p>Lütfen Seçim Yapınız&hellip;</p>
             </div>
             <div class="modal-footer justify-content-start">
-                <button type="button" class="btn btn-outline-light" data-dismiss="modal">Kapat</button>
+              <button
+                type="button"
+                class="btn btn-outline-light"
+                data-dismiss="modal"
+              >
+                Kapat
+              </button>
             </div>
+          </div>
+          <!-- /.modal-content -->
         </div>
-        <!-- /.modal-content -->
+        <!-- /.modal-dialog -->
+      </div>
     </div>
-    <!-- /.modal-dialog -->
+  </div>
 </div>
-
-

@@ -12,212 +12,266 @@ ViewData["Title"] = "IlgiliKisiler";
     DepartmanManager dptm = new DepartmanManager(new EfDepartmanDal());
     CariManager cm = new CariManager(new EfCariDal());
 }
-<div class="card">
-  <div class="m-2 mb-3">
-    <div class="col">
-      <form
-        id="fltAreaIlgiliKisiler"
-        asp-controller="IlgiliKisiler"
-        asp-action="IlgiliKisiler"
-        asp-route-id=""
-        method="post"
-      >
-        <div class="row">
-          <div class="col-md-3 mb-1">
-            <input
-              type="text"
-              class="form-control"
-              id="inputPersonelAdi"
-              name="personelAdi"
-              value="@ViewBag.personelAdi"
-              placeholder="Personel Adı"
-            />
-          </div>
-          <div class="col-md-3 mb-1">
-            <input
-              type="text"
-              class="form-control"
-              id="inputPersonelSoyadi"
-              name="personelSoyadi"
-              value="@ViewBag.personelSoyadi"
-              placeholder="Personel Soyadı"
-            />
-          </div>
-          <div class="col-md-3 mb-1">
-            <input
-              type="text"
-              class="form-control"
-              id="inputTelefon"
-              name="telefon"
-              value="@ViewBag.telefon"
-              placeholder="Telefon"
-            />
-          </div>
-          <div class="col-md-3 mb-1">
-            @*
-            <select
-              id="sCinsiyetFilter"
-              class="form-control select2bs4"
-              style="width: 100%"
-              name="cinsiyet"
-            >
-              @if (ViewBag.cinsiyetId == null || ViewBag.cinsiyetId == "") {
-              <option selected disabled>Cinsiyet Seçin</option>
-              } else {
-              <option selected value="@ViewBag.cinsiyetId">
-                @cm.TGetByID(Int32.Parse(ViewBag.cinsiyetId)).CinsiyetAciklama
-              </option>
-              } @foreach (var cinsiyet in ViewBag.cinsiyetList) {
-              <option value="@cinsiyet.CinsiyetId">
-                @cinsiyet.CinsiyetAciklama
-              </option>
-              }
-            </select>
-            *@
-          </div>
-        </div>
-        <hr class="divider" />
-        <div class="row">
-          <div class="form-check col-4">
-            <input
-              name="silindi"
-              id="chckSilindi"
-              type="checkbox"
-              value="true"
-              checked="@ViewBag.chckSilindi"
-              onclick="filter_isDeleted()"
-            />
-            @if (ViewBag.lblSilindi == null) {
-            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-              Mevcut
-            </label>
-            } else {
-            <label id="lblChck" class="form-check-label" for="checkboxMusteri">
-              @ViewBag.lblSilindi
-            </label>
-            }
-          </div>
-        </div>
-        <hr class="divider" />
-        <button onclick="filterSifirla()" type="button" class="btn btn-primary">
-          Sıfırla
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
-<div class="card">
-  <div class="card-header">
-    <div class="col-md-12 mb-1 d-flex justify-content-between">
-      <button
-        type="submit"
-        form="fltAreaIlgiliKisiler"
-        class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
-      >
-        Ara
-        <i class="bi bi-binoculars"></i>
-      </button>
-      <a
-        onclick="icerikGor('IlgiliKisiler')"
-        class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
-      >
-        Gör
-        <i class="bi bi-eye"></i>
-      </a>
-      <a
-        onclick="guncelle('IlgiliKisiler')"
-        class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
-      >
-        Değiştir
-        <i class="bi bi-arrow-counterclockwise"></i>
-      </a>
-      <a
-        asp-controller="IlgiliKisiler"
-        asp-action="IlgiliKisiEkle"
-        class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
-      >
-        Ekle
-        <i class="bi bi-clipboard-plus"></i>
-      </a>
-    </div>
-  </div>
-  <div class="card-body">
-    <table id="tblDestek" class="table table-borderless table-hover">
-      <thead>
-        <tr>
-          <th>Seç</th>
-          <th>Personel Adı</th>
-          <th>Personel Soyadı</th>
-          <th>Cari</th>
-          <th>Unvan</th>
-          <th>Departman</th>
-          <th>Pozisyon</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach (var ilgiliKisilers in ViewBag.ilgiliKisilerList) { var
-        personel = cpm.TGetByID(ilgiliKisilers.PersonelId); var cari =
-        cm.TGetByID(ilgiliKisilers.CariId);
-        <tr>
-          <td>
-            <input
-              name="radio"
-              type="radio"
-              value="@ilgiliKisilers.IlgiliKisiId"
-            />
-          </td>
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">İlgili Kişi Ekle</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right mr-3">
+          <li class="col-sm-4 mr-3">
+              <button
+                type="submit"
+                form="fltAreaIlgiliKisiler"
+                class="btn btn-info btn-lg"
+              >
+            <i class="bi bi-database-add"></i></button>
+            </li>
           @*
-          <td class="text-capitalize">@ilgiliKisilers.IlgiliKisiKodu</td>
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
           *@
-          <td class="text-capitalize">
-            @personel.CariPersonelAdi @personel.CariPersonelAdi2
-          </td>
-          <td class="text-capitalize">@personel.CariPersonelSoyadi</td>
-          <td class="text-capitalize">@cari.CariAdi</td>
-          <td class="text-capitalize">
-            @unvm.TGetByID(personel.UnvanId).UnvanAciklama
-          </td>
-          <td class="text-capitalize">
-            @dptm.TGetByID(personel.DepartmanId).DepartmanAdi
-          </td>
-          <td class="text-capitalize">
-            @pznm.TGetByID(personel.PozisyonId).PozisyonAdi
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="modal fade" id="modal">
-  <div class="modal-dialog">
-    <div class="modal-content bg-danger">
-      <div class="modal-header">
-        <h4 class="modal-title">UYARI</h4>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Lütfen Seçim Yapınız&hellip;</p>
-      </div>
-      <div class="modal-footer justify-content-start">
-        <button
-          type="button"
-          class="btn btn-outline-light"
-          data-dismiss="modal"
-        >
-          Kapat
-        </button>
+          <li class="col-sm-4">
+            <a
+              asp-action="Index"
+              asp-controller="Home"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-    <!-- /.modal-content -->
+    <div class="card-body bg-light">
+      <div class="m-2">
+        <div class="col">
+          <form
+            id="fltAreaIlgiliKisiler"
+            asp-controller="IlgiliKisiler"
+            asp-action="IlgiliKisiler"
+            asp-route-id=""
+            method="post"
+          >
+            <div class="row">
+              <div class="col-md-3 mb-1">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputPersonelAdi"
+                  name="personelAdi"
+                  value="@ViewBag.personelAdi"
+                  placeholder="Personel Adı"
+                />
+              </div>
+              <div class="col-md-3 mb-1">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputPersonelSoyadi"
+                  name="personelSoyadi"
+                  value="@ViewBag.personelSoyadi"
+                  placeholder="Personel Soyadı"
+                />
+              </div>
+              <div class="col-md-3 mb-1">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputTelefon"
+                  name="telefon"
+                  value="@ViewBag.telefon"
+                  placeholder="Telefon"
+                />
+              </div>
+              <div class="col-md-3 mb-1">
+                @*
+                <select
+                  id="sCinsiyetFilter"
+                  class="form-control select2bs4"
+                  style="width: 100%"
+                  name="cinsiyet"
+                >
+                  @if (ViewBag.cinsiyetId == null || ViewBag.cinsiyetId == "") {
+                  <option selected disabled>Cinsiyet Seçin</option>
+                  } else {
+                  <option selected value="@ViewBag.cinsiyetId">
+                    @cm.TGetByID(Int32.Parse(ViewBag.cinsiyetId)).CinsiyetAciklama
+                  </option>
+                  } @foreach (var cinsiyet in ViewBag.cinsiyetList) {
+                  <option value="@cinsiyet.CinsiyetId">
+                    @cinsiyet.CinsiyetAciklama
+                  </option>
+                  }
+                </select>
+                *@
+              </div>
+            </div>
+            <hr class="divider" />
+            <div class="row">
+              <div class="form-check col-4">
+                <input
+                  name="silindi"
+                  id="chckSilindi"
+                  type="checkbox"
+                  value="true"
+                  checked="@ViewBag.chckSilindi"
+                  onclick="filter_isDeleted()"
+                />
+                @if (ViewBag.lblSilindi == null) {
+                <label
+                  id="lblChck"
+                  class="form-check-label"
+                  for="checkboxMusteri"
+                >
+                  Mevcut
+                </label>
+                } else {
+                <label
+                  id="lblChck"
+                  class="form-check-label"
+                  for="checkboxMusteri"
+                >
+                  @ViewBag.lblSilindi
+                </label>
+                }
+              </div>
+            </div>
+            <hr class="divider" />
+            <button
+              onclick="filterSifirla()"
+              type="button"
+              class="btn btn-primary"
+            >
+              Sıfırla
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="col-md-12 mb-1 d-flex justify-content-between">
+          <button
+            type="submit"
+            form="fltAreaIlgiliKisiler"
+            class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+          >
+            Ara
+            <i class="bi bi-binoculars"></i>
+          </button>
+          <a
+            onclick="icerikGor('IlgiliKisiler')"
+            class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+          >
+            Gör
+            <i class="bi bi-eye"></i>
+          </a>
+          <a
+            onclick="guncelle('IlgiliKisiler')"
+            class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+          >
+            Değiştir
+            <i class="bi bi-arrow-counterclockwise"></i>
+          </a>
+          <a
+            asp-controller="IlgiliKisiler"
+            asp-action="IlgiliKisiEkle"
+            class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
+          >
+            Ekle
+            <i class="bi bi-clipboard-plus"></i>
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <table id="tblDestek" class="table table-borderless table-hover">
+          <thead>
+            <tr>
+              <th>Seç</th>
+              <th>Personel Adı</th>
+              <th>Personel Soyadı</th>
+              <th>Cari</th>
+              <th>Unvan</th>
+              <th>Departman</th>
+              <th>Pozisyon</th>
+            </tr>
+          </thead>
+          @*
+          <tbody>
+            @foreach (var ilgiliKisilers in ViewBag.ilgiliKisilerList) { var
+            personel = cpm.TGetByID(ilgiliKisilers.PersonelId); var cari =
+            cm.TGetByID(ilgiliKisilers.CariId);
+            <tr>
+              <td>
+                <input
+                  name="radio"
+                  type="radio"
+                  value="@ilgiliKisilers.IlgiliKisiId"
+                />
+              </td>
+
+              <td class="text-capitalize">@ilgiliKisilers.IlgiliKisiKodu</td>
+
+              <td class="text-capitalize">
+                @personel.CariPersonelAdi @personel.CariPersonelAdi2
+              </td>
+              <td class="text-capitalize">@personel.CariPersonelSoyadi</td>
+              <td class="text-capitalize">@cari.CariAdi</td>
+              <td class="text-capitalize">
+                @unvm.TGetByID(personel.UnvanId).UnvanAciklama
+              </td>
+              <td class="text-capitalize">
+                @dptm.TGetByID(personel.DepartmanId).DepartmanAdi
+              </td>
+              <td class="text-capitalize">
+                @pznm.TGetByID(personel.PozisyonId).PozisyonAdi
+              </td>
+            </tr>
+            }
+          </tbody>
+          *@
+        </table>
+      </div>
+    </div>
+
+    <div class="modal fade" id="modal">
+      <div class="modal-dialog">
+        <div class="modal-content bg-danger">
+          <div class="modal-header">
+            <h4 class="modal-title">UYARI</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Lütfen Seçim Yapınız&hellip;</p>
+          </div>
+          <div class="modal-footer justify-content-start">
+            <button
+              type="button"
+              class="btn btn-outline-light"
+              data-dismiss="modal"
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
   </div>
-  <!-- /.modal-dialog -->
 </div>

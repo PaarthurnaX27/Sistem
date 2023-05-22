@@ -18,85 +18,77 @@
     PozisyonManager pzm = new PozisyonManager(new EfPozisyonDal());
   
 }
+<div class="p-1">
+  <table
+    id="example1"
+    class="table text-nowrap table-striped small table-hover table-borderless table-responsive text-xsmall"
+  >
+    <thead>
+      <tr style="white-space: nowrap">
+        <th>Seç</th>
+        <th>Firma No</th>
+        <th>Cari Adı</th>
+        <th>Cari Tipi</th>
+        <th>Vergi Dairesi</th>
+        <th>Vergi No</th>
+        <th>Cari Dil</th>
+        <th>Ülke</th>
+        <th>Şehir</th>
+        <th>İlçe</th>
+        <th>Cari Durum</th>
+        <th>Para Birimi</th>
+        <th>Web Sitesi</th>
+        <th>Sektör</th>
+        <th>Adres</th>
+        <th>Mail Adresi</th>
+        <th>Mail Adresi 2</th>
+        <th>Telefon</th>
+        <th>Telefon 2</th>
+        <th>e-Fatura Mükellefi</th>
+        <th>e-İrsaliye Mükellefi</th>
+        <th>Sil</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var cari in ViewBag.cariList) {
+      <tr ondblclick="guncelleCari()">
+        <td><input name="radio" type="radio" value="@cari.CariId" /></td>
+        <td>@cari.FirmaNo</td>
+        <td>@cari.CariAdi</td>
+        <td>@ctm.TGetByID(cari.CariTipiId).CariTipiAciklama</td>
+        <td>@cari.VergiDairesi</td>
+        <td>@cari.VergiNo</td>
+        <td>@cari.CariDil</td>
+        <td>@um.TGetByID(cari.UlkeId).UlkeAdi</td>
+        <td>@sm.TGetByID(cari.SehirId).SehirAdi</td>
+        <td>@ilcem.TGetByID(cari.IlceId).IlceAdi</td>
+        <td>@cdm.TGetByID(cari.CariDurumId).CariDurumAciklama</td>
+        <td>
+          @pbm.TGetByID(cari.ParaBirimiId).ParaBirimiAdi
+          @pbm.TGetByID(cari.ParaBirimiId).ParaBirimiSimge
+        </td>
+        <td>@cari.WebSitesi</td>
+        <td>@asm.TGetByID(cari.AnaSektorId).AnaSektorAdi</td>
+        <td>@cari.Adres</td>
+        <td>@cari.MailAdresi1</td>
+        <td>@cari.MailAdresi2</td>
+        <td>@cari.Telefon1</td>
+        <td>@cari.Telefon2</td>
+        @if (cari.eFaturaMukellefi == true) {
+        <td>Evet</td>
+        } else {
+        <td>Hayır</td>
+        } @if (cari.eIrsaliyeMukellefi == true) {
+        <td>Evet</td>
+        } else {
+        <td>Hayır</td>
+        }
 
-<div class=" p-1">
-
-
-    <table id="example1" class="table text-nowrap table-striped small table-hover table-borderless table-responsive text-xsmall "    >
-        <thead>
-            <tr style="white-space:nowrap">
-                <th>Seç</th>
-                <th>Firma No</th>
-                <th>Cari Adı</th>
-                <th>Cari Tipi</th>
-                <th>Vergi Dairesi</th>
-                <th>Vergi No</th>
-                <th>Cari Dil</th>
-                <th>Ülke</th>
-                <th>Şehir</th>
-                <th>İlçe</th>
-                <th>Cari Durum</th>
-                <th>Para Birimi</th>
-                <th>Web Sitesi</th>
-                <th>Sektör</th>
-                <th>Adres</th>
-                <th>Mail Adresi</th>
-                <th>Mail Adresi 2</th>
-                <th>Telefon</th>
-                <th>Telefon 2</th>
-                <th>e-Fatura Mükellefi</th>
-                <th>e-İrsaliye Mükellefi</th>
-                <th>Sil</th>
-
-
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var cari in ViewBag.cariList)
-            {
-                <tr ondblclick="guncelleCari()">
-                    <td><input name="radio" type="radio" value="@cari.CariId" /></td>
-                    <td>@cari.FirmaNo</td>
-                    <td>@cari.CariAdi</td>
-                    <td>@ctm.TGetByID(cari.CariTipiId).CariTipiAciklama</td>
-                    <td>@cari.VergiDairesi</td>
-                    <td>@cari.VergiNo</td>
-                    <td>@cari.CariDil</td>
-                    <td>@um.TGetByID(cari.UlkeId).UlkeAdi</td>
-                    <td>@sm.TGetByID(cari.SehirId).SehirAdi</td>
-                    <td>@ilcem.TGetByID(cari.IlceId).IlceAdi</td>
-                    <td>@cdm.TGetByID(cari.CariDurumId).CariDurumAciklama</td>
-                    <td>@pbm.TGetByID(cari.ParaBirimiId).ParaBirimiAdi @pbm.TGetByID(cari.ParaBirimiId).ParaBirimiSimge</td>
-                    <td>@cari.WebSitesi</td>
-                    <td>@asm.TGetByID(cari.AnaSektorId).AnaSektorAdi</td>
-                    <td>@cari.Adres</td>
-                    <td>@cari.MailAdresi1</td>
-                    <td>@cari.MailAdresi2</td>
-                    <td>@cari.Telefon1</td>
-                    <td>@cari.Telefon2</td>
-                    @if (cari.eFaturaMukellefi == true)
-                    {
-                        <td>Evet</td>
-                    }
-                    else
-                    {
-                        <td>Hayır</td>
-                    }
-                    @if (cari.eIrsaliyeMukellefi == true)
-                    {
-                        <td>Evet</td>
-                    }
-                    else
-                    {
-                        <td>Hayır</td>
-                    }
-
-                    <td><a href="/Cari/DeleteCari/@cari.CariId" class="btn btn-danger">Sil</a></td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
+        <td>
+          <a href="/Cari/DeleteCari/@cari.CariId" class="btn btn-danger">Sil</a>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
 </div>
-

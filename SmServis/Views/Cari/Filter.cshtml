@@ -1,113 +1,208 @@
 ﻿@model EntityLayer.Concrete.Cari
 
+<form id="fltAreaCari" asp-action="Index" asp-controller="Cari" method="post">
+  <div class="row">
+    <div class="col-md-4 mb-1">
+      <label class="col-form-label col-form-label-sm">Cari No</label>
+      <input
+        type="number"
+        class="form-control form-control-sm"
+        id="firmaNoFlt"
+        placeholder="Firma No"
+        asp-for="@Model.FirmaNo"
+      />
+    </div>
+    <div class="col-md-4 mb-1">
+      <label class="col-form-label col-form-label-sm">Hesap Kodu</label>
+      <input
+        class="form-control form-control-sm"
+        id="hesapKoduFlt"
+        placeholder="Hesap Kodu"
+        asp-for="@Model.HesapKodu"
+      />
+    </div>
+    <div class="col-md-4 mb-1">
+      <label class="col-form-label col-form-label-sm">Dil</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        id="cariDilFlt"
+        placeholder="Cari Dil"
+        asp-for="@Model.CariDil"
+      />
+    </div>
+    @*
+    <div class="col-md-4 mb-1">
+      <input
+        type="number"
+        class="form-control"
+        id="subeKoduFlt"
+        placeholder="Şube Kodu"
+      />
+    </div>
+    *@
+  </div>
+  <div class="row mb-3">
+    <div class="col-md-4 mb-1">
+      <label class="col-form-label col-form-label-sm">Cari Adı</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        id="unvanFlt"
+        placeholder="Cari Adı"
+        asp-for="@Model.CariAdi"
+      />
+    </div>
+    <div class="col-md-4 mb-1">
+      <label class="col-form-label col-form-label-sm">Vergi Dairesi</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        id="vergiDFlt"
+        placeholder="Vergi Dairesi"
+        asp-for="@Model.VergiDairesi"
+      />
+    </div>
+    <div class="col-md-4 mb-1">
+      <label class="col-form-label col-form-label-sm">Vergi No</label>
+      <input
+        type="number"
+        class="form-control form-control-sm"
+        id="vergiNoFlt"
+        placeholder="Vergi No"
+        asp-for="@Model.VergiNo"
+      />
+    </div>
 
-                <form id="fltAreaCari" asp-action="Index" asp-controller="Cari" method="post">
-                    <div class="row ">
-                        <div class="col-md-4 mb-1">
-                            <label class="col-form-label col-form-label-sm">Cari No</label>
-                            <input type="number" class="form-control form-control-sm" id="firmaNoFlt" placeholder="Firma No" asp-for="@Model.FirmaNo">
-                        </div>
-                        <div class="col-md-4 mb-1">
-                            <label class="col-form-label col-form-label-sm">Hesap Kodu</label>
-                            <input class="form-control form-control-sm" id="hesapKoduFlt" placeholder="Hesap Kodu" asp-for="@Model.HesapKodu">
-                        </div>
-                        <div class="col-md-4 mb-1">
-                            <label class="col-form-label col-form-label-sm">Dil</label>
-                            <input type="text" class="form-control form-control-sm" id="cariDilFlt" placeholder="Cari Dil" asp-for="@Model.CariDil">
-                        </div>  
-                        @* <div class="col-md-4 mb-1">
-                            <input type="number" class="form-control" id="subeKoduFlt" placeholder="Şube Kodu" >
-                        </div> *@
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-4 mb-1 ">
-                            <label class="col-form-label col-form-label-sm">Cari Adı</label>
-                            <input type="text" class="form-control form-control-sm" id="unvanFlt" placeholder="Cari Adı" asp-for="@Model.CariAdi">
-                        </div>
-                        <div class="col-md-4 mb-1">
-                            <label class="col-form-label col-form-label-sm">Vergi Dairesi</label>
-                            <input type="text" class="form-control form-control-sm" id="vergiDFlt" placeholder="Vergi Dairesi" asp-for="@Model.VergiDairesi">
-
-                        </div>
-                        <div class="col-md-4 mb-1">
-                            <label class="col-form-label col-form-label-sm">Vergi No</label>
-                            <input type="number" class="form-control form-control-sm" id="vergiNoFlt" placeholder="Vergi No" asp-for="@Model.VergiNo">
-                        </div>
-                        
-                        @*<div class="col-md-4 mb-1">
-                                <input type="text" class="form-control" id="hesapKoduFlt"  placeholder="Hesap Kodu">
-                            </div>*@
-                        @* <div class="col-md-4 mb-1">
-                            <input type="text" class="form-control" id="ulkeFlt" placeholder="Ülke" name="ulke">
-                        </div>
-                        <div class="col-md-4 mb-1">
-                            <input type="text" class="form-control" id="sehirFlt" placeholder="Şehir" name="sehir">
-                        </div> *@
-                    </div>
-                    <div class="row mb-3">
-
-                      @*  <div class="form-check col-4">
-                            <input type="checkbox" name="filter" value="" id="chckEFatura" asp-asp-for="@Model.eFaturaMukellefi" />
-                             <input type="checkbox" name="filter" value="" id="chckEFatura" onclick="return filter_type(this)" /> 
-                            <label class="form-check-label" for="chckEFatura">
-                                e-Fatura
-                                Mükellefi
-                            </label>
-                        </div>
-                        <div class="form-check col-4">
-                            <input  type="checkbox" name="filter" id="chckEIrsaliye" asp-for="@Model.eIrsaliyeMukellefi"/>
-                            <input  type="checkbox" name="filter" id="chckEIrsaliye" onclick="return filter_type2(this)" /> 
-                            <label class="form-check-label" for="chckEIrsaliye">
-                                e-İrsaliye
-                                Mükellefi
-                            </label>
-                        </div>
-                        @*<div class="form-check col-3">
-                            <input class="form-check-input" type="checkbox" value="" id="chckNothing" />
-                            <label class="form-check-label" for="chckNothing">
-                                Hiçbiri
-                            </label>
-                        </div>*@
-                        @* <div class="form-check col-4">
-                            <input  type="checkbox" value="" id="chckAll" />
-                            <label class="form-check-label" for="chckAll"> Hepsi </label>
-                        </div> *@
-                    </div>
-                    @*<hr class="divider">*@
-                    <div class="">
-                        @*<div class="form-check col-3">
-                            <input name="default-radio-1" class="form-check-input" type="checkbox" value="" id="radioAday" />
-                            <label class="form-check-label" for="checkboxAday"> Aday </label>
-                        </div>*@
-                       @*  <div class="form-check col-4">
-                            <input name="filter"  type="checkbox" value="Müşteri" id="Müşteri" />
-                            <input name="filter"  type="checkbox" value="Müşteri"onclick="return filter_type3(this)"
-                                   id="Müşteri" /> 
-                            <label class="form-check-label" for="checkboxMusteri">
-                                Müşteri
-                            </label>
-                        </div>
-                        <div class="form-check col-4">
-                            <input name="filter"  type="checkbox" value="Tedarikçi" id="Tedarikçi" />
-                             <input name="filter"  type="checkbox" value="Tedarikçi"onclick="return filter_type3(this)"
-                                   id="Tedarikçi" /> 
-                            <label class="form-check-label" for="checkboxTedarikci">
-                                Tedarikçi
-                            </label>
-                        </div>
-                        <div class="form-check col-4">
-                            <input name="default-radio-1"  type="checkbox" value="" id="radioAll" />
-                            <label class="form-check-label" for="checkboxAll"> Hepsi </label>
-                        </div> *@
-
-                    </div>
-                   
-                </form>
-    
-
-
-
-
-
-
-
+    @*
+    <div class="col-md-4 mb-1">
+      <input
+        type="text"
+        class="form-control"
+        id="hesapKoduFlt"
+        placeholder="Hesap Kodu"
+      />
+    </div>
+    *@ @*
+    <div class="col-md-4 mb-1">
+      <input
+        type="text"
+        class="form-control"
+        id="ulkeFlt"
+        placeholder="Ülke"
+        name="ulke"
+      />
+    </div>
+    <div class="col-md-4 mb-1">
+      <input
+        type="text"
+        class="form-control"
+        id="sehirFlt"
+        placeholder="Şehir"
+        name="sehir"
+      />
+    </div>
+    *@
+  </div>
+  <div class="row mb-3">
+    @*
+    <div class="form-check col-4">
+      <input
+        type="checkbox"
+        name="filter"
+        value=""
+        id="chckEFatura"
+        asp-asp-for="@Model.eFaturaMukellefi"
+      />
+      <input
+        type="checkbox"
+        name="filter"
+        value=""
+        id="chckEFatura"
+        onclick="return filter_type(this)"
+      />
+      <label class="form-check-label" for="chckEFatura">
+        e-Fatura Mükellefi
+      </label>
+    </div>
+    <div class="form-check col-4">
+      <input
+        type="checkbox"
+        name="filter"
+        id="chckEIrsaliye"
+        asp-for="@Model.eIrsaliyeMukellefi"
+      />
+      <input
+        type="checkbox"
+        name="filter"
+        id="chckEIrsaliye"
+        onclick="return filter_type2(this)"
+      />
+      <label class="form-check-label" for="chckEIrsaliye">
+        e-İrsaliye Mükellefi
+      </label>
+    </div>
+    @*
+    <div class="form-check col-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="chckNothing"
+      />
+      <label class="form-check-label" for="chckNothing"> Hiçbiri </label>
+    </div>
+    *@ @*
+    <div class="form-check col-4">
+      <input type="checkbox" value="" id="chckAll" />
+      <label class="form-check-label" for="chckAll"> Hepsi </label>
+    </div>
+    *@
+  </div>
+  @*
+  <hr class="divider" />
+  *@
+  <div class="">
+    @*
+    <div class="form-check col-3">
+      <input
+        name="default-radio-1"
+        class="form-check-input"
+        type="checkbox"
+        value=""
+        id="radioAday"
+      />
+      <label class="form-check-label" for="checkboxAday"> Aday </label>
+    </div>
+    *@ @*
+    <div class="form-check col-4">
+      <input name="filter" type="checkbox" value="Müşteri" id="Müşteri" />
+      <input
+        name="filter"
+        type="checkbox"
+        value="Müşteri"
+        onclick="return filter_type3(this)"
+        id="Müşteri"
+      />
+      <label class="form-check-label" for="checkboxMusteri"> Müşteri </label>
+    </div>
+    <div class="form-check col-4">
+      <input name="filter" type="checkbox" value="Tedarikçi" id="Tedarikçi" />
+      <input
+        name="filter"
+        type="checkbox"
+        value="Tedarikçi"
+        onclick="return filter_type3(this)"
+        id="Tedarikçi"
+      />
+      <label class="form-check-label" for="checkboxTedarikci">
+        Tedarikçi
+      </label>
+    </div>
+    <div class="form-check col-4">
+      <input name="default-radio-1" type="checkbox" value="" id="radioAll" />
+      <label class="form-check-label" for="checkboxAll"> Hepsi </label>
+    </div>
+    *@
+  </div>
+</form>
