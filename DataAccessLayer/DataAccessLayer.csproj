@@ -20,9 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Concrete\" />
-    <Folder Include="Abstract\" />
     <Folder Include="Concrete\Repositories\" />
-    <Folder Include="EntityFramework\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />

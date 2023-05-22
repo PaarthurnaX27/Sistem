@@ -1,73 +1,66 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using System.Runtime.Intrinsics.Arm;
 using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
-using EntityLayer.Concrete;
-using Microsoft.AspNetCore.Mvc;
+using Npgsql;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Data;
+using Dapper;
+using System.Drawing;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace SmServis.Controllers
+namespace SmServis
 {
-    public class NumaratorController : Controller
-    {
-        CariManager cm = new CariManager(new EfCariDal());
+	public class NumaraUret
+	{
+        public  static  string dataBase = "";
         NumaratorManager nm = new NumaratorManager(new EfNumaratorDal());
         NumaratorDegerManager ndm = new NumaratorDegerManager(new EfNumaratorDegerDal());
-        // GET: /<controller>/
-        public IActionResult Numarator(string numarator, string no)
+        Numarator_TabloManager ntm = new Numarator_TabloManager(new EfNumarator_TabloDal());
+        string connectionString = "User Id=postgres;Password=4909;Host=localhost;Port=5432;Database="+dataBase+";";
+        public List<string> TableList()
         {
-            ViewBag.tempNumaratorParca = cm.TGetList().Where(x => x.CariId == 0);
-            ViewBag.numaratorList = nm.TGetList();
-            ViewBag.numarator = numarator;
-            ViewBag.no = no;
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Numarator(string numaratorAciklama, int parcaUzunluğu, string onEk, int baslangicSayisi, int arttirmaAraligi, string doldurmaKarakteri, string sonEk, string numara, int sira1, int sira2, int sira3, int sira4, int sira5, int sira6, string karakter1, string karakter2, string karakter3, string karakter4, string karakter5)
-        {
-            Numarator numarator = new Numarator();
-            NumaratorDeger numaratorDeger = new NumaratorDeger();
-            numarator.NumaratorAciklama = numaratorAciklama;
-            numarator.OnEk = onEk;
-            numarator.Sira1 = sira1;
-            numarator.Sira2 = sira2;
-            numarator.Sira3 = sira3;
-            numarator.Sira4 = sira4;
-            numarator.Sira5 = sira5;
-            numarator.Sira6 = sira6;
-            numarator.Karakter1 = karakter1;
-            numarator.Karakter2 = karakter2;
-            numarator.Karakter3 = karakter3;
-            numarator.Karakter4 = karakter4;
-            numarator.Karakter5 = karakter5;
-            numarator.ArttirmaAraligi = arttirmaAraligi;
-            numarator.BaslangicSayisi = baslangicSayisi;
-            numarator.DoldurmaKarakteri = doldurmaKarakteri;
-            numarator.ParcaUzunlugu = parcaUzunluğu;
-            numarator.SonEk = sonEk;
-            numaratorDeger.SimdikiDeger = 0;
 
-            try
+
+
+            List<string> tableList = new List<string>();
+            string query = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name NOT IN (SELECT \"TabloAdi\" FROM \"Numarator_Tablos\") Order By table_name asc";
+
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
             {
-                nm.TAdd(numarator);
-                numaratorDeger.NumaratorId = numarator.NumaratorId;
-                ndm.TAdd(numaratorDeger);
+                connection.Open();
+
+                using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(query, connection))
+                {
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                       tableList.Add(row["TABLE_NAME"].ToString());
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                ViewBag.numarator = numara;
-                return View(new { numarator = numara });
-            }
-            ViewBag.numaratorList = nm.TGetList();
-            ViewBag.tempNumaratorParca = cm.TGetList().Where(x => x.CariId == 0);
-            ViewBag.numarator = numara;
-            return View(new { numarator = numara });
+            return tableList;
         }
-        public IActionResult NumaraUret(int numaratorId)
+        public List<string> KolonList(string tabloAdi)
         {
+            List<string> columns = new List<string>();
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"SELECT column_name FROM information_schema.columns WHERE table_name = @tabloAdi";
+                var columnNames = connection.Query<string>(query, new { tabloAdi }).ToList();
+                foreach (string columnName in columnNames)
+                {
+                    columns.Add(columnName);
+                }
+            }
+            return columns;
+        }
+        public string NumaraOlustur(int id,string tabloAdi)
+        {
+            var numaratorTablo=ntm.TGetList().Where(x => x.TabloAdi == tabloAdi).FirstOrDefault();
+            int numaratorId = numaratorTablo.NumaratorId;
             var tblNumarator = nm.TGetByID(numaratorId);
             var tblNumaratorDeger = ndm.TGetList().Where(x => x.NumaratorId == numaratorId).FirstOrDefault();
             string no = "";
@@ -85,10 +78,34 @@ namespace SmServis.Controllers
             string sira4 = "";
             string sira5 = "";
             string sira6 = "";
-            //if (tblNumarator.BaslangicSayisi == tblNumaratorDeger.SimdikiDeger)
-            //{
-            //    baslangic = tblNumarator.BaslangicSayisi;
-            //}
+            string kolonAdi1 = tblNumarator.Parametre1;
+            string kolonAdi2 = tblNumarator.Parametre2;
+            object kolonDeger1 = "";
+            object kolonDeger2 = "";
+            string idColumn= tabloAdi.Remove(tabloAdi.Length - 1);
+            using (NpgsqlConnection connection = new NpgsqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = $"SELECT \"{kolonAdi1}\",\"{kolonAdi2}\" FROM \"{tabloAdi}\" WHERE \"{idColumn}Id\" = @id";
+                using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("id", id);
+                    using (NpgsqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            kolonDeger1 = reader[kolonAdi1];
+                            kolonDeger2 = reader[kolonAdi2];
+                        }
+                        else
+                        {
+                           
+                        }
+                    }
+                }
+            }
+
+
             if (siraNo1 != 0)
             {
                 switch (siraNo1)
@@ -108,8 +125,10 @@ namespace SmServis.Controllers
                         ndm.TUpdate(tblNumaratorDeger);
                         break;
                     case 5:
+                        sira1 = kolonDeger1.ToString();
                         break;
                     case 6:
+                        sira1 = kolonDeger2.ToString();
                         break;
                     default:
                         break;
@@ -142,8 +161,10 @@ namespace SmServis.Controllers
                         ndm.TUpdate(tblNumaratorDeger);
                         break;
                     case 5:
+                        sira2 = kolonDeger1.ToString();
                         break;
                     case 6:
+                        sira2 = kolonDeger2.ToString();
                         break;
                     default:
                         break;
@@ -163,14 +184,15 @@ namespace SmServis.Controllers
                         sira3 = DateTime.Now.Year.ToString();
                         break;
                     case 4:
-                        if (baslangic != 0)
                             sira3 = (tblNumaratorDeger.SimdikiDeger + tblNumarator.ArttirmaAraligi).ToString();
                         tblNumaratorDeger.SimdikiDeger = Convert.ToInt32(sira3);
                         ndm.TUpdate(tblNumaratorDeger);
                         break;
                     case 5:
+                        sira3 = kolonDeger1.ToString();
                         break;
                     case 6:
+                        sira3 = kolonDeger2.ToString();
                         break;
                     default:
                         break;
@@ -195,8 +217,10 @@ namespace SmServis.Controllers
                         ndm.TUpdate(tblNumaratorDeger);
                         break;
                     case 5:
+                        sira4 = kolonDeger1.ToString();
                         break;
                     case 6:
+                        sira4 = kolonDeger2.ToString();
                         break;
                     default:
                         break;
@@ -221,8 +245,10 @@ namespace SmServis.Controllers
                         ndm.TUpdate(tblNumaratorDeger);
                         break;
                     case 5:
+                        sira5 = kolonDeger1.ToString();
                         break;
                     case 6:
+                        sira5 = kolonDeger2.ToString();
                         break;
                     default:
                         break;
@@ -247,8 +273,10 @@ namespace SmServis.Controllers
                         ndm.TUpdate(tblNumaratorDeger);
                         break;
                     case 5:
+                        sira6 = kolonDeger1.ToString();
                         break;
                     case 6:
+                        sira6 = kolonDeger2.ToString();
                         break;
                     default:
                         break;
@@ -258,24 +286,7 @@ namespace SmServis.Controllers
 
             no = tblNumarator.OnEk + sira1 + tblNumarator.Karakter1 + sira2 + tblNumarator.Karakter2 + sira3 + tblNumarator.Karakter3 + sira4 + tblNumarator.Karakter4 + sira5 + tblNumarator.Karakter5 + sira6 + tblNumarator.SonEk;
             tblNumarator.Numara += tblNumarator.ArttirmaAraligi;
-            ViewBag.numaratorList = nm.TGetList();
-            ViewBag.tempNumaratorParca = cm.TGetList().Where(x => x.CariId == 0);
-            return RedirectToAction("Numarator", new { no = no });
-        }
-        [HttpGet]
-        public IActionResult NumaratorEkle()
-        {
-        return View();
-        }
-        [HttpGet]
-        public IActionResult NumaratorGor()
-        {
-        return View();
-        }
-        [HttpGet]
-        public IActionResult NumaratorGuncelle()
-        {
-        return View();
+            return no;
         }
     }
 }

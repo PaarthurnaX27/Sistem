@@ -1,4 +1,14 @@
-﻿<style>
+@* @using BusinessLayer.Concrete;
+@using DataAccessLayer.EntityFramework;
+@{
+    var um = new UlkeManager(new EfUlkeDal());
+    var sm = new SehirManager(new EfSehirDal());
+    var km = new KullaniciManager(new EfKullaniciDal());
+
+
+} *@
+
+<style>
     .select2-selection__rendered {
         line-height: 31px !important;
     }
@@ -7,216 +17,249 @@
         height: 31px !important;
     }
 </style>
-<form asp-action="Numarator" asp-controller="Numarator" method="post">
-    <div class="row bg-secondary justify-content-around">
-        <div class="col-md-1">
-            <label class="col-form-label col-form-label-sm">Ön Ek</label>
-            <input class="form-control form-control-sm" name="onEk" />
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label class="col-12 col-form-label col-form-label-sm  text-center">Sıra</label>
-                <select class="form-control select2bs4" style="width: 100%;" name="sira1">
-                    <option selected disabled>Tip Seç</option>
-                    <option value="1">Gün</option>
-                    <option value="2">Ay</option>
-                    <option value="3">Yıl</option>
-                    <option value="4">Otomatik</option>
-                    <option value="5">Parametre1</option>
-                    <option value="6">Parametre2</option>
-                </select>
-            </div>
-        </div>
-        <div style="width:30px">
-            <label class=" col-12 text-center ">-</label>
-            <input class="form-control form-control-sm" maxlength="1" name="karakter1" />
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm text-center col-12">Sıra</label>
-                <select class="form-control select2bs4" style="width: 100%;" name="sira2">
-                    <option selected disabled>Tip Seç</option>
-                    <option value="1">Gün</option>
-                    <option value="2">Ay</option>
-                    <option value="3">Yıl</option>
-                    <option value="4">Otomatik</option>
-                    <option value="5">Parametre1</option>
-                    <option value="6">Parametre2</option>
-                </select>
-            </div>
-        </div>
-        <div style="width:30px">
-            <label class="col-12 text-center">-</label>
-            <input class="form-control form-control-sm" maxlength="1" name="karakter2" />
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
-                <select class="form-control select2bs4" style="width: 100%;" name="sira3">
-                    <option selected disabled>Tip Seç</option>
-                    <option value="1">Gün</option>
-                    <option value="2">Ay</option>
-                    <option value="3">Yıl</option>
-                    <option value="4">Otomatik</option>
-                    <option value="5">Parametre1</option>
-                    <option value="6">Parametre2</option>
-                </select>
-            </div>
-        </div>
-        <div style="width:30px">
-            <label class=" col-12 text-center ">-</label>
-            <input class="form-control form-control-sm" maxlength="1" name="karakter3" />
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
-                <select class="form-control select2bs4" style="width: 100%;" name="sira4">
-                    <option selected disabled>Tip Seç</option>
-                    <option value="1">Gün</option>
-                    <option value="2">Ay</option>
-                    <option value="3">Yıl</option>
-                    <option value="4">Otomatik</option>
-                    <option value="5">Parametre1</option>
-                    <option value="6">Parametre2</option>
-                </select>
-            </div>
-        </div>
-        <div style="width:30px">
-            <label class=" col-12 text-center ">-</label>
-            <input class="form-control form-control-sm" maxlength="1" name="karakter4" />
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
-                <select class="form-control select2bs4" style="width: 100%;" name="sira5">
-                    <option selected disabled>Tip Seç</option>
-                    <option value="1">Gün</option>
-                    <option value="2">Ay</option>
-                    <option value="3">Yıl</option>
-                    <option value="4">Otomatik</option>
-                    <option value="5">Parametre1</option>
-                    <option value="6">Parametre2</option>
-                </select>
-            </div>
-        </div>
-        <div style="width:30px">
-            <label class=" col-12 text-center">-</label>
-            <input class="form-control form-control-sm" maxlength="1" name="karakter5" />
-        </div>
-        <div class="col-md-1">
-            <div class="form-group">
-                <label class="col-form-label col-form-label-sm  col-12 text-center">Sıra</label>
-                <select class="form-control select2bs4" style="width: 100%;" name="sira6">
-                    <option selected disabled>Tip Seç</option>
-                    <option value="1">Gün</option>
-                    <option value="2">Ay</option>
-                    <option value="3">Yıl</option>
-                    <option value="4">Otomatik</option>
-                    <option value="5">Parametre1</option>
-                    <option value="6">Parametre2</option>
-                </select>
-            </div>
-        </div>
-        <div class="col-md-1">
-            <label class="col-form-label col-form-label-sm col-12 text-right">Son Ek</label>
-            <input class="form-control form-control-sm" name="sonEk" />
-        </div>
-    </div>
-    <div class="m-3">
-  <div class="col-10 m-auto">
-    <div class="form-group row">
-      <label for="numarator" class="col-sm-2 col-form-label"
-        >Numarator Açıklama</label
-      >
-      <div class="col-sm-10">
-        <input
-          type="text"
-          class="form-control"
-          id="numarator"
-          placeholder="Numarator Açıklama"
-          value="@ViewBag.numarator"
-          name="numaratorAciklama"
-          required
-        />
+
+<div class="bg-light">
+  <div class="bg-secondary rounded-top">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Numarator Tablosu</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right mr-3">
+          @*
+          <li class="col-sm-4">
+            <button
+              type="submit"
+              form="formCariGuncelle"
+              class="btn btn-info btn-lg"
+            ></button>
+          </li>
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="Index"
+              asp-controller="Home"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="parca" class="col-sm-2 col-form-label">Parça Uzunluğu</label>
-      <div class="col-sm-10">
-        <input
-          class="form-control"
-          id="parca"
-          type="number"
-          value="0"
-          name="baslangicSayisi"
-        />
+    <div class="card-body bg-light">
+      <div class="m-2">
+        <div class="col">
+          <form
+            id="fltAreaSehir"
+            asp-controller="DtSehir"
+            asp-action="DTSehir"
+            asp-route-id=""
+            method="post"
+          >
+            <div class="row">
+              <div class="col-md-4 mb-1">
+                <label class="col-form-label col-form-label-sm"
+                  >Şehir Adı</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="sehirAdiFlt1"
+                  name="sehirAdi"
+                  value="@ViewBag.sehirAdi"
+                  placeholder="Şehir Adı"
+                />
+              </div>
+              <div class="col-md-4 mb-1">
+                <label class="col-form-label col-form-label-sm"
+                  >Plaka Kodu</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="plakaKoduFlt1"
+                  name="plakaKodu"
+                  value="@ViewBag.plakaKodu"
+                  placeholder="Plaka Kodu"
+                />
+              </div>
+              <div class="col-md-4 mb-1">
+                <label class="col-form-label col-form-label-sm"
+                  >Telefon Kodu</label
+                >
+                <input
+                  type="number"
+                  class="form-control form-control-sm"
+                  id="telefonKoduFlt1"
+                  name="telefonKodu"
+                  value="@ViewBag.telefonKodu"
+                  placeholder="Telefon Kodu"
+                />
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4 mb-1">
+                <label class="col-form-label col-form-label-sm">Ülke</label>
+                @* <select
+                  id="sUlkeFilter1"
+                  class="form-control select2bs4"
+                  style="width: 100%"
+                  name="ulkeId"
+                >
+                  @if (ViewBag.ulkeId == null || ViewBag.ulkeId == "") {
+                  <option selected disabled>Ülke Seçin</option>
+                  } else {
+                  <option selected value="@ViewBag.ulkeId">
+                    @ViewBag.ulkeAdi
+                  </option>
+                  } @foreach (var ulke in ViewBag.ulkeList) {
+                  <option value="@ulke.UlkeId">@ulke.UlkeAdi</option>
+                  }
+                </select> *@
+              </div>
+              <div class="col-md-4 mb-1">
+                <label class="col-form-label col-form-label-sm"
+                  >Oluşturan</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="olusturanFlt"
+                  placeholder="Oluşturan"
+                />
+              </div>
+              <div class="col-md-4 mb-1">
+                <label class="col-form-label col-form-label-sm"
+                  >Son Değiştiren</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="sonDegistirenflt"
+                  placeholder="Son Değiştiren "
+                />
+              </div>
+            </div>
+            <hr class="divider" />
+            <div class="row">
+              @* <div class="form-check col-4">
+                <input
+                  name="silindi"
+                  id="chckSilindi"
+                  type="checkbox"
+                  value="true"
+                  checked="@ViewBag.chckSilindi"
+                  onclick="filter_isDeleted()"
+                />
+                @if (ViewBag.lblSilindi == null) {
+                <label id="lblChck" class="form-check-label" for="chckSilindi">
+                  Mevcut
+                </label>
+                } else {
+                <label id="lblChck" class="form-check-label" for="chckSilindi">
+                  @ViewBag.lblSilindi
+                </label>
+                }
+              </div> *@
+            </div>
+            <hr class="divider" />
+            <div class="row"></div>
+            <button
+              onclick="filterSifirla(); FillCountry()"
+              type="button"
+              class="btn btn-primary"
+            >
+              Sıfırla
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="baslangıc" class="col-sm-2 col-form-label"
-        >Başlangıç Sayısı</label
-      >
-      <div class="col-sm-10">
-        <input
-          type="number"
-          id="baslangıc"
-          class="form-control"
-          name="arttirmaAraligi"
-        />
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="col-md-12 mb-1 d-flex justify-content-between">
+        <button
+          type="submit"
+          form="fltAreaSehir"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+        >
+          Ara
+          <i class="bi bi-binoculars"></i>
+        </button>
+        <a
+          onclick="icerikGor('Sehir')"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+        >
+          Gör
+          <i class="bi bi-eye"></i>
+        </a>
+        <a
+          onclick="guncelle('Sehir')"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1 mr-1"
+        >
+          Değiştir
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </a>
+        <a
+          asp-controller="Numarator"
+          asp-action="NumaratorEkle"
+          method="get"
+          class="btn btn-outline-primary rounded-1 col-md-3 mb-1"
+        >
+          Ekle
+          <i class="bi bi-clipboard-plus"></i>
+        </a>
       </div>
     </div>
-    <div class="form-group row">
-      <label for="arttırma" class="col-sm-2 col-form-label"
-        >Arttırma Aralığı</label
-      >
-      <div class="col-sm-10">
-        <input
-          type="number"
-          class="form-control"
-          id="arttırma"
-          name="arttirmaAraligi"
-        />
-      </div>
-    </div>
-    <div class="form-group row">
-      <label for="doldurmaKarakteri" class="col-sm-2 col-form-label"
-        >Doldurma Karakteri</label
-      >
-      <div class="col-sm-10">
-        <input
-          type="number"
-          class="form-control"
-          id="doldurmaKarakteri"
-          name="doldurmaKarakteri"
-        />
-      </div>
-    </div>
-    <div class="col-10 offset-2 text-center">
-      <button type="submit" class="col-4 btn btn-primary my-2">Button</button>
+    <div class="card-body">
+      <table id="tblDestek" class="table table-borderless table-hover">
+        <thead>
+          <tr>
+            <th>Seç</th>
+            <th>Şehir Adı</th>
+            <th>Plaka Kodu</th>
+            <th>Telefon Kodu</th>
+            <th>Ülke</th>
+            <th>Son Değiştiren</th>
+            <th>Oluşturan</th>
+          </tr>
+        </thead>
+        @* <tbody>
+          @foreach (var item in ViewBag.sehirList) { var tblUlke =
+          um.TGetByID(item.UlkeId); var olusturan = km.TGetByID(item.Olusturan);
+          var sonDegistiren = km.TGetByID(item.SonDegistiren);
+          <tr id="tblSehirRow" aria-expanded="false">
+            <td><input name="radio" type="radio" value="@item.SehirId" /></td>
+            <td>@item.SehirAdi</td>
+            <td>@item.PlakaKodu</td>
+            <td>@item.TelefonKodu</td>
+            <td>@tblUlke.UlkeAdi</td>
+            <td>@olusturan.KullaniciAdi @olusturan.KullaniciSoyadi</td>
+            <td>@sonDegistiren.KullaniciAdi @sonDegistiren.KullaniciSoyadi</td>
+          </tr>
+          }
+        </tbody> *@
+      </table>
     </div>
   </div>
 </div>
 
-
-    @* Modal Başlangıç *@
-    @* <button
-      type="button"
-      class="btn btn-primary"
-      data-toggle="modal"
-      data-target="#modal-default"
-    >
-      Launch Default Modal
-    </button> *@
-    <div
-  class="modal fade"
-  id="modal-default"
-  data-backdrop="static"
-  data-keyboard="false"
->
+<div class="modal fade" id="modal">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content bg-danger">
       <div class="modal-header">
-        <h4 class="modal-title">Default Modal</h4>
+        <h4 class="modal-title">UYARI</h4>
         <button
           type="button"
           class="close"
@@ -227,119 +270,19 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="input-group">
-          <select class="custom-select" id="inputGroupSelect04">
-            <option selected>Choose...</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </select>
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button">
-              Button
-            </button>
-          </div>
-        </div>
+        <p>Lütfen Seçim Yapınız&hellip;</p>
       </div>
-      <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          Close
+      <div class="modal-footer justify-content-start">
+        <button
+          type="button"
+          class="btn btn-outline-light"
+          data-dismiss="modal"
+        >
+          Kapat
         </button>
-        <button type="button" class="btn btn-primary">Save changes</button>
       </div>
     </div>
     <!-- /.modal-content -->
   </div>
   <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->
-
-    <script type="text/javascript">
-    window.addEventListener("load", (event) => {
-        $("#modal-default").modal("show");
-    });
-    </script>
-
-
-    @* Modal Bitiş *@
-
-    @*<div class="col-md-3">
-        <label class="col-form-label col-form-label-sm">Parça Tipi</label>
-        <select id="parcaTipi" class="form-control select2bs4" name="parcaTipi" style="width: 100%;" required>
-            <option selected disabled>Parça Tipi Seçin</option>
-            <option value="1">Gün</option>
-            <option value="2">Ay</option>
-            <option value="3">Yıl</option>
-            <option value="4">Otomatik</option>
-            <option value="5">Parametre1</option>
-            <option value="6">Parametre2</option>
-        </select>
-    </div>*@
-
-
-    
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Parça Tipi</th>
-            <th>Parça Uzunluğu</th>
-            <th>Ön Ek</th>
-            <th>Başlangıç Sayısı</th>
-            <th>Arttırma Aralığı</th>
-            <th>Yenileme Parçaları</th>
-            <th>Doldurma Karakteri</th>
-            <th>Son Ek</th>
-        </tr>
-    </thead>
-    @*<tbody>
-        @if (Enumerable.Count(ViewBag.numaratorList) != 0)
-        {
-            @foreach (var item in ViewBag.numaratorList)
-                {
-                    string parcaTipi = "";
-                    switch (item.ParcaTipi)
-                    {
-                        case 1:
-                            parcaTipi = "gün";
-                            break;
-                        case 2:
-                            parcaTipi = "ay";
-                            break;
-                        case 3:
-                            parcaTipi = "yıl";
-                            break;
-                        case 4:
-                            parcaTipi = "otomatik";
-                            break;
-                        default:
-                            break;
-                    }
-                <tr>
-                    <td>@parcaTipi</td>
-                    <td>@item.ParcaUzunlugu</td>
-                    <td>@item.OnEk</td>
-                    <td>@item.BaslangicSayisi</td>
-                    <td>@item.ArttirmaAraligi</td>
-                    <td>@item.YenilemeParcalari</td>
-                    <td>@item.DoldurmaKarakteri</td>
-                    <td>@item.SonEk</td>
-                </tr>
-            }
-        }
-    </tbody>*@
-</table>
-<form asp-action="NumaraUret" asp-controller="Numarator" method="get">
-    <select class="form-control select2bs4" style="width: 100%;" name="numaratorId" required>
-        <option selected disabled value="">Numarator Seçin</option>
-        @if (Enumerable.Count(ViewBag.numaratorList) != 0)
-            {
-                foreach (var item in ViewBag.numaratorList)
-                {
-                    <option value="@item.NumaratorId">@item.NumaratorAciklama</option>
-                }
-            }
-        </select>
-<label>@ViewBag.no</label>
-<button type="submit" class="btn ">uret</button>
-</form>

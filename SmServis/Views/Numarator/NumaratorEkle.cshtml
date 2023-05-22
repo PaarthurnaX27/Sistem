@@ -1,0 +1,439 @@
+﻿<style>
+  .select2-selection__rendered {
+    line-height: 31px !important;
+  }
+
+  .select2-container .select2-selection--single {
+    height: 31px !important;
+  }
+</style>
+<div class="card bg-light">
+  <div class="bg-secondary rounded">
+    <div class="d-flex container-fluid nav-general">
+      <div class="col-sm-6">
+        <div class="nav-brand">Numarator Ekle</div>
+      </div>
+      <div class="col-sm-6 col-md-5 col-lg-3 ml-auto">
+        <ul class="list-items float-right">
+          <li class="col-sm-4 mr-3">
+            <button
+              type="submit"
+              form="numaratorEkle"
+              class="btn btn-info btn-lg"
+            >
+              <i class="bi bi-database-add"></i>
+            </button>
+          </li>
+          @*
+          <li class="col-sm-4">
+            <button
+              type="button"
+              class="btn btn-warning btn-lg"
+              data-toggle="modal"
+              data-target="#modalSil"
+            ></button>
+          </li>
+          *@
+          <li class="col-sm-4">
+            <a
+              asp-action="Numarator"
+              asp-controller="Numarator"
+              class="btn btn-danger btn-lg"
+            >
+              <i class="bi bi-x-lg"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <form
+      id="numaratorEkle"
+      asp-action="Numarator"
+      asp-controller="Numarator"
+      method="post"
+      class="mt-1 container-fluid"
+    >
+      <div class="row bg-secondary justify-content-around rounded">
+        <div class="col">
+          <label class="col-form-label col-form-label-sm">Ön Ek</label>
+          <input class="form-control form-control-sm" name="onEk" />
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label class="col-12 col-form-label col-form-label-sm text-center"
+              >Sıra</label
+            >
+            <select
+              class="form-control select2bs4"
+              style="width: 100%"
+              name="sira1"
+            >
+              <option selected disabled>Tip Seç</option>
+              <option value="1">Gün</option>
+              <option value="2">Ay</option>
+              <option value="3">Yıl</option>
+              <option value="4">Otomatik</option>
+              <option value="5">Parametre1</option>
+              <option value="6">Parametre2</option>
+            </select>
+          </div>
+        </div>
+        <div style="width: 30px">
+          <label class="col-12 text-center">-</label>
+          <input
+            class="form-control form-control-sm"
+            maxlength="1"
+            name="karakter1"
+          />
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm text-center col-12"
+              >Sıra</label
+            >
+            <select
+              class="form-control select2bs4"
+              style="width: 100%"
+              name="sira2"
+            >
+              <option selected disabled>Tip Seç</option>
+              <option value="1">Gün</option>
+              <option value="2">Ay</option>
+              <option value="3">Yıl</option>
+              <option value="4">Otomatik</option>
+              <option value="5">Parametre1</option>
+              <option value="6">Parametre2</option>
+            </select>
+          </div>
+        </div>
+        <div style="width: 30px">
+          <label class="col-12 text-center">-</label>
+          <input
+            class="form-control form-control-sm"
+            maxlength="1"
+            name="karakter2"
+          />
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm col-12 text-center"
+              >Sıra</label
+            >
+            <select
+              class="form-control select2bs4"
+              style="width: 100%"
+              name="sira3"
+            >
+              <option selected disabled>Tip Seç</option>
+              <option value="1">Gün</option>
+              <option value="2">Ay</option>
+              <option value="3">Yıl</option>
+              <option value="4">Otomatik</option>
+              <option value="5">Parametre1</option>
+              <option value="6">Parametre2</option>
+            </select>
+          </div>
+        </div>
+        <div style="width: 30px">
+          <label class="col-12 text-center">-</label>
+          <input
+            class="form-control form-control-sm"
+            maxlength="1"
+            name="karakter3"
+          />
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm col-12 text-center"
+              >Sıra</label
+            >
+            <select
+              class="form-control select2bs4"
+              style="width: 100%"
+              name="sira4"
+            >
+              <option selected disabled>Tip Seç</option>
+              <option value="1">Gün</option>
+              <option value="2">Ay</option>
+              <option value="3">Yıl</option>
+              <option value="4">Otomatik</option>
+              <option value="5">Parametre1</option>
+              <option value="6">Parametre2</option>
+            </select>
+          </div>
+        </div>
+        <div style="width: 30px">
+          <label class="col-12 text-center">-</label>
+          <input
+            class="form-control form-control-sm"
+            maxlength="1"
+            name="karakter4"
+          />
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm col-12 text-center"
+              >Sıra</label
+            >
+            <select
+              class="form-control select2bs4"
+              style="width: 100%"
+              name="sira5"
+            >
+              <option selected disabled>Tip Seç</option>
+              <option value="1">Gün</option>
+              <option value="2">Ay</option>
+              <option value="3">Yıl</option>
+              <option value="4">Otomatik</option>
+              <option value="5">Parametre1</option>
+              <option value="6">Parametre2</option>
+            </select>
+          </div>
+        </div>
+        <div style="width: 30px">
+          <label class="col-12 text-center">-</label>
+          <input
+            class="form-control form-control-sm"
+            maxlength="1"
+            name="karakter5"
+          />
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label class="col-form-label col-form-label-sm col-12 text-center"
+              >Sıra</label
+            >
+            <select
+              class="form-control select2bs4"
+              style="width: 100%"
+              name="sira6"
+            >
+              <option selected disabled>Tip Seç</option>
+              <option value="1">Gün</option>
+              <option value="2">Ay</option>
+              <option value="3">Yıl</option>
+              <option value="4">Otomatik</option>
+              <option value="5">Parametre1</option>
+              <option value="6">Parametre2</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <label class="col-form-label col-form-label-sm col-12 text-right"
+            >Son Ek</label
+          >
+          <input class="form-control form-control-sm" name="sonEk" />
+        </div>
+      </div>
+
+      <div class="row mt-2 p-2">
+  <div class="col-6">
+    <div class="form-group row">
+      <label for="numarator" class="col-4 col-form-label"
+        >Numarator Açıklama</label
+      >
+      <div class="col-8">
+        <input
+          type="text"
+          class="form-control"
+          id="numarator"
+          placeholder="Numarator Açıklama"
+          value="@ViewBag.numarator"
+          name="numaratorAciklama"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="parca" class="col-4 col-form-label">Parça Uzunluğu</label>
+      <div class="col-8">
+        <input
+          class="form-control"
+          id="parca"
+          type="number"
+          value="0"
+          name="baslangicSayisi"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="baslangıc" class="col-4 col-form-label"
+        >Başlangıç Sayısı</label
+      >
+      <div class="col-8">
+        <input
+          type="number"
+          id="baslangıc"
+          class="form-control"
+          name="arttirmaAraligi"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="arttırma" class="col-4 col-form-label"
+        >Parametre 1</label
+      >
+      <div class="col-8">
+        <input
+          type="number"
+          class="form-control"
+          id="arttırma"
+          name="arttirmaAraligi"
+          readonly
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="form-group row">
+      <label for="doldurmaKarakteri" class="col-4 col-form-label"
+        >Tablo Adı</label
+      >
+      <div class="col-8">
+        <input
+          type="number"
+          class="form-control"
+          id="doldurmaKarakteri"
+          name="doldurmaKarakteri"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="parametre1" class="col-4 col-form-label">Doldurma Karakteri</label>
+      <div class="col-8">
+        <input
+          type="number"
+          class="form-control"
+          id="parametre1"
+          name="parametre1"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="parametre2" class="col-4 col-form-label">Arttırma Aralığı</label>
+      <div class="col-8">
+        <input
+          type="number"
+          class="form-control"
+          id="parametre2"
+          name="parametre2"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="parametre3" class="col-4 col-form-label">Parametre 2</label>
+      <div class="col-8">
+        <input
+          type="number"
+          class="form-control"
+          id="parametre3"
+          name="parametre3"
+          readonly
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+      @* Modal Başlangıç *@ 
+      @*
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-toggle="modal"
+        data-target="#modal-default"
+      >
+        Launch Default Modal
+      </button>
+      *@
+      <div
+        class="modal fade"
+        id="modal-default"
+        data-backdrop="static"
+        data-keyboard="false"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Default Modal</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="input-group">
+                <select class="custom-select" id="inputGroupSelect04">
+                  <option selected>Choose...</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="button">
+                    Button
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <button
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+      <script type="text/javascript">
+        window.addEventListener("load", (event) => {
+          $("#modal-default").modal("show");
+        });
+      </script>
+
+      @* Modal Bitiş *@ 
+      @*
+      <div class="col-md-3">
+        <label class="col-form-label col-form-label-sm">Parça Tipi</label>
+        <select
+          id="parcaTipi"
+          class="form-control select2bs4"
+          name="parcaTipi"
+          style="width: 100%"
+          required
+        >
+          <option selected disabled>Parça Tipi Seçin</option>
+          <option value="1">Gün</option>
+          <option value="2">Ay</option>
+          <option value="3">Yıl</option>
+          <option value="4">Otomatik</option>
+          <option value="5">Parametre1</option>
+          <option value="6">Parametre2</option>
+        </select>
+      </div>
+        *@
+    </form>
+  </div>
+</div>
