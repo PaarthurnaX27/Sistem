@@ -74,4 +74,12 @@ body {
   }
 }
 
-/* DT Sayfalarının CSS Bitişi*/
+/* DT Sayfalarının CSS Bitişi */
+
+.bx-shadow {
+  transition: all ease-in-out 0.2s;
+}
+
+.bx-shadow:hover {
+  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
+} 
